@@ -380,7 +380,7 @@ class EventsManager extends Public_Controller
                 ->append_js('admin_theme::ckeditor/ckeditor.js')
                 ->append_js('admin_theme::ckeditor/adapters/jquery.js')
                 // Google Maps
-                //->append_metadata("<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false&language=" . $this->current_user->lang . "'></script>")
+                ->append_metadata("<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false&language=" . $this->current_user->lang . "'></script>")
                 // jQuery UI (Datepicker)
                 ->append_js('module::jquery-ui.min.js')
                 ->append_css('admin_theme::jquery/jquery-ui.css')
@@ -388,7 +388,7 @@ class EventsManager extends Public_Controller
                 ->append_js('module::jquery.imgareaselect.pack.js')
                 ->append_css('module::imgareaselect/imgareaselect-default.css')
                 // Misc styles and scripts
-                //->append_js('module::form.js')
+                ->append_js('module::form.js')
                 ->append_js('module::frontend-form.js')
                 ->append_css('module::frontend_form.css')
                 ->append_js('wall.js')
@@ -513,12 +513,6 @@ class EventsManager extends Public_Controller
                 ->build('eventsmanager/index');
     }
     
-    public function youtube($slug = null)
-    {
-        $this->template
-                ->set('content', $this->load_view('youtube'))
-                ->build('eventsmanager/index');
-    }
 
     public function followers($slug = null)
     {
