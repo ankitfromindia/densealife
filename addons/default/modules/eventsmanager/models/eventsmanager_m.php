@@ -117,7 +117,6 @@ class EventsManager_m extends MY_Model
                 $end_datetime->modify('+1 hour');
             }
         }
-
         $insert_row = array(
             'category_id'      => $input['category_id'],
             'sub_category_id'  => $input['sub_category_id'],
@@ -134,7 +133,8 @@ class EventsManager_m extends MY_Model
             'end_date_defined' => $input['end_date_defined'],
             'enable_comments'  => $input['enable_comments'],
             'published'        => isset($input['published']) ? $input['published'] : 1,
-            'cover_photo'      => isset($input['cover_photo']) ? $input['cover_photo'] : null
+            'cover_photo'      => isset($input['cover_photo']) ? $input['cover_photo'] : null,
+            'youtube_videos'  => isset($input['youtube_videos']) ? serialize($input['youtube_videos']) : null,
         );
         return $insert_row;
     }
@@ -150,7 +150,7 @@ class EventsManager_m extends MY_Model
     {
         $array = $this->__process($input);
         $id    = ( int ) parent::insert($array);
-
+        
         // Doing this work after for PHP < 5.3
         if ( isset($input['picture_id']) ) {
             parent::update($id, array( 'picture_id' => $input['picture_id'] ));
@@ -293,6 +293,7 @@ class EventsManager_m extends MY_Model
 
     public function save_thumbnail($id, $input)
     {
+        
         $max_width    = "500";       // Max width allowed for the large image
         $thumb_width  = "100";      // Width of thumbnail image
         $thumb_height = "100";
@@ -309,17 +310,7 @@ class EventsManager_m extends MY_Model
             $scale    = 1;
             $uploaded = $this->resizeImage($large_image_location, $width, $height, $scale);
         }
-
-        $x1      = $input['thumbnail_x1'];
-        $x2      = $input['thumbnail_y1'];
-        $y1      = $input['thumbnail_x2'];
-        $y2      = $input['thumbnail_y2'];
-        $w       = 500;
-        $h       = 500;
-        //Scale the image to the thumb_width set above
-        $scale   = $thumb_width / $w;
-        $cropped = $this->resizeThumbnailImage(UPLOAD_PATH . 'files/ankit.jpg', $large_image_location, $w, $h, $x1, $y1, $scale);
-        exit;
+        
         //Delete the thumbnail file so the user can create a new one
         if ( file_exists($thumb_image_location) ) {
             unlink($thumb_image_location);
@@ -349,23 +340,24 @@ class EventsManager_m extends MY_Model
     public function update($id, $input, $skip_validation = false)
     {
 
+        
         $array  = $this->__process($input);
         // Update all except author
         $result = parent::update($id, $array);
+        
 
         // Doing this work after for PHP < 5.3
-        $result &= $this->save_thumbnail($id, $input);
-
+        $result = $this->save_thumbnail($id, $input);
         // Maps
         if ( isset($input['show_map']) )
-            $result &= parent::update($id, array( 'show_map' => $input['show_map'] ));
+            $result = parent::update($id, array( 'show_map' => $input['show_map'] ));
         else
-            $result &= parent::update($id, array( 'show_map' => false ));
+            $result = parent::update($id, array( 'show_map' => false ));
         if ( isset($input['pos_method']) ) {
             if ( $input['pos_method'] == 0 ) // Automatic mode
-                $result &= parent::update($id, array( 'pos_lat' => null, 'pos_lng' => null ));
+                $result = parent::update($id, array( 'pos_lat' => null, 'pos_lng' => null ));
             else // Latitude/longitude mode
-                $result &= parent::update($id, array( 'pos_lat' => $input['pos_lat'], 'pos_lng' => $input['pos_lng'] ));
+                $result = parent::update($id, array( 'pos_lat' => $input['pos_lat'], 'pos_lng' => $input['pos_lng'] ));
         }
         return $result;
     }
