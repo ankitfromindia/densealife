@@ -80,6 +80,7 @@ $module_path = BASE_URL . $this->module_details['path'] ;
              
              <div id="video-tab">
                 <?php 
+                echo 'hello';
                     $this->load->view('/admin/partials/tabs/youtube_videos',array(
                         'event' => $event,
                     ));
