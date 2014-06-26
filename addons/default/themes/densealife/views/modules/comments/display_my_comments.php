@@ -4,7 +4,7 @@
             <li class='li-<?php echo $item->id;?>'>
                 <span>{{user:profile_pic user_id='<?php echo $item->user_id;?>'}}</span> 
                 <div class="status-aera">
-                    <span class="name"><?php echo $item->user_name;?> > <?php echo $item->entry_title;?></span> 
+                    <span class="name"><?php echo $item->user_name;?> <?php if($item->entry_title) :?>> <?php endif;?><?php echo $item->entry_title;?></span> 
                     <?php 
                         if($item->media!=''):
                             $media = unserialize($this->encrypt->decode($item->media));
