@@ -5,7 +5,7 @@
         <a href="/eventsmanager/{{data:slug}}" title="<?php echo $data->title; ?>" >
             {{ eventsmanager:thumb name="<?php echo $data->thumbnail;?>" }}
             <div class="display-none hover-aera">
-                {{button:star_event event_id='<?php echo $data->id;?>'}}
+                <!--{{button:star_event event_id='<?php echo $data->id;?>'}}-->
 <!--                <a href="" class="float-left star-aera">Star</a>  -->
                 {{button:follow_event event_id='<?php echo $data->id;?>' class='float-right ctrl_trend'}}
                 <!--<button type="button" class="float-right">follow</button>-->

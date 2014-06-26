@@ -173,14 +173,14 @@
                     <button class="btn-color common add_friend">Add Friend</button>
                     <button class="common invite_by_mail">Invite by Mail</button>
                     <!-- AddThis Button BEGIN -->
-                    <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
-                        <a class="addthis_button_facebook"></a>
+                    <!--<div class="addthis_toolbox addthis_default_style addthis_32x32_style">-->
+<!--                        <a class="addthis_button_facebook"></a>
                         <a class="addthis_button_twitter"></a>
                         <a class="addthis_button_pinterest_share"></a>
                         <a class="addthis_button_google_plusone_share"></a>
                     </div>
                     <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50d1c64c6188fd02"></script>
+                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50d1c64c6188fd02"></script>-->
                     <!-- AddThis Button END -->
                         <?php if ( !empty($follower_friends) ): ?>
                         <div class="comman-box clearfix clear">

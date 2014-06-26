@@ -55,6 +55,7 @@ class Trend_m extends MY_Model
                     'entry_id'     => $input['entry_id']
                 );
         if(!$this->if_exists($input)){
+            //p($input);
             switch($input['trend']){
                 case TREND_STAR:
                     $post['star'] = true; 
@@ -69,17 +70,20 @@ class Trend_m extends MY_Model
                     $this->add_favorite($input['entry_id']);
                     break;
             }
-            return parent::insert($post) ;
+            return '+1' ;
         }else{
-           
+           echo 'hello ankit'; exit; 
+           $trendIncrement = '+1';
            $query  = "UPDATE {$this->dbprefix('trends')} SET %s , modified_at='".date('Y-m-d H:i:s')."' WHERE user_id ={$this->current_user->id}"
             . " AND entry_type = '{$input['entry_type']}' AND entry_id = {$input['entry_id']}"; 
             switch($input['trend']){
                 case TREND_STAR:
                     $star = $this->select('star')
                         ->get_by(array('user_id' => $input['user_id'], 'entry_type' => $input['entry_type'], 'entry_id' => $input['entry_id']));
+                    echo $this->last_query(); exit; 
                     $existing = $star->star;
                     if($existing=='true'){
+                        $trendIncrement = '-1';
                         $this->remove_star($input['entry_id']);
                     }else{
                         $this->add_star($input['entry_id']);
@@ -91,6 +95,7 @@ class Trend_m extends MY_Model
                         ->get_by(array('user_id' => $input['user_id'], 'entry_type' => $input['entry_type'], 'entry_id' => $input['entry_id']));
                     $existing = $follow->follow;
                     if($existing=='true'){
+                        $trendIncrement = '-1';
                         $this->remove_follow($input['entry_id']);
                     }else{
                         $this->add_follow($input['entry_id']);
@@ -102,6 +107,7 @@ class Trend_m extends MY_Model
                         ->get_by(array('user_id' => $input['user_id'], 'entry_type' => $input['entry_type'], 'entry_id' => $input['entry_id']));
                     $existing = $favorite->favorite;
                     if($existing=='true'){
+                        $trendIncrement = '-1';
                         $this->remove_favorite($input['entry_id']);
                     }else{
                         $this->add_favorite($input['entry_id']);
@@ -109,7 +115,8 @@ class Trend_m extends MY_Model
                     $condition  = 'favorite = (if(favorite="true","false","true")) '; 
                     break;
             }
-            return $this->query(sprintf($query,$condition));
+            $this->query(sprintf($query,$condition));
+            return $trendIncrement;
             
         }
         

@@ -135,7 +135,7 @@ ul li.edit-pro span a{font-weight:normal;}
 .social-user-profile ul li{float:left; margin:1%; width:46%;}
 span.follower{width:54%;display:inline-block;margin:1px;float:left;border:1px solid #757575;font-size:11px;}
 span.stars {width:27%;display:inline-block;margin:1px;float:left;border:1px solid #757575;font-size:11px;background-image:url(../img/star.png); background-repeat:no-repeat;background-position: 177% -88px}
-span.stars:hover{background-position: 177% -110px;}
+/*span.stars:hover{background-position: 177% -110px;}*/
 .new-star{background-image:url(../img/new-star.png); background-repeat:no-repeat; background-position:left -25px; padding-left:26px;}
 .new-star:hover{background-position: left 0px;background-size: 9%;}
 span.follower a, span.stars a{font-size:11px;text-decoration:none;color:#236aa0;}
@@ -145,7 +145,7 @@ span.follower a, span.stars a{font-size:11px;text-decoration:none;color:#236aa0;
 #body-container .left-body-container article{color:#246a9e;font-size:24px;font-weight:700;font-style:italic;text-align:center;margin:10px auto;float: left;width: 100%;}
 #body-container .left-body-container .events-heading{background-color:#05a8cf;width:94%;padding:1% 2%;float:left;text-align:left;color:#ffffff;font-weight:bold;font-size: 16px;margin: 10px;}
 #body-container .left-body-container .event-slot-aera{width: 100%;margin: 0px auto;padding: 50px 0 0;}
-#body-container .left-body-container .event-slot-aera ul{float:left; margin:0px; padding:0px;width:100%;}
+#body-container .left-body-container .event-slot-aera ul{float:left; margin:-14px 0 0; padding:10px;width:100%;}
 #body-container .left-body-container .event-slot-aera ul li{width:170px;float:left;margin: 6px 16px 0px 1px;}
 #body-container .left-body-container .event-slot-aera ul li .event-slot-image{width:163px; height:230px; background-color:#99FF99;-webkit-box-shadow: 0 0 2px 1px rgba(179,179,179,1);box-shadow: 0 0 2px 1px rgba(179,179,179,1);border:5px solid #ffffff;margin: 0px auto 10px;overflow: hidden;}
 #body-container .left-body-container .event-slot-aera ul li .event-slot-image img{min-width:100% ; height:100%;}
@@ -162,8 +162,10 @@ span.follower a, span.stars a{font-size:11px;text-decoration:none;color:#236aa0;
 .activity-feeds span.heading{padding:10px; text-transform:uppercase;color:#236aa0;font-size: 20px;}
 .activity-feeds ul{width:100%;float:left;margin:0px; padding:0px;}
 .activity-feeds ul li{border-bottom:1px solid #d8d8d8;overflow: hidden;}
-.activity-feeds ul li span {display:block;float:left;width:100%;}
-.activity-feeds ul li span.text {float:left;padding:5px;font-size: 10px;width: 75%;}
+/*.activity-feeds ul li span {display:block;float:left;width:100%;}*/
+.activity-feeds ul li span {display:block;float:left;}
+.activity-feeds ul li span.text {float:left;padding:5px;font-size: 10px;width: 75%; line-height:10px;}
+.activity-feeds ul li span.head {font-weight: bold;}
 span.name {display:block;margin: 4px auto 0px;padding: 5px;font-weight: bold;}
 span.name a{font-size:10px;}
 .activity-feeds span.more {display:block; text-align:right; padding:11px 0px 11px;clear: both; color:#236aa0;}
@@ -248,7 +250,7 @@ h2.heading{margin:10px 0;padding:1% 2%;font-size:14px; background-color:#f6f6f6;
 div.tabs{margin:10px 0;font-size:12px; background-color:#f6f6f6; border:1px solid #d8d8d8;float:left; width:99%; color:#23699e;padding-right: 5px;}
 div.tabs ul li{ width:auto; padding:1% 2%; font-weight:normal; float:left;border-right:1px solid #d8d8d8;}
 .comman-heading{background-color:#05a8cf;width:98%;padding:1%;float:left;text-align:left;color:#ffffff;font-weight:bold;font-size: 16px;}
-.comman-heading button{float:right; width: 92px;margin: 0;border:none;border-radius:5px; font-weight:bold; font-size:12px; color:#000000;
+.comman-heading button{float:right; width: 119px;margin: 0;border:none;border-radius:5px; font-weight:bold; font-size:12px; color:#000000;
 	background: #b4e391; /* Old browsers */
 	background: -moz-linear-gradient(top,  #b4e391 0%, #61c419 50%, #b4e391 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b4e391), color-stop(50%,#61c419), color-stop(100%,#b4e391)); /* Chrome,Safari4+ */
@@ -348,5 +350,5 @@ table tr td h3{margin: 0;padding: 0;font-size: 21px; color:#05a6cc;}
 table tr th{color:#ffffff;}
 
 .homepage-bodyinnre-container{width:78%; float:left;margin:0px 1%;}
-.right-bodyinnre-container button{margin: -36px 0;width: 100%;height: 38px;font-size: 14px;font-weight: 700;}
+//.right-bodyinnre-container button{margin: -36px 0;width: 100%;height: 38px;font-size: 14px;font-weight: 700;}
 .cat{text-align:center; padding:0 0 2px 0;margin-top: -7px; }

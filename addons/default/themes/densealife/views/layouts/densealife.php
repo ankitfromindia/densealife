@@ -122,8 +122,8 @@
                                     </div>
                                 </span> 
                                 <span class="name">
-                                    <a href="" class="float-left">{{star_count}} Stars</a>  
-                                    <a href="" class="float-right"><span class="count_follow_{{id}}" >{{follow_count}}</span> Followers</a></span> 
+                                    <a href="javascript:void(0);" class="float-left"><span class="count_star_{{id}}">{{star_count}}</span> Stars</a>  
+                                    <a href="javascript:void(0);" class="float-right"><span class="count_follow_{{id}}" >{{follow_count}}</span> Followers</a></span> 
                             </li>
                             {{ /eventsmanager:get_all_events}}
                         </ul>

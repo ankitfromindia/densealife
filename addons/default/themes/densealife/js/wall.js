@@ -191,6 +191,15 @@ $('.form-trend').ajaxForm({
         $.fancybox.showLoading();
     },
     success: function(response) {
+        if(response.trend =='3' ){
+            $star_place_holder = $('.count_star_'+ response.entry);
+            star_count = parseInt($star_place_holder.text())
+            if(response.action=='-1'){
+                  $star_place_holder.text(star_count-1)
+            }else{
+                $star_place_holder.text(star_count+1)
+            }
+        }
     }, 
     complete: function() {
         $.fancybox.hideLoading();

@@ -80,9 +80,10 @@ class Plugin_Button extends Plugin
     function star_event()
     {
         $this->load->library('trends/trends');
-        $event_id         = $this->attribute('event_id');
-        $variation         = $this->attribute('variation','icon');
-        return $this->trends->link_star($event_id,null,$variation);
+        $event_id       = $this->attribute('event_id');
+        $variation      = $this->attribute('variation','icon');
+        $entry_type     = $this->attribute('type','event');
+        return $this->trends->link_star($event_id, $entry_type, $variation);
         
     }
     

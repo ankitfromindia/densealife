@@ -5,6 +5,6 @@
 <a href="javascript:void(0);" onclick="$('#form-star-<?php echo $entry_id;?>').submit();" class="float-left star-aera">Star</a>  
 <?php else: ?>
     <a href="#" class="star-count">
-        <?php echo $star_count; ?></a>Stars 
+        <span class="count_star_<?php echo $entry_id;?>"><?php echo $star_count; ?></span></a>Stars 
         <a href="javascript:void(0);" class='ctrl_trend star'><?php echo $text; ?></a>
-<?php endif; ?>
+<?php endif;

@@ -24,6 +24,7 @@ $module_path = BASE_URL . $this->module_details['path'] ;
                 <li><a class="tab" href="#album-tab"><span>Album</span></a></li>
                 <li><a class="tab" href="#cover-photo"><span>Cover Photo</span></a></li>
                 <li><a class="tab" href="#picture-tab"><span><?php echo lang('eventsmanager:thumbnail_label') ; ?></span></a></li>
+                <li><a class="tab" href="#video-tab"><span>Youtube Videos</span></a></li>
                 <?php endif; ?>
             </ul>
 
@@ -56,6 +57,7 @@ $module_path = BASE_URL . $this->module_details['path'] ;
                     ));
                 ?>
             </div>
+              
              <!-- Picture tab -->
             
             <div id="picture-tab">
@@ -71,6 +73,14 @@ $module_path = BASE_URL . $this->module_details['path'] ;
             <div id="cover-photo">
                 <?php 
                     $this->load->view('/admin/partials/tabs/cover-photo',array(
+                        'event' => $event,
+                    ));
+                ?>
+            </div>
+             
+             <div id="video-tab">
+                <?php 
+                    $this->load->view('/admin/partials/tabs/youtube_videos',array(
                         'event' => $event,
                     ));
                 ?>
