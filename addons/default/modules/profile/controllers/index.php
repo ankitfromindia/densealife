@@ -16,6 +16,11 @@ class Index extends Public_Controller
             $this->session->set_userdata('redirect_to', current_url());
             redirect('users/login');
         }
+         $this->template->append_metadata(
+                "<script>
+                                                var baseurl = '" . base_url() . "'
+                                             </script>"
+        );
         $this->load->library('comments/comments');
         $this->load->library('users/Ion_auth');
         $this->load->library('trends/Trends');
