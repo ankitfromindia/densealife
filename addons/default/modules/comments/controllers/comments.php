@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+    <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Comments controller (frontend)
@@ -143,11 +143,9 @@ class Comments extends Public_Controller
                                             $response['comment_id'] = $comment_id;
                                             $response['entry']      = $this->input->post('entry');
 
-                                            include($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'plugins.php');
-                                            include($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'system' . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . 'user.php');
+                                            $this->load->model('users/profile_m');
                                             
-                                            $plugin                 = new Plugin_User();
-                                            $response['pic']        = $plugin->profile_pic($comment->user_id);
+                                            $response['pic']        = $this->profile_m->get_profile_pic($comment->user_id);
                                             $response['user_email'] = $comment->user_email;
                                             $response['user_name']  = $comment->user_name;
                                             $response['media']      = '';
