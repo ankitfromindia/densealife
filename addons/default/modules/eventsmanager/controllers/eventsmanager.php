@@ -380,7 +380,7 @@ class EventsManager extends Public_Controller
                 ->append_js('admin_theme::ckeditor/ckeditor.js')
                 ->append_js('admin_theme::ckeditor/adapters/jquery.js')
                 // Google Maps
-                ->append_metadata("<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false&language=" . $this->current_user->lang . "'></script>")
+                //->append_metadata("<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false&language=" . $this->current_user->lang . "'></script>")
                 // jQuery UI (Datepicker)
                 ->append_js('module::jquery-ui.min.js')
                 ->append_css('admin_theme::jquery/jquery-ui.css')
@@ -388,7 +388,7 @@ class EventsManager extends Public_Controller
                 ->append_js('module::jquery.imgareaselect.pack.js')
                 ->append_css('module::imgareaselect/imgareaselect-default.css')
                 // Misc styles and scripts
-                ->append_js('module::form.js')
+                //->append_js('module::form.js')
                 ->append_js('module::frontend-form.js')
                 ->append_css('module::frontend_form.css')
                 ->append_js('wall.js')
@@ -491,8 +491,11 @@ class EventsManager extends Public_Controller
 
     public function videos($slug = null)
     {
+      
         $this->_set_template_content($slug);
         $event             = $this->eventsmanager_m->getBy('slug', $slug);
+        $youtube_videos    = unserialize($event->youtube_videos);
+        
         $albums            = $this->file_folders_m->get_albums($event->id);
         $count_video_files = 0;
         foreach ( $albums as &$album ) {
@@ -506,7 +509,14 @@ class EventsManager extends Public_Controller
         }
 
         $this->template
-                ->set('content', $this->load_view('videos', array( 'albums' => $albums, 'count' => $count_video_files )))
+                ->set('content', $this->load_view('videos', array( 'albums' => $albums, 'count' => $count_video_files , 'youtube_videos' => $youtube_videos)))
+                ->build('eventsmanager/index');
+    }
+    
+    public function youtube($slug = null)
+    {
+        $this->template
+                ->set('content', $this->load_view('youtube'))
                 ->build('eventsmanager/index');
     }
 
