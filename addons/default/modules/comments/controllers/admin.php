@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  *
- * @author 		PyroCMS Dev Team
+ * @author 	Ankit Vishwakarma 
  * @package 	PyroCMS\Core\Modules\Comments\Controllers
  */
 class Admin extends Admin_Controller {
