@@ -118,8 +118,10 @@ class Friends extends Public_Controller
             $this->template
                     ->set('result', $result);
         }
+        
         $this->template
                 ->set('_user', $user)
+                ->set('user_friends', $user_friends)
                 ->build('friends/find');
     }
     

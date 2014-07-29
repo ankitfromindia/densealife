@@ -1,11 +1,9 @@
 <div class="comman-heading">Notification</div>
 <div class="clear"></div>
 <ul class="notification mt15">
-    <?php foreach($notifications as $key => $values) :?>
+    <?php foreach($notifications as $notification) :?>
     <li>
-        <?php foreach($values as $value): ?>
-            <?php echo load_view('profile','notifications/partials/noti_'.$value->type,array('data' => $value));?>
-        <?php endforeach;?>
+            <?php echo load_view('profile','notifications/partials/noti_'.$notification->type,array('data' => $notification));?>
     </li>
     <?php endforeach;?>
 <li>

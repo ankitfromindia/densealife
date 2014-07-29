@@ -102,7 +102,7 @@ class EventsManager_m extends MY_Model
         return $query;
     }
 
-    private function __process($input)
+    private function _process($input)
     {
         if ( $input['start_date'] ) {
             // Format the date for the database
@@ -132,10 +132,19 @@ class EventsManager_m extends MY_Model
             'end_date'         => (is_object($end_datetime)) ? $end_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
             'end_date_defined' => $input['end_date_defined'],
             'enable_comments'  => $input['enable_comments'],
-            'published'        => isset($input['published']) ? $input['published'] : 1,
+            'published'        => isset($input['published'])  ? $input['published'] : 1,
             'cover_photo'      => isset($input['cover_photo']) ? $input['cover_photo'] : null,
-            'youtube_videos'  => isset($input['youtube_videos']) ? serialize($input['youtube_videos']) : null,
+            'youtube_videos'   => isset($input['youtube_videos']) ? serialize($input['youtube_videos']) : null,
+            'comment_permission' => isset($input['comment_permission']) ? $input['comment_permission'] : 'CREATER',
+            'comment_approval'  => isset($input['comment_approval']) ? $input['comment_approval'] : 'NO'
         );
+        
+        if($this->current_user->group == 'admin') {
+            $insert_row['published'] = 1;
+        } else{
+            $insert_row['published'] = 0;
+        }
+        
         return $insert_row;
     }
 
@@ -148,7 +157,7 @@ class EventsManager_m extends MY_Model
      */
     public function insert($input, $skip_validation = false)
     {
-        $array = $this->__process($input);
+        $array = $this->_process($input);
         $id    = ( int ) parent::insert($array);
         
         // Doing this work after for PHP < 5.3
@@ -336,12 +345,14 @@ class EventsManager_m extends MY_Model
             }
         }
     }
-
+    public function publish_event($id, $input){
+        return parent::update($id, $input); 
+    }
     public function update($id, $input, $skip_validation = false)
     {
 
         
-        $array  = $this->__process($input);
+        $array  = $this->_process($input);
         // Update all except author
         $result = parent::update($id, $array);
         

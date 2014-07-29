@@ -302,7 +302,7 @@ ul.status li span{float:left;padding:0 10px;}
 ul.status-blog{clear:both;width: 100%;float: left;margin: 0px;padding: 0px;}
 ul.status-blog li {margin-bottom:5px;border-bottom:1px dashed #ccc;width:100%;float:left; padding-bottom:10px;}
 ul.status-blog li span{float:left;}
-ul.status-blog li span img{width:50px; height:50px;background-color:#CCCCCC;margin:10px auto;}
+ul.status-blog li span img{width:50px; height:50px;background-color:#CCCCCC;margin:5px auto;}
 ul.status-blog li:last-child{border:none;} 
 ul.status-blog li div.status-aera{float:left;width:80%;}
 ul.status-blog li div.status-aera input[type=text]{width: 105%;height: 16px;margin-top: 10px;}

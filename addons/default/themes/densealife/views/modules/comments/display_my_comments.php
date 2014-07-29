@@ -23,8 +23,7 @@
                     <span class="comman-star stars">
                         <?php echo $this->comments->link_star($item->id);?>
                      
-                        <a href="">Share</a>
-                        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-type="icon"></div>
+                        <a href="/comments/share/<?php echo $item->id;?>" class="fancybox fancybox.ajax">Share</a>
                     </span> 
                 </div>
                 <ul class="comments-hare">

@@ -1,4 +1,4 @@
-<script>
+<!--<script>
     function fb_login()
     {
             $.post('/fb_login',{}, function(response){
@@ -7,7 +7,7 @@
                 }
             },'json');
     }
-</script>
+</script>-->
 {{ if user:not_logged_in }}
 <div class="login-form-block">
     <form action="{{ url:site uri='users/login' }}" method="post" accept-charset="utf-8" >
@@ -22,7 +22,9 @@
         
         
     </form>
-        <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" onlogin="fb_login()"></div>
+    <a href="{{fb_connect:login}}">Facebook Login</a>
+    
+<!--        <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false" onlogin="fb_login()"></div>-->
 </div>
 {{ endif }}
 
