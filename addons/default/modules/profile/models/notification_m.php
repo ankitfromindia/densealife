@@ -35,11 +35,12 @@ class Notification_m extends MY_Model
                 ->select($this->_table . '.type');
         }
         return $this
+                ->select($this->_table.'. data')
                         ->join('profiles as p1', "p1.user_id = $this->_table.rec_id", 'inner')
                         ->join('profiles as p2', "p2.user_id = $this->_table.sender_id", 'inner')
                         ->where(
                                 array(
-                                    $this->_table . '.status' => self::NOTIFICATION_STATUS_UNSEEN,
+                                    //$this->_table . '.status' => self::NOTIFICATION_STATUS_UNSEEN,
                                     $this->_table . '.rec_id' => $this->current_user->id
                                 )
                 )

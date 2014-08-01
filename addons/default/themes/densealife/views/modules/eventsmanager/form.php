@@ -18,9 +18,8 @@
         <li><a id="tab-album" href="/densealife-page/album">Album</a></li>
     </ul>
     <div id="tabs-1">
-        
         <div class='error-tab-1 d-none'></div>
-        <?php echo load_view('profile','index/partials/form_content', array('event' => $event, 'type' => $type)); ?>
+        <?php echo load_view('eventsmanager','partials/form_content', array('event' => $event, 'type' => $type)); ?>
     </div>
     
 </div>

@@ -42,7 +42,8 @@ class Plugin_Profile extends Plugin
         $user_id = $this->attribute('user_id');
         $type = $this->attribute('type');
         $links = $this->social_m->get_by(array('user_id' => $user_id));
-        if(array_key_exists($type, $links)){
+        
+        if(!empty($links) and array_key_exists($type, $links)){
             return $links->$type;
         }
     }

@@ -1,12 +1,3 @@
-//$(document)
-//        .ajaxStart(function() {
-//            $('.wall').animate({'opacity': '0.3'});
-//            $.fancybox.showLoading();
-//        })
-//        .ajaxStop(function() {
-//            $('.wall').animate({'opacity': '1'});
-//            $.fancybox.hideLoading();
-//        });
 $(document).ready(function() {
 
   $('.page-about').click(function(){
@@ -200,6 +191,23 @@ $('.form-trend').ajaxForm({
                 $star_place_holder.text(star_count+1)
             }
         }
+    }, 
+    complete: function() {
+        $.fancybox.hideLoading();
+    }
+});
+
+$('#form-share').ajaxForm({
+    type: 'POST',
+    delegation: true, // for live response
+    dataType: 'json',
+    beforeSubmit: function() {
+        $.fancybox.showLoading();
+    },
+    success: function(response) {
+       if(response.status==='success') {
+           $.fancybox.close();
+       }
     }, 
     complete: function() {
         $.fancybox.hideLoading();

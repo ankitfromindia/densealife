@@ -5,7 +5,7 @@ defined('BASEPATH') or exit('No direct script access allowed') ;
 class Module_EventsManager extends Module
 {
 
-    public $version = '1.0.0' ;
+    public $version = '2.0.1' ;
 
     public function info()
     {
@@ -85,7 +85,7 @@ class Module_EventsManager extends Module
             'is_required' => true,
             'is_gui'      => true,
             'module'      => 'eventsmanager',
-            'order'       => 8 )
+            'order'       => 8 ),
             ) ;
 
     public function install()
@@ -222,10 +222,11 @@ class Module_EventsManager extends Module
     public function admin_menu(&$menu)
     {
         $menu['Event Management'] = array(
-            'Event Listing'    => 'admin/eventsmanager',
-            'Create Event'     => 'admin/eventsmanager/create',
-            'Category Listing' => 'admin/eventsmanager/categories',
-            'Create Category'  => 'admin/eventsmanager/categories/create'
+            'Event Listing'           => 'admin/eventsmanager',
+            'Create Event'            => 'admin/eventsmanager/create',
+            'Category Listing'        => 'admin/eventsmanager/categories',
+            'Create Category'         => 'admin/eventsmanager/categories/create',
+            'Pending Approvals'       => 'admin/eventsmanager/approve',
         ) ;
 
         add_admin_menu_place('Event Management', 1) ;
@@ -241,26 +242,24 @@ class Module_EventsManager extends Module
     public function upgrade($old_version)
     {
         if ( $old_version === '1.0' ) { // Upgrade 1.0 -> 1.1
-            $upgrade = array(
-                'show_map' => array(
-                    'type'    => 'BOOL',
-                    'null'    => true,
-                    'default' => 0 // false
-                ),
-                'pos_lat'  => array(
-                    'type' => 'DOUBLE',
-                    'null' => true
-                ),
-                'pos_lng'  => array(
-                    'type' => 'DOUBLE',
-                    'null' => true
-                )
-                    ) ;
-            $result  = $this->dbforge->add_column('events', $upgrade) ;
+            $custom_setting = array(
+                'events_user_event_approval' => array(
+                    'slug'        => 'events_user_event_approval',
+                    'title'       => 'User Event or Interest Approval',
+                    'description' => 'If the user created events or interest must be approved by the admin before display in public.',
+                    'default' => '1',
+                    'value' => '1',
+                    'type' => 'select',
+                    'options' => '1=Yes|0=No',
+                    'is_required' => true,
+                    'is_gui'      => true,
+                    'module'      => 'eventsmanager',
+                    'order'       => 10)
+            );
             $this->load->library('settings') ;
-            $this->settings->add($this->custom_settings['events_map_width']) ;
-            $this->settings->add($this->custom_settings['events_map_height']) ;
-            return $result ;
+            foreach ( $custom_setting as $setting ){
+                $this->settings->add($setting) ;
+            }
         }
         return true ;
     }

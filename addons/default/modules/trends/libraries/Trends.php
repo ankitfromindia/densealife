@@ -184,6 +184,7 @@ class Trends
     }
     
     public function get_entry_type($entry_id){
+        return 'event'; 
         $rs = ci()->db->select('ec.slug')
                 ->from('events as e')
                 ->join('event_categories as ec', 'ec.id = e.category_id', 'inner')

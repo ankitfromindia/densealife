@@ -1,6 +1,6 @@
 <?php
 
-if ( !defined('BASEPATH') )
+if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 /**
@@ -23,7 +23,7 @@ class EventsManager extends Public_Controller
     {
         parent::__construct();
         $this->lang->load('eventsmanager');
-        if ( !is_logged_in() ) {
+        if (!is_logged_in()) {
             $this->session->set_userdata('redirect_to', current_url());
             redirect('users/login');
         }
@@ -33,7 +33,7 @@ class EventsManager extends Public_Controller
                                              </script>"
         );
         $this->template->set_layout('event');
-        if ( $this->input->is_ajax_request() ) {
+        if ($this->input->is_ajax_request()) {
             $this->template->set_layout(false);
         }
         $this->load->model('files/file_folders_m');
@@ -49,12 +49,12 @@ class EventsManager extends Public_Controller
 
         $event                      = $this->eventsmanager_m->getBy('slug', $slug) or show_404();
         // Get the author
-        $event->author_display_name = $this->profile_m->get_profile(array( 'user_id' => $event->author ))->display_name;
+        $event->author_display_name = $this->profile_m->get_profile(array('user_id' => $event->author))->display_name;
         // Get the picture filename
         $picture                    = null;
-        if ( isset($event->picture_id) )
+        if (isset($event->picture_id))
             $picture                    = $this->eventsmanager_m->get_image_file($event->picture_id);
-        if ( isset($picture) )
+        if (isset($picture))
             $event->picture_filename    = $picture->filename;
         $this->template
                 ->title($this->module_details['name'])
@@ -95,36 +95,28 @@ class EventsManager extends Public_Controller
 
     public function event($slug = NULL)
     {
-        $slug or show_404();
+        $event = $this->eventsmanager_m->getBy('slug', $slug);
+        if (!empty($event)) {
+            // Get the author
+            $event->author_display_name = $this->profile_m->get_profile(array('user_id' => $event->author))->display_name;
+            // Get the picture filename
+            $picture                    = null;
+            if (isset($event->picture_id))
+                $picture                    = $this->eventsmanager_m->get_image_file($event->picture_id);
+            if (isset($picture))
+                $event->picture_filename    = $picture->filename;
 
-        $event                      = $this->eventsmanager_m->getBy('slug', $slug) or show_404();
-        // Get the author
-        $event->author_display_name = $this->profile_m->get_profile(array( 'user_id' => $event->author ))->display_name;
-        // Get the picture filename
-        $picture                    = null;
-        if ( isset($event->picture_id) )
-            $picture                    = $this->eventsmanager_m->get_image_file($event->picture_id);
-        if ( isset($picture) )
-            $event->picture_filename    = $picture->filename;
+            $this->template
+                    ->set('event', $event);
 
+            if (new Datetime($event->end_date) >= new Datetime())
+                $this->template->set_breadcrumb(lang('eventsmanager:upcoming_events_label'), $this->module);
+            else
+                $this->template->set_breadcrumb(lang('eventsmanager:past_events_label'), $this->module . '/past');
+
+            $comments = $this->_load_comments($event->id);
+        }
         $this->template
-                ->title($this->module_details['name'])
-                ->set_breadcrumb(lang('eventsmanager:events_label'), $this->module)
-                ->append_js('module::jquery.fancybox.pack.js')
-                ->append_css('module::frontend_event.css')
-                ->append_css('module::common.css')
-                ->append_css('module::jquery.fancybox.css')
-                ->set('event', $event);
-
-        if ( new Datetime($event->end_date) >= new Datetime() )
-            $this->template->set_breadcrumb(lang('eventsmanager:upcoming_events_label'), $this->module);
-        else
-            $this->template->set_breadcrumb(lang('eventsmanager:past_events_label'), $this->module . '/past');
-
-        $comments = $this->_load_comments($event->id);
-
-        $this->template
-                ->set_breadcrumb($event->title)
                 ->build('event');
     }
 
@@ -137,7 +129,7 @@ class EventsManager extends Public_Controller
         );
 
         $events                = array();
-        if ( !empty($past_events) )
+        if (!empty($past_events))
             $events["past_events"] = $past_events;
 
         $this->template
@@ -152,18 +144,18 @@ class EventsManager extends Public_Controller
 
     public function edit($slug)
     {
-        $slug  or show_404();
-        
-        $event = $this->eventsmanager_m->getBy('slug', $slug);
-        $type = 'event'; 
-        if($event->category_id = 2){
-            $type = 'interest'; 
+        $slug or show_404();
+
+        $event              = $this->eventsmanager_m->getBy('slug', $slug);
+        $type               = 'event';
+        if ($event->category_id = 2) {
+            $type = 'interest';
         }
         $this->create($type, $slug);
     }
+
     public function create($type = 'event', $slug = null)
     {
-
         $this->template->set_layout('densealife')->set('type', $type);
 
         // Check for user permissions
@@ -171,35 +163,35 @@ class EventsManager extends Public_Controller
 
         $this->form_validation->set_rules(Events_Validation::rules());
 
-        if ( $this->form_validation->run() ) {
+        if ($this->form_validation->run()) {
             $post                = $this->input->post();
             $post['category_id'] = '1';
-            if ( $type == 'interest' ) {
+            if ($type == 'interest') {
                 $post['category_id'] = '2';
             }
-            if ( $id = $this->eventsmanager_m->insert($post) ) {
+            if ($id = $this->eventsmanager_m->insert($post)) {
                 $this->session->set_userdata('recently_created_event', $id);
-                echo json_encode(array( 'status' => 'success', 'slug' => $this->input->post('slug') ));
+                echo json_encode(array('status' => 'success', 'slug' => $this->input->post('slug')));
                 exit;
             } else {
                 $this->session->set_flashdata('error', lang('eventsmanager:create_error'));
             }
         } else {
-            if($slug){
-            $event = $this->eventsmanager_m->getBy('slug', $slug);
-            $this->session->set_userdata('recently_created_event', $event->id);
-            }else{
+            if ($slug) {
+                $event = $this->eventsmanager_m->getBy('slug', $slug);
+                $this->session->set_userdata('recently_created_event', $event->id);
+            } else {
                 $event = new StdClass();
-                
-            
-            foreach ( Events_Validation::rules() as $key => $field ) {
-                $value                  = isset($field['default']) ? set_value($field['field'], $field['default']) : set_value($field['field']);
-                $event->$field['field'] = $value;
+
+
+                foreach (Events_Validation::rules() as $key => $field) {
+                    $value                  = isset($field['default']) ? set_value($field['field'], $field['default']) : set_value($field['field']);
+                    $event->$field['field'] = $value;
+                }
             }
-            }
-            
-            if ( $this->input->post() ) {
-                echo json_encode(array( 'status' => 'failure', 'message' => validation_errors('<li>', '</li>') ));
+
+            if ($this->input->post()) {
+                echo json_encode(array('status' => 'failure', 'message' => validation_errors('<li>', '</li>')));
                 exit;
             }
         }
@@ -209,7 +201,7 @@ class EventsManager extends Public_Controller
         $this->_load_frontend_form_assets();
         $sub_categories = array();
 
-        if ( $type == 'interest' ) {
+        if ($type == 'interest') {
             $cat       = $this->event_categories_m->get_by('slug', 'interest');
             $parent_id = $cat->id;
         } else {
@@ -218,14 +210,14 @@ class EventsManager extends Public_Controller
         }
         $categories = $this->event_categories_m
                 ->order_by('title')
-                ->get_many_by(array( 'parent_id' => $parent_id ));
+                ->get_many_by(array('parent_id' => $parent_id));
 
-        foreach ( $categories as $pc ) {
+        foreach ($categories as $pc) {
             $sub_categories[$pc->id] = $pc->title;
         }
 
 
-        if ( $this->session->userdata('recently_created_event') != '' ) {
+        if ($this->session->userdata('recently_created_event') != '') {
             $event_id = $this->session->userdata('recently_created_event');
             $event    = $this->eventsmanager_m->get_by('id', $event_id);
         }
@@ -244,12 +236,12 @@ class EventsManager extends Public_Controller
         $id = $this->session->userdata('recently_created_event');
         // Check for user permissions
         role_or_die('eventsmanager', 'frontend_editing', 'eventsmanager', lang('eventsmanager:notallowed_frontend_editing'));
-        if ( $this->session->userdata('recently_created_event') != '' ) {
+        if ($this->session->userdata('recently_created_event') != '') {
             $id    = $this->session->userdata('recently_created_event');
             $event = $this->eventsmanager_m->getBy('id', $id);
-            if ( $event->author == $this->current_user->id ) {
+            if ($event->author == $this->current_user->id) {
                 $this->eventsmanager_m->save_image_as($id, $this->input->post());
-                echo json_encode(array( 'status' => 'success' ));
+                echo json_encode(array('status' => 'success'));
                 exit;
             } else {
                 show_error('You are not authorized to create thumbnail for this event');
@@ -262,13 +254,13 @@ class EventsManager extends Public_Controller
     public function save_cp_pos()
     {
         role_or_die('eventsmanager', 'frontend_editing', 'eventsmanager', lang('eventsmanager:notallowed_frontend_editing'));
-        if ( $this->input->post('event_id') == '' || $this->input->post('new_cp_pos') == '' ) {
+        if ($this->input->post('event_id') == '' || $this->input->post('new_cp_pos') == '') {
             show_error('There is some error');
         } else {
             $event = $this->eventsmanager_m->getBy('id', $this->input->post('event_id'));
-            if ( $event->author == $this->current_user->id ) {
+            if ($event->author == $this->current_user->id) {
                 $this->eventsmanager_m->save_cp_pos($event->id, $this->input->post());
-                echo json_encode(array( 'status' => 'success' ));
+                echo json_encode(array('status' => 'success'));
                 exit;
             } else {
                 show_error('You are not authorized to create thumbnail for this event');
@@ -280,12 +272,12 @@ class EventsManager extends Public_Controller
     {
         // Check for user permissions
         role_or_die('eventsmanager', 'frontend_editing', 'eventsmanager', lang('eventsmanager:notallowed_frontend_editing'));
-        if ( $this->session->userdata('recently_created_event') != '' ) {
+        if ($this->session->userdata('recently_created_event') != '') {
             $id    = $this->session->userdata('recently_created_event');
             $event = $this->eventsmanager_m->getBy('id', $id);
-            if ( $event->author == $this->current_user->id ) {
+            if ($event->author == $this->current_user->id) {
                 $this->eventsmanager_m->save_coverphoto($id, $this->input->post());
-                echo json_encode(array( 'response' => 'success' ));
+                echo json_encode(array('response' => 'success'));
                 exit;
             } else {
                 show_error('You are not authorized to create thumbnail for this event');
@@ -303,15 +295,15 @@ class EventsManager extends Public_Controller
         $slug or show_404();
 
         $event = $this->eventsmanager_m->getBy('slug', $slug);
-        if ( empty($event) ) {
+        if (empty($event)) {
             $this->session->set_flashdata('error', lang('eventsmanager:exists_error'));
             redirect('eventsmanager');
         }
 
         $this->form_validation->set_rules(Events_Validation::rules());
 
-        if ( $this->form_validation->run() ) {
-            if ( $this->eventsmanager_m->update($event->id, $this->input->post()) == true ) {
+        if ($this->form_validation->run()) {
+            if ($this->eventsmanager_m->update($event->id, $this->input->post()) == true) {
                 $this->session->set_flashdata('success', lang('eventsmanager:update_success'));
 
                 $this->input->post('btn-action') == 'save_exit' ? redirect('eventsmanager/' . $event->slug) : redirect('eventsmanager/edit/' . $event->slug);
@@ -334,7 +326,7 @@ class EventsManager extends Public_Controller
     private function _load_comments($event_id)
     {
         $event = $this->eventsmanager_m->getBy('id', $event_id);
-        if ( isset($event->enable_comments) or $event->enable_comments ) {
+        if (isset($event->enable_comments) or $event->enable_comments) {
 
             $this->load->library('comments/comments', array(
                 'entry_id'    => $event->id,
@@ -349,7 +341,7 @@ class EventsManager extends Public_Controller
     private function _load_trends($event_id)
     {
         $event = $this->eventsmanager_m->getBy('id', $event_id);
-        if ( $event->enable_comments ) {
+        if ($event->enable_comments) {
 
             $this->load->library('trends/trends', array(
                 'entry_id'    => $event->id,
@@ -407,21 +399,21 @@ class EventsManager extends Public_Controller
 
         $picture  = null;
         $pictures = array();
-        if ( isset($event->picture_id) )
+        if (isset($event->picture_id))
             $picture  = $this->eventsmanager_m->get_image_file($event->picture_id);
-        if ( isset($picture) )
+        if (isset($picture))
             $pictures = $this->eventsmanager_m->get_images_files($picture->folder_id); // Loads pictures from selected picture folder
         else {
             $picture     = null;
             $folders_ids = array_keys($file_folders);
-            if ( isset($folders_ids[0]) )
+            if (isset($folders_ids[0]))
                 $pictures    = $this->eventsmanager_m->get_images_files($folders_ids[0]); // Choose the first folder if exists
             else
                 $pictures    = array(); // No folder and no image on the site
         }
 
         $folders_tree = array();
-        foreach ( $file_folders as $folder ) {
+        foreach ($file_folders as $folder) {
             $indent                    = repeater('&raquo; ', $folder->depth);
             $folders_tree[$folder->id] = $indent . $folder->name;
         }
@@ -454,7 +446,7 @@ class EventsManager extends Public_Controller
         $this->_set_template_content($slug);
         $event = $this->eventsmanager_m->getBy('slug', $slug);
         $this->template
-                ->set('content', $this->load_view('wall', array( 'event' => $event )))
+                ->set('content', $this->load_view('wall', array('event' => $event)))
                 ->build('eventsmanager/index');
     }
 
@@ -464,7 +456,7 @@ class EventsManager extends Public_Controller
         $event = $this->eventsmanager_m->getBy('slug', $slug);
 
         $this->template
-                ->set('content', $this->load_view('about', array( 'event' => $event )))
+                ->set('content', $this->load_view('about', array('event' => $event)))
                 ->build('eventsmanager/index');
     }
 
@@ -474,8 +466,8 @@ class EventsManager extends Public_Controller
         $event  = $this->eventsmanager_m->getBy('slug', $slug);
         $albums = $this->file_folders_m->get_albums($event->id);
         $photos = '';
-        foreach ( $albums as &$album ) {
-            if ( $album->count_files != 0 ) {
+        foreach ($albums as &$album) {
+            if ($album->count_files != 0) {
                 $cover              = $this->eventsmanager_m->get_images_files($album->id);
                 $album_cover        = current($cover);
                 $album->cover       = is_object($album_cover) ? $album_cover->path : '';
@@ -485,22 +477,22 @@ class EventsManager extends Public_Controller
         $user_uploads = $this->eventsmanager_m->get_user_uploads_by_event_id($event->id);
 
         $this->template
-                ->set('content', $this->load_view('albums', array( 'albums' => $albums, 'photos' => $user_uploads )))
+                ->set('content', $this->load_view('albums', array('albums' => $albums, 'photos' => $user_uploads)))
                 ->build('eventsmanager/index');
     }
 
     public function videos($slug = null)
     {
-      
+
         $this->_set_template_content($slug);
-        $event             = $this->eventsmanager_m->getBy('slug', $slug);
-        $youtube_videos    = unserialize($event->youtube_videos);
-        
+        $event          = $this->eventsmanager_m->getBy('slug', $slug);
+        $youtube_videos = unserialize($event->youtube_videos);
+
         $albums            = $this->file_folders_m->get_albums($event->id);
         $count_video_files = 0;
-        foreach ( $albums as &$album ) {
+        foreach ($albums as &$album) {
             $video_files = $this->eventsmanager_m->get_files('v', $album->id);
-            if ( !empty($video_files) ) {
+            if (!empty($video_files)) {
                 $album->videos = $video_files;
                 $count_video_files ++;
             } else {
@@ -509,10 +501,9 @@ class EventsManager extends Public_Controller
         }
 
         $this->template
-                ->set('content', $this->load_view('videos', array( 'albums' => $albums, 'count' => $count_video_files , 'youtube_videos' => $youtube_videos)))
+                ->set('content', $this->load_view('videos', array('albums' => $albums, 'count' => $count_video_files, 'youtube_videos' => $youtube_videos)))
                 ->build('eventsmanager/index');
     }
-    
 
     public function followers($slug = null)
     {
@@ -523,7 +514,7 @@ class EventsManager extends Public_Controller
         $this->load->library('friend/friend');
 
         $this->template
-                ->set('content', $this->load_view('followers', array( 'followers' => $followers )))
+                ->set('content', $this->load_view('followers', array('followers' => $followers)))
                 ->build('eventsmanager/index');
     }
 
@@ -543,14 +534,14 @@ class EventsManager extends Public_Controller
         $input          = $this->input->post();
         $folder_content = Files::folder_contents(0, $input['entry_id'], true);
         $folder_id      = null;
-        if ( empty($folder_content['data']['folder']) ) {
+        if (empty($folder_content['data']['folder'])) {
             $album     = Files::create_album(0, 'User Uploads :' . ucfirst($input['title']), $input['entry_id'], true);
             $folder_id = $album['data']['id'];
         } else {
             $folder    = reset($folder_content['data']['folder']);
             $folder_id = $folder->id;
         }
-        if ( $folder_id ) {
+        if ($folder_id) {
             //$result = Files::upload($input['folder_id'], $input['name'], 'file', $input['width'], $input['height'], $input['ratio'], null, $input['alt_attribute']);
             $result = Files::upload($folder_id, false, 'file');
             $result['status'] AND Events::trigger('file_uploaded', $result['data']);
@@ -568,7 +559,7 @@ class EventsManager extends Public_Controller
     {
         $ext = pathinfo($view, PATHINFO_EXTENSION) ? '' : '.php';
 
-        if ( file_exists($this->template->get_views_path() . 'modules/eventsmanager/' . $view . $ext) ) {
+        if (file_exists($this->template->get_views_path() . 'modules/eventsmanager/' . $view . $ext)) {
             // look in the theme for overloaded views
             $path = $this->template->get_views_path() . 'modules/eventsmanager/';
         } else {
@@ -580,7 +571,7 @@ class EventsManager extends Public_Controller
         $this->load->set_view_path($path);
         $this->load->vars($data);
 
-        return $this->load->_ci_load(array( '_ci_view' => $view, '_ci_return' => true ));
+        return $this->load->_ci_load(array('_ci_view' => $view, '_ci_return' => true));
     }
 
     public function get_sub_categories()
@@ -588,7 +579,7 @@ class EventsManager extends Public_Controller
         $cat_id            = $this->input->post('cat_id', '');
         $parent_categories = $this->event_categories_m->get_sub_categories($cat_id);
         $parents           = array();
-        foreach ( $parent_categories as $pc ) {
+        foreach ($parent_categories as $pc) {
             $parents[$pc->id] = $pc->title;
         }
         // exit(form_dropdown('sub_category_id', array( '' => lang('cat:no_category_select_label') ) + $parents,'class="drpdwn_sub_category_id"'));
@@ -597,7 +588,7 @@ class EventsManager extends Public_Controller
 
     public function ajax_search_events($title)
     {
-        $events = $this->eventsmanager_m->like('title', $title)->limit(10)->get_many_by(array( 'published' => 1 ));
+        $events = $this->eventsmanager_m->like('title', $title)->limit(10)->get_many_by(array('published' => 1));
 
         $this->template
                 ->set_layout(false)
@@ -605,50 +596,51 @@ class EventsManager extends Public_Controller
                 ->set('events', $events)
                 ->build('search');
     }
-    
+
     public function add_friend($event_slug = null)
     {
-        
-        $friends = $this->friend_m->get_friends($this->current_user->id);
-        $notifications = $this->notification_m->get_by(array('type' => Notify::TYPE_INVITE, 'sender_id' => $this->current_user->id));
+
+        $friends                       = $this->friend_m->get_friends($this->current_user->id);
+        $notifications                 = $this->notification_m->get_by(array('type' => Notify::TYPE_INVITE, 'sender_id' => $this->current_user->id));
         $friends_invititation_not_sent = array();
-        foreach($friends as $friend){
-            
-            if(isset($notifications->rec_id) && $friend->user_id == $notifications->rec_id){
-                continue; 
+        foreach ($friends as $friend) {
+
+            if (isset($notifications->rec_id) && $friend->user_id == $notifications->rec_id) {
+                continue;
             }
             $friends_invititation_not_sent[] = $friend;
         }
-        
-        if($event_slug){
-            $event = $this->eventsmanager_m->get_by('slug',$event_slug);
-            $event  or show_404();
-        }
-        if($this->input->post()){
-            $data = $this->input->post('data');
-            $invitation = unserialize($this->encrypt->decode($data));
-            
-            Notify::trigger(Notify::TYPE_INVITE, $invitation);
-                
-            // Email 
-            if(array_key_exists('event', $invitation) 
-                    and $event = $this->eventsmanager_m->get_by('id', $invitation['event'])){
-                    // Add in some extra details
-                    $content['slug'] ='invite-friend-to-event';
 
-                    $content['username'] = $this->current_user->username;
-                    $friend = $this->user_m->get_by('id', $invitation['rec_id']);
-                    $content['to'] =  $friend->email;
-                    $content['event_link'] = '/eventsmanager/'. $event->slug;
-                    @Events::trigger('email', $event);
+        if ($event_slug) {
+            $event = $this->eventsmanager_m->get_by('slug', $event_slug);
+            $event or show_404();
+        }
+        if ($this->input->post()) {
+            $data       = $this->input->post('data');
+            $invitation = unserialize($this->encrypt->decode($data));
+
+            Notify::trigger(Notify::TYPE_INVITE, $invitation);
+
+            // Email 
+            if (array_key_exists('event', $invitation)
+                    and $event = $this->eventsmanager_m->get_by('id', $invitation['event'])) {
+                // Add in some extra details
+                $content['slug'] = 'invite-friend-to-event';
+
+                $content['username']   = $this->current_user->username;
+                $friend                = $this->user_m->get_by('id', $invitation['rec_id']);
+                $content['to']         = $friend->email;
+                $content['event_link'] = '/eventsmanager/' . $event->slug;
+                @Events::trigger('email', $event);
             }
-            echo json_encode( array(
-                                'status' => 'success',
-                                'response' => array(
-                                    'msg' => 'Invitation sent successfully',
-                                    'friend_id' => $invitation['rec_id']
-                                )
-                            ));  exit; 
+            echo json_encode(array(
+                'status'   => 'success',
+                'response' => array(
+                    'msg'       => 'Invitation sent successfully',
+                    'friend_id' => $invitation['rec_id']
+                )
+            ));
+            exit;
         }
         $this->template
                 ->set_layout(false)
@@ -657,44 +649,42 @@ class EventsManager extends Public_Controller
                 ->set('friends', $friends_invititation_not_sent)
                 ->build('add_friend');
     }
-    
+
     public function invite_by_mail($event_slug = null)
     {
         $event = '';
-        if($event_slug!='' ){
+        if ($event_slug != '') {
             $event = $this->eventsmanager_m->get_by('slug', $event_slug);
             $event or show_404();
         }
-        if($friends = $this->input->post('friends')){
+        if ($friends = $this->input->post('friends')) {
             $friends = explode(',', $friends);
-            
-            $event = $this->eventsmanager_m->get_by('slug', $event_slug);
-            $invalid_emails = array();
-            foreach($friends as $friend_email){
-                if(filter_var(trim($friend_email), FILTER_VALIDATE_EMAIL)){
-                    // Add in some extra details
-                    $content['slug'] ='invite-friend-to-event-by-mail';
 
-                    $content['username'] = $this->current_user->username;
-                    $content['to'] =  $friend_email;
-                    $content['event_link'] = '/eventsmanager/'. $event->slug;
+            $event          = $this->eventsmanager_m->get_by('slug', $event_slug);
+            $invalid_emails = array();
+            foreach ($friends as $friend_email) {
+                if (filter_var(trim($friend_email), FILTER_VALIDATE_EMAIL)) {
+                    // Add in some extra details
+                    $content['slug'] = 'invite-friend-to-event-by-mail';
+
+                    $content['username']   = $this->current_user->username;
+                    $content['to']         = $friend_email;
+                    $content['event_link'] = '/eventsmanager/' . $event->slug;
                     @Events::trigger('email', $content);
-                }else{
+                } else {
                     $invalid_emails[] = trim($friend_email);
                 }
             }
-            if(count($invalid_emails)){
-                exit(json_encode(array('status' => 'error', 'msg' => 'Please enter valid email ids' , 'invalid_emails' => implode(',', $invalid_emails))));
-            }else{
+            if (count($invalid_emails)) {
+                exit(json_encode(array('status' => 'error', 'msg' => 'Please enter valid email ids', 'invalid_emails' => implode(',', $invalid_emails))));
+            } else {
                 exit(json_encode(array('status' => 'success', 'msg' => 'Email sent successfully')));
             }
-            
         }
         $this->template
                 ->set_layout(false)
                 ->set('event', $event)
                 ->build('invite_by_mail');
     }
-   
 
 }

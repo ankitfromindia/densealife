@@ -23,11 +23,12 @@ if ( !defined('BASEPATH') )
   |	http://www.codeigniter.com/user_guide/general/routing.html
  */
 //// Maintain admin routes
-$route['eventsmanager/admin/categories(/:any)?'] = 'admin_categories$1' ;
+$route['eventsmanager/admin/categories(/:any)?'] = 'admin_categories/$1' ;
 $route['eventsmanager/admin(:any)?']             = 'admin$1' ;
 ////
 ////// Rewrite the URLs
 $route['eventsmanager']                   = 'eventsmanager/index' ;
+
 $route['eventsmanager/add_friend']                   = 'eventsmanager/add_friend' ;
 $route['eventsmanager/create']                   = 'eventsmanager/create/event' ;
 $route['eventsmanager/create_interest']                   = 'eventsmanager/create/interest' ;

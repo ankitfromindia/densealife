@@ -41,7 +41,7 @@ class Notifications extends Public_Controller
 
     public function view()
     {
-        $pending = $this->notification_m->get_unseen($this->user->id);
+        $pending = $this->notification_m->get_all_notifications($this->user->id);
         $this->template
                 ->set('notifications', $pending)
                 ->build('notifications/view');

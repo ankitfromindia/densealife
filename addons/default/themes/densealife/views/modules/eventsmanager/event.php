@@ -1,4 +1,4 @@
-<?php $module_path = BASE_URL . $this->module_details['path']; ?>
+<?php $module_path = BASE_URL . $this->module_details['path'];  ?>
 <h2><?php echo $event->title; ?></h2>
 <?php echo $this->load->view('partials/follow',array('slug' => $event->slug));?>
 <img src="<?php echo $event->cover_photo;?>" alt ="<?php echo $event->title; ?>" width="700"/>

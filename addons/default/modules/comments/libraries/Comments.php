@@ -134,7 +134,10 @@ class Comments
             ci()->load->library('trends/trends');
             
 		// Fetch comments, then process them
-		$comments = $this->process(ci()->comment_m->get_by_user($user_id));
+//		$comments = $this->process(ci()->comment_m->get_by_user($user_id));
+		$comments = $this->process(ci()->comment_m->get_wall_posts($user_id));
+               // echo ci()->comment_m->last_query();exit;
+               //p($comments); exit; 
                
                 foreach($comments as &$comment){
                     $comment->count_stars = '';//ci()->trends->comment_count(Trends::TREND_STAR, $comment->id);
