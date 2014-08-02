@@ -12,6 +12,20 @@ var refreshSrc, inputSync;
 
 jQuery(function($)
 {
+  if($('input[name="comment_permission"]:checked').val() == 'FOLLOWER'){
+      $('#tr-ca').show(); 
+  }else{
+      $('#tr-ca').hide(); 
+      $('input[name="comment_approval"]').removeAttr('checked');
+  }
+  $('input[name="comment_permission"]').change(function(){
+     if($(this).val()=='FOLLOWER') {
+         $('#tr-ca').show(); 
+     }else{
+         $('input[name="comment_approval"]').removeAttr('checked');
+         $('#tr-ca').hide(); 
+     }
+  });
   // Generate a slug when the user types a title in
   $('input[name="title"]').keyup(function()
   {

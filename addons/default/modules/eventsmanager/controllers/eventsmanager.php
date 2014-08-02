@@ -151,10 +151,10 @@ class EventsManager extends Public_Controller
         if ($event->category_id = 2) {
             $type = 'interest';
         }
-        $this->create($type, $slug);
+        $this->create($type, $slug, 'edit');
     }
 
-    public function create($type = 'event', $slug = null)
+    public function create($type = 'event', $slug = null, $action='create')
     {
         $this->template->set_layout('densealife')->set('type', $type);
 
@@ -162,13 +162,20 @@ class EventsManager extends Public_Controller
         role_or_die('eventsmanager', 'frontend_editing', 'eventsmanager', lang('eventsmanager:notallowed_frontend_editing'));
 
         $this->form_validation->set_rules(Events_Validation::rules());
-
+        $event              = $this->eventsmanager_m->getBy('slug', $slug);
         if ($this->form_validation->run()) {
             $post                = $this->input->post();
             $post['category_id'] = '1';
             if ($type == 'interest') {
                 $post['category_id'] = '2';
             }
+            if($action=='edit'){
+             if ($this->eventsmanager_m->update($event->id, $this->input->post()) == true) {
+                 $this->session->set_userdata('recently_created_event', $event->id);
+                echo json_encode(array('status' => 'success', 'slug' => $this->input->post('slug')));
+                exit;
+             }   
+            }else{
             if ($id = $this->eventsmanager_m->insert($post)) {
                 $this->session->set_userdata('recently_created_event', $id);
                 echo json_encode(array('status' => 'success', 'slug' => $this->input->post('slug')));
@@ -176,9 +183,9 @@ class EventsManager extends Public_Controller
             } else {
                 $this->session->set_flashdata('error', lang('eventsmanager:create_error'));
             }
+            }
         } else {
             if ($slug) {
-                $event = $this->eventsmanager_m->getBy('slug', $slug);
                 $this->session->set_userdata('recently_created_event', $event->id);
             } else {
                 $event = new StdClass();
@@ -445,8 +452,15 @@ class EventsManager extends Public_Controller
 
         $this->_set_template_content($slug);
         $event = $this->eventsmanager_m->getBy('slug', $slug);
+        $this->load->model('comments/comment_blacklists_m'); 
+        $blacklisted = $this->comment_blacklists_m->is_blacklisted($event->author, $this->current_user->id);
+        $allow_comment = false; 
+        if(!$blacklisted and(($this->current_user->id == $event->author) or ($event->comment_permission == 'FOLLOWER' and $this->trend_m->am_i_following($event->id)))) {
+            $allow_comment = true; 
+        }
+        
         $this->template
-                ->set('content', $this->load_view('wall', array('event' => $event)))
+                ->set('content', $this->load_view('wall', array('event' => $event,'allow_comment' => $allow_comment)))
                 ->build('eventsmanager/index');
     }
 

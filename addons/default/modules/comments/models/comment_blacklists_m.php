@@ -26,19 +26,17 @@ class Comment_blacklists_m extends MY_Model {
 	
 	private function _get_count($data)
 	{
-		return $this->db->or_where($data)->count_all_results('comment_blacklists');
+            return $this->db->where($data)->count_all_results('comment_blacklists');
 	}
 
-	public function is_blacklisted($data)
-	{
-		// We will always get an email address since it's required.
-		// The only variable is the website. If it wasn't provided,
-		// we can't check by it.
-		if ( ! trim($data['website']))
-		{
-			return (bool)$this->db->where('email', $data['email'])->count_all_results('comment_blacklists');
-		}
+	public function is_blacklisted($author, $user)
+        {
+            $data = array(
+                'author_id'       => $author,
+                'blocked_user_id' => $user,
+                'status'          => 'block'
+            );
+            return (bool) $this->_get_count($data);
+        }
 
-		return (bool)$this->_get_count($data);
-	}
 }

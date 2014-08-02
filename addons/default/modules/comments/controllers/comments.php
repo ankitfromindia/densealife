@@ -73,7 +73,8 @@ class Comments extends Public_Controller
         // Get information back from the entry hash
         // @HACK This should be part of the controllers lib, but controllers & libs cannot share a name
         $entry                 = unserialize($this->encrypt->decode($this->input->post('entry')));
-
+        
+        $event = $this->eventsmanager_m->get_by('id', $entry['id']);
         $comment = array(
             'parent_id'    => $this->input->post('parent_id'),
             'module'       => $module,
@@ -83,10 +84,16 @@ class Comments extends Public_Controller
             'entry_plural' => $entry['plural'],
             'uri'          => $entry['uri'],
             'comment'      => $this->input->post('comment'),
-            'is_active'    => (bool) ((isset($this->current_user->group) and $this->current_user->group == 'admin') or ! Settings::get('moderate_comments')),
             'media'        => !empty($media_content) ? $media_content : '',
         );
-
+        
+        $comment['is_active'] = 0;
+        if((isset($this->current_user->group) and $this->current_user->group == 'admin') 
+                or $event->comment_approval == 'NO'
+                or ($this->current_user->id == $event->author)){
+            $comment['is_active'] = 1;
+        }
+       
         // Logged in? in which case, we already know their name and email
         if ($this->current_user) {
             $comment['user_id']      = $this->current_user->id;
@@ -128,6 +135,16 @@ class Comments extends Public_Controller
             } else {
                 // Save the comment
                 if ($comment_id = $this->comment_m->insert($comment)) {
+                    if ($event->comment_approval == 'YES') {
+                        Notify::trigger(Notify::TYPE_COMMENT, array(
+                            'rec_id' => $event->author,
+                            'data'   => array(
+                                'comment_id' => $comment_id,
+                                'media'   => $comment['media'],
+                                'comment' => $comment['comment']
+                            )
+                        ));
+                    }
                     if ($this->input->is_ajax_request()) {
                         $parent_id              = $this->input->post('parent_id') ? $this->input->post('parent_id') : 0;
                         $comment                = $this->comment_m->get_by(array('id' => $comment_id));
@@ -405,15 +422,15 @@ class Comments extends Public_Controller
             }
         }
 
-        // Do our own blacklist check.
-        $blacklist = array(
-            'email'   => $this->input->post('email'),
-            'website' => $this->input->post('website')
-        );
-
-        if ($this->comment_blacklists_m->is_blacklisted($blacklist)) {
-            return array('status' => false, 'message' => 'The website or email address posting this comment has been blacklisted.');
-        }
+//        // Do our own blacklist check.
+//        $blacklist = array(
+//            'email'   => $this->input->post('email'),
+//            'website' => $this->input->post('website')
+//        );
+//
+//        if ($this->comment_blacklists_m->is_blacklisted($blacklist)) {
+//            return array('status' => false, 'message' => 'The website or email address posting this comment has been blacklisted.');
+//        }
 
         // F**k knows, its probably fine...
         return array('status' => true);
@@ -472,4 +489,65 @@ class Comments extends Public_Controller
                 ->build('share');
     }
 
+    /**
+     * Approve a comment
+     * 
+     * @param  mixed $ids		id or array of ids to process
+     * @return void
+     */
+    public function approve()
+    {
+        $this->_do_action($this->input->get('cid'), $this->input->get('action'));
+    }
+    
+    /**
+    * Do the actual work for approve/unapprove
+    * @access protected
+    * @param  int|array $ids	id or array of ids to process
+    * @param  string $action	action to take: maps to model
+    * @return void
+    */
+   protected function _do_action($ids, $action)
+   {
+           $ids		= ( ! is_array($ids)) ? array($ids) : $ids;
+           $multiple	= (count($ids) > 1) ? '_multiple' : null;
+           $status		= 'success';
+
+           foreach ($ids as $id)
+           {
+                   if ( ! $this->comment_m->{$action}($id))
+                   {
+                           $status = 'error';
+                           break;
+                   }
+                   if ($action == 'approve')
+                   {
+                           // add an event so third-party devs can hook on
+                           Events::trigger('comment_approved', $this->comment_m->get($id));
+                   }
+                   else
+                   {
+                           Events::trigger('comment_unapproved', $id);
+                   }
+           }
+           
+           $this->template
+                   ->build_json(array($status => lang('comments:' . $action . '_' . $status . $multiple)));
+   }
+   
+   public function block()
+   {
+       $this->load->model('comment_blacklists_m');
+       
+       $uid = $this->input->get('uid'); 
+       if($uid!=''){
+           $data = array('author_id' => $this->current_user->id,
+               'blocked_user_id' => $uid,
+               'status' => 'block');
+           if($this->comment_blacklists_m->save($data)){
+               $this->template
+                       ->build_json(array('success' => 'This user is blocked now.')); 
+           }
+       }
+   }
 }

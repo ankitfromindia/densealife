@@ -31,7 +31,11 @@ class Notification_m extends MY_Model
     public function get_columns($colums = true)
     {
         if($colums){
-            $this->select("p1.display_name as receiver, p2.display_name as sender,$this->_table.created_on, p1.user_id as receiver_id, p2.user_id as sender_id")
+            $this->select("p1.display_name as receiver,
+                    p2.display_name as sender,
+                    p1.user_id as receiver_id, 
+                    p2.user_id as sender_id,
+                    $this->_table.created_on,")
                 ->select($this->_table . '.type');
         }
         return $this

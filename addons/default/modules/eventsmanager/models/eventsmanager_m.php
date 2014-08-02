@@ -138,7 +138,6 @@ class EventsManager_m extends MY_Model
             'comment_permission' => isset($input['comment_permission']) ? $input['comment_permission'] : 'CREATER',
             'comment_approval'  => isset($input['comment_approval']) ? $input['comment_approval'] : 'NO'
         );
-        
         if($this->current_user->group == 'admin') {
             $insert_row['published'] = 1;
         } else{
@@ -358,7 +357,7 @@ class EventsManager_m extends MY_Model
         
 
         // Doing this work after for PHP < 5.3
-        $result = $this->save_thumbnail($id, $input);
+        //$result = $this->save_thumbnail($id, $input);
         // Maps
         if ( isset($input['show_map']) )
             $result = parent::update($id, array( 'show_map' => $input['show_map'] ));

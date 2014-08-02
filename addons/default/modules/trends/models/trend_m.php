@@ -54,8 +54,8 @@ class Trend_m extends MY_Model
                     'entry_type'   => $input['entry_type'],
                     'entry_id'     => $input['entry_id']
                 );
+        
         if(!$this->if_exists($input)){
-            //p($input);
             switch($input['trend']){
                 case TREND_STAR:
                     $post['star'] = true; 
@@ -70,9 +70,9 @@ class Trend_m extends MY_Model
                     $this->add_favorite($input['entry_id']);
                     break;
             }
+            parent::insert($post);
             return '+1' ;
         }else{
-           echo 'hello ankit'; exit; 
            $trendIncrement = '+1';
            $query  = "UPDATE {$this->dbprefix('trends')} SET %s , modified_at='".date('Y-m-d H:i:s')."' WHERE user_id ={$this->current_user->id}"
             . " AND entry_type = '{$input['entry_type']}' AND entry_id = {$input['entry_id']}"; 
@@ -80,7 +80,6 @@ class Trend_m extends MY_Model
                 case TREND_STAR:
                     $star = $this->select('star')
                         ->get_by(array('user_id' => $input['user_id'], 'entry_type' => $input['entry_type'], 'entry_id' => $input['entry_id']));
-                    echo $this->last_query(); exit; 
                     $existing = $star->star;
                     if($existing=='true'){
                         $trendIncrement = '-1';
@@ -124,7 +123,7 @@ class Trend_m extends MY_Model
     
     public function if_exists($input){
         unset($input['trend']);
-        return $this->count_by($input) ? true : false;
+        return (int) $this->count_by($input);
     }
     
     public function toogle_state(){
@@ -491,4 +490,23 @@ class Trend_m extends MY_Model
                 ->join('profiles m', 'm.user_id = u.id', 'left') ;
     }
 
+    
+    /**
+     * To check if the logged in user already following the event 
+     * 
+     * @param int $event_id
+     * @return boolean
+     */
+    public function am_i_following($event_id) {
+        
+        $trend = $this
+                        ->select('follow')
+                        ->get_by(
+                            array(
+                                'user_id' => $this->current_user->id,
+                                'entry_id' => $event_id
+                            )
+                        );
+        return (is_object($trend) and $trend->follow == 'true');
+    }
 }

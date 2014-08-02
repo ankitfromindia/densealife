@@ -1,3 +1,4 @@
+<?php //p($event);?>
 <form method="post" id='form-create-event'>
 <table style='width:100%;'>
     <tr>
@@ -181,7 +182,7 @@
         </td>
     </tr>
     
-    <tr>
+    <tr id="tr-ca">
         <td>
             <div class="input">
                 <p>Comment approval</p>

@@ -93,7 +93,9 @@
                 <!--Start left-body-container-->
                 <div class="left-bodyinnre-container">
                     <span class="follower-right"><?php echo anchor('eventsmanager/wall/' . $event->slug, $event->title); ?></span>
-                    <span class="follower-right"><?php echo anchor('eventsmanager/edit/' . $event->slug, 'Edit'); ?></span>
+                    <?php if($event->author == $this->current_user->id):?>
+                        <span class="follower-right"><?php echo anchor('eventsmanager/edit/' . $event->slug, 'Edit'); ?></span>
+                    <?php endif;?>
                     <div class="comman-box">
                         <span class="heading-comman">Information</span>
                         <p><?php echo $event->about ? $event->about : ''; ?></p>

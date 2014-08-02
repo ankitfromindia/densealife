@@ -41,7 +41,6 @@ class Trends extends Public_Controller
             $decrypt = unserialize($this->encrypt->decode($post['data']));
             // Save the trend
             if ( $trendIncrement = $this->trend_m->insert($decrypt) ) {
-                
                 echo json_encode(array( 'message' => 'success',
                     'action' => $trendIncrement,
                     'entry' => $decrypt['entry_id'],

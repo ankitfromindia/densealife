@@ -75,4 +75,12 @@ class Event_Followers_m extends MY_Model
                         ->count_all_results() ;
     }
 
+    public function am_i_following($slug) {
+        return ( bool ) $this->db->where(array(
+                        'event_slug' => $slug,
+                        'follow' => 'follow',
+                        'user_id' => $this->current_user->id))
+                        ->from($this->_table)
+                        ->count_all_results() ;
+    }
 }

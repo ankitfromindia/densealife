@@ -43,6 +43,7 @@ class Notifications extends Public_Controller
     {
         $pending = $this->notification_m->get_all_notifications($this->user->id);
         $this->template
+                ->append_js('module::notification.js')
                 ->set('notifications', $pending)
                 ->build('notifications/view');
     }

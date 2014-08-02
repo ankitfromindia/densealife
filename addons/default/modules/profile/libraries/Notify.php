@@ -12,6 +12,7 @@ class Notify
     CONST TYPE_FOLLOW  = 'follow';
     CONST TYPE_INVITE  = 'invite';
     CONST TYPE_SHARE   = 'share';
+    CONST TYPE_COMMENT = 'comment';
     
     public static function trigger($type, $data)
     {
