@@ -186,6 +186,7 @@ class EventsManager extends Public_Controller
             }
         } else {
             if ($slug) {
+                $event = $this->eventsmanager_m->getBy('slug', $slug);
                 $this->session->set_userdata('recently_created_event', $event->id);
             } else {
                 $event = new StdClass();
