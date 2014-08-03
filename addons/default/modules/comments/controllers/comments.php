@@ -88,7 +88,18 @@ class Comments extends Public_Controller
         );
         
         $comment['is_active'] = 0;
-        if((isset($this->current_user->group) and $this->current_user->group == 'admin') 
+        $this->load->model('profile/auto_approval_m'); 
+        $auto_approved = (bool)$this->auto_approval_m->count_by(
+                array(
+                        'admin_id' => $event->author,
+                        'user_id' => $this->current_user->id,
+                        'approval_type' => 'comment',
+                        'status' => 'on'
+                )
+            );
+        $this->db->set_dbprefix('default_');
+        if($auto_approved 
+                or(isset($this->current_user->group) and $this->current_user->group == 'admin') 
                 or $event->comment_approval == 'NO'
                 or ($this->current_user->id == $event->author)){
             $comment['is_active'] = 1;
@@ -135,7 +146,7 @@ class Comments extends Public_Controller
             } else {
                 // Save the comment
                 if ($comment_id = $this->comment_m->insert($comment)) {
-                    if ($event->comment_approval == 'YES') {
+                    if (!$auto_approved and $event->comment_approval == 'YES') {
                         Notify::trigger(Notify::TYPE_COMMENT, array(
                             'rec_id' => $event->author,
                             'data'   => array(

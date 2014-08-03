@@ -453,10 +453,18 @@ class EventsManager extends Public_Controller
 
         $this->_set_template_content($slug);
         $event = $this->eventsmanager_m->getBy('slug', $slug);
+        $this->load->model('profile/auto_approval_m'); 
+        $auto_approved = (bool)$this->auto_approval_m->count_by(array('admin_id' => $event->author, 'user_id' => $this->current_user->id, 'approval_type' => 'comment', 'status' => 'on'));
+        $this->db->set_dbprefix('default_'); 
         $this->load->model('comments/comment_blacklists_m'); 
         $blacklisted = $this->comment_blacklists_m->is_blacklisted($event->author, $this->current_user->id);
+        
         $allow_comment = false; 
-        if(!$blacklisted and(($this->current_user->id == $event->author) or ($event->comment_permission == 'FOLLOWER' and $this->trend_m->am_i_following($event->id)))) {
+        if(
+                ($this->current_user->group == 'admin') 
+                or ($this->current_user->id == $event->author) 
+                or (!$blacklisted) 
+                and ($auto_approved or ($event->comment_permission == 'FOLLOWER' and $this->trend_m->am_i_following($event->id)))) {
             $allow_comment = true; 
         }
         

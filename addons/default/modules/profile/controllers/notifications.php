@@ -106,4 +106,19 @@ class Notifications extends Public_Controller
             echo 'false';
         }
     }
+    
+    public function approval()
+    {
+        if($_POST){
+            $this->load->model('auto_approval_m'); 
+            $this->auto_approval_m->insert(isset($_POST['followers']) ? $_POST['followers'] : array()); 
+        }
+        $this->load->model('trends/trend_m');
+        $my_event_followers  = $this->trend_m->get_my_event_followers();
+        $this->template
+                ->set('followers', $my_event_followers)
+                ->set('title', 'My Events\' followers')
+                ->append_js('module::notification.js')
+                ->build('notifications/approval');
+    }
 }

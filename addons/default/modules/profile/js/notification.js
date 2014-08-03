@@ -24,6 +24,12 @@ var notification = {
                 $.fancybox.close();
             }
         },'json');
+    },
+    auto_approve : function(){
+        //this is commented because in case of only one follower if selected i want to deselect it then it would be a probls. 
+//        if($('input[name="followers[]"]:checked').length == 0 ){
+//            alert('Please select one from the list to approve');
+//            return false; 
+//        }
     }
 }
-

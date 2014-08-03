@@ -509,4 +509,26 @@ class Trend_m extends MY_Model
                         );
         return (is_object($trend) and $trend->follow == 'true');
     }
+    
+     /**
+     * list of all the followers of the events that have been created by the logged in user
+     */
+    public function get_my_event_followers()
+    {
+        $this->db
+                ->select('P.*,AA.status')
+                ->from('events as E')
+                ->join('trends as T', 'T.entry_id = E.id', 'left')
+                ->join('profiles as P', 'P.user_id = T.user_id', 'left');
+        $this->db->set_dbprefix(null);
+        $this->db->join('auto_approvals as AA', 'AA.admin_id = E.author', 'left');
+        $this->db->set_dbprefix('default_');
+        $select = $this->db->where('E.author', $this->current_user->id)
+                ->where('T.user_id!=', $this->current_user->id)
+                ->where('T.follow', 'true')
+                ->group_by('P.user_id')
+                ->get()
+                ->result_array();
+        return $select; 
+    }
 }
