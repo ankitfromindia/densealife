@@ -499,7 +499,8 @@ class Trends
                 ->join('users as u','p.user_id = u.id','inner')
                 ->where('t.entry_id', $entry_id)
                 ->where('t.entry_type', 'event')
-                ->where('t.follow','true');
+                ->where('t.follow','true')
+                ->where('p.user_id!=', ci()->current_user->id);
         if(!is_null($limit)){
             ci()->db->limit($limit);
         }
