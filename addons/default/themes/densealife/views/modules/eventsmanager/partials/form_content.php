@@ -43,7 +43,6 @@
     
         </td>
     </tr>
-
     <tr>
         <td>
             <label form='about'>About <span>*</span></label>
@@ -52,7 +51,7 @@
 
     <tr>
         <td>
-            <div class='input'><?php echo form_textarea(array( 'id' => 'about', 'name' => 'about', 'value' => isset($event->description) ? $event->description : '', 'rows' => 10 )); ?></div>
+            <div class='input'><?php echo form_textarea(array( 'id' => 'about', 'name' => 'about', 'value' => isset($event->about) ? $event->about : '', 'rows' => 10 )); ?></div>
         </td>
     </tr>
 
@@ -70,7 +69,7 @@
 
     <tr>
         <td>
-            <label for="start_date"><?php echo lang('eventsmanager:start_date_label'); ?> <span>*</span></label>
+            <label for="start_date"><?php echo lang('eventsmanager:start_date_label'); ?></label>
         </td>
     </tr>
 
@@ -192,7 +191,7 @@
     </tr>
     <tr>
         <td>
-            <label for="place_clone"><?php echo lang('eventsmanager:place_label'); ?> <span>*</span></label>
+            <label for="place_clone"><?php echo lang('eventsmanager:place_label'); ?></label>
         </td>
     </tr>
 

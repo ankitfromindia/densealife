@@ -110,10 +110,10 @@
                         
                         <ul class="stream" id="stream_search_result">
                             {{eventsmanager:get_all_events limit='10'}}
-                            <li>
-                                <h2><a href="/eventsmanager/{{slug}}" title="{{title}}">{{title}}</a></h2>
+                            <li class="txt-center">
+                                <span class="f-bold fs14"><a href="/eventsmanager/{{slug}}" title="{{title}}">{{title}}</a></span>
                                 <span class="image">
-                                    <a href="/eventsmanager/{{slug}}" title="{{title}}">
+                                    <a href="/eventsmanager/{{slug}}" title="{{title}}" >
                                     {{ eventsmanager:thumb name=thumbnail}}
                                     </a>
                                     <div class="display-none hover-aera">
@@ -121,9 +121,12 @@
                                         {{button:follow_event event_id=id class='float-right ctrl_trend'}}
                                     </div>
                                 </span> 
-                                <span class="name">
-                                    <a href="javascript:void(0);" class="float-left"><span class="count_star_{{id}}">{{star_count}}</span> Stars</a>  
-                                    <a href="javascript:void(0);" class="float-right"><span class="count_follow_{{id}}" >{{follow_count}}</span> Followers</a></span> 
+                                    <table width="100%" border="0">
+                                        <tr>
+                                            <td width="50%"><a href="javascript:void(0);" class="float-left"><span class="count_star_{{id}}">{{star_count}}</span> &nbsp; Stars</a> </td>
+                                            <td  width="50%"><a href="javascript:void(0);" class="float-right"><span class="count_follow_{{id}}" >{{follow_count}}</span> &nbsp; Followers</a></span> </td>
+                                        </tr>
+                                    </table>
                             </li>
                             {{ /eventsmanager:get_all_events}}
                         </ul>

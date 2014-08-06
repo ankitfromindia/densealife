@@ -6,7 +6,7 @@ body {margin:0px;padding:0px;font-family: 'SegoeUISymbolRegular';font-size:12px;
     font-family: 'SegoeUISymbolRegular';
     src: url('../fonts/seguisym.eot');
     src: url('../fonts/seguisym.eot') format('embedded-opentype'),
-         url('../fonts/seguisym.woff') format('woff'),
+         url('../fonts/seguisym.woff') format('woff'),ac
          url('../fonts/seguisym.ttf') format('truetype'),
          url('../fonts/seguisym.svg#SegoeUISymbolRegular') format('svg');
 }
@@ -163,7 +163,7 @@ span.follower a, span.stars a{font-size:11px;text-decoration:none;color:#236aa0;
 .activity-feeds ul{width:100%;float:left;margin:0px; padding:0px;}
 .activity-feeds ul li{border-bottom:1px solid #d8d8d8;overflow: hidden;}
 /*.activity-feeds ul li span {display:block;float:left;width:100%;}*/
-.activity-feeds ul li span {display:block;float:left;}
+.activity-feeds ul li span {display:block;}
 .activity-feeds ul li span.text {float:left;padding:5px;font-size: 10px;width: 75%; line-height:10px;}
 .activity-feeds ul li span.head {font-weight: bold;}
 span.name {display:block;margin: 4px auto 0px;padding: 5px;font-weight: bold;}
@@ -262,8 +262,8 @@ div.tabs ul li{ width:auto; padding:1% 2%; font-weight:normal; float:left;border
 }
 .comman-width{width:160px;}
 span.location{display:block; margin:10px auto;clear:both;}
-ul.comman-links{margin:0px 21% 0px;width:58%;float:left;}
-ul.comman-links li{float:left; margin:10px 5px; padding:8px 0px;width:115px;border:1px solid #d8d8d8;text-align:center;background-color:#05a6cc;text-transform: uppercase;color: #ffffff;font-size: 13px;}
+ul.comman-links{margin:0px 21% 0px;width:58%;}
+ul.comman-links li{display:inline-block; margin:10px 5px; padding:8px 0px;width:115px;border:1px solid #d8d8d8;text-align:center;background-color:#05a6cc;text-transform: uppercase;color: #ffffff;font-size: 13px;}
 ul.comman-links li:hover{background-color: #23699e;}
 ul.comman-links li a{color:#ffffff;}
 ul.comman-links li a:hover{color:#ffffff;text-decoration:none;}

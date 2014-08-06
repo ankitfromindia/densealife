@@ -16,10 +16,11 @@
             <!--Start Body Container-->
             <div id="body-container-inner" class="clearfix"> 
                 <div class="links-header">
-                    <ul class="comman-links">
-                        <li><a href="">Events</a></li>
-                        <li><a href="">Upcoming</a></li>
-                        <li><a href="">Favorites</a></li>
+                    <ul class="comman-links link-header-event">
+                        <li data-page="events"><a href="/densealife-page/#events">Events</a></li>
+                        <li data-page="trending"><a href="/densealife-page/#trending">Trending</a></li>
+                        <li data-page="upcoming"><a href="/densealife-page/#upcoming">Upcoming</a></li>
+                        <li data-page="favorite"><a href="/densealife-page/#favorite">Favorites</a></li>
                     </ul>
                 </div>
                 <!--Start center-body-container-->

@@ -24,21 +24,27 @@ class EventsManager_m extends MY_Model
     public function get_all_events($user_id = null, $entry_type = 'event', $limit = null)
     {
         $this->db->select()
-                ->from($this->_table . ' as e')
-                ->join('trends as t', 'e.id = t.entry_id', 'right')
-                ->where('t.entry_type', $entry_type);
-        if ( $user_id != '' ) {
-            $this->db->where('t.user_id', $user_id);
+                ->from($this->_table . ' as e');
+        if(!empty($user_id)){
+                //->join('trends as t', 'e.id = t.entry_id', 'right')
+                $this->db->where('e.author', $user_id);
         }
+                //->where('t.entry_type', $entry_type);
+//        if ( $user_id != '' ) {
+//            $this->db->where('t.user_id', $user_id);
+//        }
 
         if ( $limit != '' ) {
             $this->db->limit($limit);
         }
-        $rs = $this->db->order_by('star_count', 'DESC')
-                ->order_by('follow_count', 'DESC')
-                ->order_by('favorite_count', 'DESC')
-                ->get()
+        $rs = $this->db->order_by('id', 'DESC')->get()
                 ->result();
+//        $rs = $this->db->order_by('star_count', 'DESC')
+//                ->order_by('follow_count', 'DESC')
+//                ->order_by('favorite_count', 'DESC')
+//                ->get()
+//                ->result();
+
         return $rs;
     }
 
@@ -104,7 +110,7 @@ class EventsManager_m extends MY_Model
 
     private function _process($input)
     {
-        if ( $input['start_date'] ) {
+        if (!empty($input['start_date'] )) {
             // Format the date for the database
             $DATE_FORMAT    = $this->settings->get('date_format');
             $start_datetime = date_create_from_format($DATE_FORMAT, $input['start_date']);
@@ -128,8 +134,8 @@ class EventsManager_m extends MY_Model
             'description'      => $input['description'],
             'place'            => $input['place'],
             'author'           => $input['author'],
-            'start_date'       => (is_object($start_datetime)) ? $start_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
-            'end_date'         => (is_object($end_datetime)) ? $end_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
+            'start_date'       => (!empty($start_datetime) && is_object($start_datetime)) ? $start_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
+            'end_date'         => (!empty($end_datetime) && is_object($end_datetime)) ? $end_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
             'end_date_defined' => $input['end_date_defined'],
             'enable_comments'  => $input['enable_comments'],
             'published'        => isset($input['published'])  ? $input['published'] : 1,

@@ -182,6 +182,22 @@ $('.form-trend').ajaxForm({
         $.fancybox.showLoading();
     },
     success: function(response) {
+        
+        if(response.trend =='1'){
+            if(response.action=='-1'){
+                $('.btn-follow-' + response.entry).text('Follow');
+            }else{
+                $('.btn-follow-' + response.entry).text('Following');
+            }
+        }
+        
+        if(response.trend =='2'){
+            if(response.action=='-1'){
+                $('.btn-favorite-' + response.entry).text('Add Favorite');
+            }else{
+                $('.btn-favorite-' + response.entry).text('Favorite');
+            }
+        }
         if(response.trend =='3' ){
             $star_place_holder = $('.count_star_'+ response.entry);
             star_count = parseInt($star_place_holder.text())

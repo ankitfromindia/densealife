@@ -200,16 +200,10 @@ class Plugin_Trends extends Plugin
 
     public function link_follow()
     {
-        $user_id = $this->attribute('user_id');
         $entry_id = $this->attribute('entry_id');
+        $this->load->library('trends/Trends');
         
-        $this->load->library('trends/Trends',array(
-            'module'   => 'eventsmanager',
-            'singular' => 'eventsmanager:event',
-            'plural'   => 'eventsmanager:events',
-            'entry_id'=> $entry_id));
-        
-        return $this->trends->link_follow('event', $entry_id, $user_id);
+        return $this->trends->link_follow($entry_id);
     }
 }
 

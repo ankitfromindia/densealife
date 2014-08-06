@@ -59,9 +59,9 @@ class Plugin_Button extends Plugin
         $follower = ci()->follower_m->is_follower($user_id, $current_user_id);
 
         if ( $follower === false ) {
-            return '<button class="btn_follow_' . $user_id . ' btn-color common" onclick="friend.follow(' . $user_id . ');">Follow</button>';
+            return '<button class="btn_follow_' . $user_id . ' common" onclick="friend.follow(' . $user_id . ');">Follow</button>';
         } else {
-            return '<button class="btn_follow_' . $user_id . ' btn-color common" onclick="friend.follow(' . $user_id . ');">Following</button>';
+            return '<button class="btn_follow_' . $user_id . ' common" onclick="friend.follow(' . $user_id . ');">Following</button>';
         }
     }
     
@@ -72,7 +72,7 @@ class Plugin_Button extends Plugin
     {
         $this->load->library('trends/trends');
         $event_id         = $this->attribute('event_id');
-        $class            = $this->attribute('class','btn-color common ctrl_trend');
+        $class            = $this->attribute('class','common ctrl_trend');
         return $this->trends->link_follow($event_id, $class);
         
     }

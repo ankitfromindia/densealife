@@ -5,11 +5,10 @@
         {{eventsmanager:get_all_events user_id=_user:id}}
         <li>
             <h2>{{title}}</h2>
-            <span class="image">{{ eventsmanager:thumb name="{{ thumbnail }}" }}
-                <div class="display-none hover-aera"><a href="" class="float-left star-aera">Star</a>
-<!--                    <button type="button" class="float-right">follow</button>-->
-                        {{trends:link_follow entry_id='{{entry_id}}'}}
-                        <?php //echo $this->trends->link_follow('event',entry_id,_user:id) ; ?>
+            <span class="image">{{ eventsmanager:thumb name="{{ thumbnail }}"}}
+                <div class="display-none hover-aera">
+                    <a href="" class="float-left star-aera">Star</a>
+                        {{trends:link_follow entry_id=id}}
                 </div>
             </span>
             <div><a href="" class="float-right">{{follow_count}} Followers</a></div>

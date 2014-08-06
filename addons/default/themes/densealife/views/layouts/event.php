@@ -83,7 +83,7 @@
             <!--Start Body Container-->
             <div id="body-container-inner" class="clearfix"> 
                 <div class="links-header">
-                    <ul class="comman-links event-links">
+                    <ul class="txt-center comman-links event-links">
                         <li class="<?php echo (($this->router->fetch_method() == 'about') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">About</a><?php //echo anchor('eventsmanager/about/' . $event->slug, 'About') ;  ?></li>
                         <li class="<?php echo (($this->router->fetch_method() == 'albums') ? 'active' : ''); ?>page-album" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Albums</a><?php //echo anchor('eventsmanager/albums/' . $event->slug, 'Albums') ;  ?></li>
                         <li class="<?php echo (($this->router->fetch_method() == 'videos') ? 'active' : ''); ?>page-video" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Videos</a><?php //echo anchor('eventsmanager/videos/' . $event->slug, 'Videos') ;  ?></li>
@@ -102,7 +102,7 @@
                     </div>
                     {{button:follow_event event_id='<?php echo $event->id;?>'}}
                     {{button:favorite_event event_id='<?php echo $event->id;?>'}}
-                    <span class="comman-star stars"><?php echo $this->trends->link_star($event->id); ?></span>
+                    <span class=""><?php echo $this->trends->link_star($event->id); ?></span>
                     <span class="location">Location : <?php echo $event->place; ?></span>
                     <span class="location">
                         Date: 
@@ -139,7 +139,7 @@
                 <!--End center-body-container--> 
                 <!--Start right-body-container-->
                 <div class="right-bodyinnre-container">
-                    <span class="follower-right"><?php echo $this->trends->count_followers($event->id); ?> Followers <?php //if ( $this->trends->count_new(Trends::TREND_FOLLOW) ):  ?>(<?php //echo $this->trends->count_new(Trends::TREND_FOLLOW) ;  ?> New) <?php //endif ;  ?></span>
+                    <span class="f-bold follower-right"><?php echo $this->trends->count_followers($event->id); ?> Followers <?php //if ( $this->trends->count_new(Trends::TREND_FOLLOW) ):  ?>(<?php //echo $this->trends->count_new(Trends::TREND_FOLLOW) ;  ?> New) <?php //endif ;  ?></span>
                     <script>
                         $(function() {
 

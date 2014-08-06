@@ -1,6 +1,6 @@
 
-<li>
-    <h2><a href="/eventsmanager/<?php echo $data->slug; ?>" title="<?php echo $data->title; ?>" ><?php echo $data->title; ?></a></h2>
+<li class="txt-center">
+    <span class="f-bold fs14"><a href="/eventsmanager/<?php echo $data->slug; ?>" title="<?php echo $data->title; ?>"><?php echo $data->title; ?></a></span>
     <span class="image">
         <a href="/eventsmanager/{{data:slug}}" title="<?php echo $data->title; ?>" >
             {{ eventsmanager:thumb name="<?php echo $data->thumbnail;?>" }}
@@ -12,8 +12,10 @@
             </div>
         </a>
     </span> 
-    <span class="name">
-        <a href="" class="float-left"><span class="count_star_<?php echo $data->id;?>"><?php echo $data->star_count; ?></span>  Stars</a>  
-        <a href="" class="float-right"> <span class="count_follow_<?php echo $data->id;?>"><?php echo $data->follow_count; ?></span> Followers</a>
-    </span> 
+    <table width="100%" border="0">
+        <tr>
+            <td width="50%"><a href="" class="float-left"><span class="count_star_<?php echo $data->id;?>"><?php echo $data->star_count; ?></span>  &nbsp;Stars</a>  </td>
+            <td  width="50%"><a href="" class="float-right"> <span class="count_follow_<?php echo $data->id;?>"><?php echo $data->follow_count; ?></span> &nbsp;Followers</a></span> </td>
+        </tr>
+    </table>
 </li>

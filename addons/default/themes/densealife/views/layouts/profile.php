@@ -30,6 +30,7 @@
                 <div class="left-bodyinnre-container">
                     <span class="clear user-name">{{_user:display_name}}</span>
                     <span class="user-picutre clearfix">{{user:profile_pic_180 user_id=_user:id}}</span>
+                    <span class="user-profile"><?php echo $user->display_name;?><?php if($_user->id==$this->current_user->id):?><a class="fancybox fancybox.ajax" href="/edit-profile">Edit</a><?php endif;?></span>
                     <span class="follower-right"><a href="#">455 Followers</a></span>
                     <div class="comman-box">
                         <span class="heading-comman">About Me</span>

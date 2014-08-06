@@ -322,6 +322,9 @@ p, dfn, aside, div, li, a{
 .mb40{
   margin-bottom: 40px;
 }
+.ml34{
+    margin-left:34px; 
+}
 .ml0{
   margin-left: 0;
 }

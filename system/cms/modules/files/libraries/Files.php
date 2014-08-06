@@ -1234,7 +1234,9 @@ class Files
             $slug = $original_slug . '-' . $i ;
             $name = $original_name . '-' . $i ;
         }
-
+        if($event == ''){
+            $event = NULL;
+        }
         $insert = array( 
             'parent_id'        => $parent,
             'user_id'          => ci()->current_user->id,

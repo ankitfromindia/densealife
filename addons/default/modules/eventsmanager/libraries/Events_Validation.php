@@ -44,12 +44,12 @@ class Events_Validation
         'place'       => array(
             'field' => 'place',
             'label' => 'lang:eventsmanager:place_label',
-            'rules' => 'trim|required'
+            'rules' => 'trim'
         ),
         'start_date'  => array(
             'field' => 'start_date',
             'label' => 'lang:eventsmanager:date_label',
-            'rules' => 'trim|required',
+            'rules' => 'trim',
         ),
         'end_date'    => array(
             'field' => 'end_date',
