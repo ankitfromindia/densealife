@@ -2,7 +2,7 @@
 <ul class="status">
     <li>
         <span>{{ theme:image file="status.png" alt="Status" }}</span>
-        <a href="javascript:void(0);" class="wall-status" data-type="text">Update Status</a>
+        <a href="javascript:void(0);" class="wall-status" data-type="text">Post Status</a>
     </li>
     <li>
         <span>{{ theme:image file="addvidoes.png" alt="Videos" }}</span>

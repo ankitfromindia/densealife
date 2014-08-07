@@ -106,7 +106,7 @@ $('.form-status').ajaxForm({
     },
     media: function(response) {
         if (response.media != '') {
-            return '<a class="fancybox-effects-b pl10" data-fancybox-group="button" href="' + response.media.baseurl + 'files/large/' + response.media.filename + '"><img src="' + response.media.baseurl + 'files/medium/' + response.media.id + '" alt="" width="200" height="200"/></a>';
+            return '<a class="fancybox-effects-b pl10" data-fancybox-group="button" href="' + response.media.baseurl + 'files/large/' + response.media.filename + '"><img src="' + response.media.baseurl + 'files/wall/' + response.media.id + '" alt=""/></a>';
         } else {
             return '';
         }
@@ -200,11 +200,11 @@ $('.form-trend').ajaxForm({
         }
         if(response.trend =='3' ){
             $star_place_holder = $('.count_star_'+ response.entry);
-            star_count = parseInt($star_place_holder.text())
+            star_count = parseInt($star_place_holder.html())
             if(response.action=='-1'){
-                  $star_place_holder.text(star_count-1)
+                  $star_place_holder.text(eval(star_count-1))
             }else{
-                $star_place_holder.text(star_count+1)
+                $star_place_holder.text(eval(star_count+1))
             }
         }
     }, 

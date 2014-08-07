@@ -88,6 +88,8 @@ class Comments extends Public_Controller
         );
         
         $comment['is_active'] = 0;
+        $auto_approved = true; 
+        if((!empty($event) && is_object($event))){
         $this->load->model('profile/auto_approval_m'); 
         $auto_approved = (bool)$this->auto_approval_m->count_by(
                 array(
@@ -97,6 +99,7 @@ class Comments extends Public_Controller
                         'status' => 'on'
                 )
             );
+        }
         $this->db->set_dbprefix('default_');
         if($auto_approved 
                 or(isset($this->current_user->group) and $this->current_user->group == 'admin') 

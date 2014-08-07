@@ -297,6 +297,11 @@ class Files_front extends Public_Controller
             return $this->thumb($id,$size,$size,'fit');
         }
         
+        public function wall($id)
+        {
+            return $this->thumb($id, 600,400,'fit');
+        }
+        
  
 }
 

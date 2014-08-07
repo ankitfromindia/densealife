@@ -123,8 +123,8 @@
                                 </span> 
                                     <table width="100%" border="0">
                                         <tr>
-                                            <td width="50%"><a href="javascript:void(0);" class="float-left"><span class="count_star_{{id}}">{{star_count}}</span> &nbsp; Stars</a> </td>
-                                            <td  width="50%"><a href="javascript:void(0);" class="float-right"><span class="count_follow_{{id}}" >{{follow_count}}</span> &nbsp; Followers</a></span> </td>
+                                            <td width="50%"><a href="javascript:void(0);" class="float-left"><span class="d-inline count_star_{{id}}">{{star_count}}</span> &nbsp; Stars</a> </td>
+                                            <td  width="50%"><a href="javascript:void(0);" class="float-right"><span class="d-inline count_follow_{{id}}" >{{follow_count}}</span> &nbsp; Followers</a></span> </td>
                                         </tr>
                                     </table>
                             </li>
