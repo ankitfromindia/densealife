@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed') ;
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * User controller for the users module (frontend)
@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed') ;
  */
 class Users extends Public_Controller
 {
-        
+
     /**
      * Constructor method
      *
@@ -19,15 +19,15 @@ class Users extends Public_Controller
      */
     public function __construct()
     {
-        parent::__construct() ;
+        parent::__construct();
 
         // Load the required classes
-        $this->load->model('user_m') ;
-        $this->load->helper('user') ;
-        $this->lang->load('user') ;
-        $this->load->library('form_validation') ;
-        $this->load->library('trends/Trends') ;
-        $this->load->library('files/files') ;
+        $this->load->model('user_m');
+        $this->load->helper('user');
+        $this->lang->load('user');
+        $this->load->library('form_validation');
+        $this->load->library('trends/Trends');
+        $this->load->library('files/files');
         $this->load->model('users/album_m');
     }
 
@@ -38,17 +38,17 @@ class Users extends Public_Controller
      */
     public function view($username = null)
     {
-        $user = $this->_settings($username);
-        $allowed = true; 
-        if($username!= '' && $this->current_user->username != $username){
+        $user    = $this->_settings($username);
+        $allowed = true;
+        if ($username != '' && $this->current_user->username != $username) {
             $this->load->model('profile/privacy_m');
             $allowed = $this->privacy_m->seek_permission($user->id, Privacy_Lib::PERMISSION_CAN_SEE_MY_ACTIVITY);
         }
         $this->load->library('comments/comments');
         $this->template->build('profile/activity', array(
-            '_user' => $user,
+            '_user'   => $user,
             'allowed' => $allowed
-        )) ;
+        ));
     }
 
     /**
@@ -57,18 +57,18 @@ class Users extends Public_Controller
     public function login()
     {
         // Check post and session for the redirect place
-        $redirect_to = ($this->input->post('redirect_to')) ? trim(urldecode($this->input->post('redirect_to'))) : $this->session->userdata('redirect_to') ;
+        $redirect_to = ($this->input->post('redirect_to')) ? trim(urldecode($this->input->post('redirect_to'))) : $this->session->userdata('redirect_to');
         // Any idea where we are heading after login?
-        if ( !$_POST and $args = func_get_args() ) {
+        if (!$_POST and $args        = func_get_args()) {
             $redirect_to = implode('/', $args);
-            $this->session->set_userdata('redirect_to', '/densealife-page') ;
+            $this->session->set_userdata('redirect_to', '/densealife-page');
         }
-        
+
         // Get the user data
-        $user       = ( object ) array(
+        $user       = (object) array(
                     'email'    => $this->input->post('email'),
                     'password' => $this->input->post('password')
-        ) ;
+                );
         $validation = array(
             array(
                 'field' => 'email',
@@ -80,52 +80,52 @@ class Users extends Public_Controller
                 'label' => lang('global:password'),
                 'rules' => 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']'
             ),
-        ) ;
+                );
 
         // Set the validation rules
-        $this->form_validation->set_rules($validation) ;
+        $this->form_validation->set_rules($validation);
 
         // If the validation worked, or the user is already logged in
-        if ( $this->form_validation->run() or $this->current_user ) {
+        if ($this->form_validation->run() or $this->current_user) {
             // Kill the session
-            $this->session->unset_userdata('redirect_to') ;
+            $this->session->unset_userdata('redirect_to');
 
             // trigger a post login event for third party devs
-            Events::trigger('post_user_login') ;
+            Events::trigger('post_user_login');
 
-            if ( $this->input->is_ajax_request() ) {
-                $user           = $this->ion_auth->get_user_by_email($user->email) ;
-                $user->password = '' ;
-                $user->salt     = '' ;
-                $form           = $this->load->view('eventsmanager/partials/dialog-comment', '', true) ;
+            if ($this->input->is_ajax_request()) {
+                $user           = $this->ion_auth->get_user_by_email($user->email);
+                $user->password = '';
+                $user->salt     = '';
+                $form           = $this->load->view('eventsmanager/partials/dialog-comment', '', true);
 
-                exit(json_encode(array( 'status' => true, 'message' => lang('user:logged_in'), 'data' => $user, 'form' => $form ))) ;
+                exit(json_encode(array('status' => true, 'message' => lang('user:logged_in'), 'data' => $user, 'form' => $form)));
             } else {
                 //$this->session->set_flashdata('success', lang('user:logged_in')) ;
             }
 
             // Don't allow protocols or cheeky requests
-            if ( strpos($redirect_to, ':') !== false and strpos($redirect_to, site_url()) !== 0 ) {
+            if (strpos($redirect_to, ':') !== false and strpos($redirect_to, site_url()) !== 0) {
                 // Just login to the homepage
-                redirect('') ;
+                redirect('');
             }
 
             // Passes muster, on your way
             else {
-                
-                redirect($redirect_to ? $redirect_to : '/densealife-page') ;
+
+                redirect($redirect_to ? $redirect_to : '/densealife-page');
             }
         }
 
-        if ( $_POST and $this->input->is_ajax_request() ) {
-            exit(json_encode(array( 'status' => false, 'message' => validation_errors() ))) ;
+        if ($_POST and $this->input->is_ajax_request()) {
+            exit(json_encode(array('status' => false, 'message' => validation_errors())));
         }
 
         $this->template
                 ->build('login', array(
                     '_user'       => $user,
                     'redirect_to' => $redirect_to,
-        )) ;
+                ));
     }
 
     /**
@@ -134,15 +134,15 @@ class Users extends Public_Controller
     public function logout()
     {
         // allow third party devs to do things right before the user leaves
-        Events::trigger('pre_user_logout') ;
+        Events::trigger('pre_user_logout');
 
-        $this->ion_auth->logout() ;
+        $this->ion_auth->logout();
 
-        if ( $this->input->is_ajax_request() ) {
-            exit(json_encode(array( 'status' => true, 'message' => lang('user:logged_out') ))) ;
+        if ($this->input->is_ajax_request()) {
+            exit(json_encode(array('status' => true, 'message' => lang('user:logged_out'))));
         } else {
-            $this->session->set_flashdata('success', lang('user:logged_out')) ;
-            redirect('') ;
+            $this->session->set_flashdata('success', lang('user:logged_out'));
+            redirect('');
         }
     }
 
@@ -151,17 +151,17 @@ class Users extends Public_Controller
      */
     public function register()
     {
-        if ( $this->current_user ) {
-            $this->session->set_flashdata('notice', lang('user:already_logged_in')) ;
-            redirect() ;
+        if ($this->current_user) {
+            $this->session->set_flashdata('notice', lang('user:already_logged_in'));
+            redirect();
         }
         /* show the disabled registration message */
-        if ( !Settings::get('enable_registration') ) {
+        if (!Settings::get('enable_registration')) {
             $this->template
                     ->set_layout(false)
                     ->title(lang('user:register_title'))
-                    ->build('disabled') ;
-            return ;
+                    ->build('disabled');
+            return;
         }
 
         // Validation rules
@@ -181,9 +181,7 @@ class Users extends Public_Controller
                 'label' => lang('user:username'),
                 'rules' => Settings::get('auto_username') ? '' : 'required|alpha_dot_dash|min_length[3]|max_length[20]|callback__username_check',
             ),
-            
-           
-        ) ;
+                );
 
         // --------------------------------
         // Merge streams and users validation
@@ -194,60 +192,60 @@ class Users extends Public_Controller
         // registering.
         // --------------------------------
         // Get the profile fields validation array from streams
-        $this->load->driver('Streams') ;
-        $profile_validation = $this->streams->streams->validation_array('profiles', 'users') ;
+        $this->load->driver('Streams');
+        $profile_validation = $this->streams->streams->validation_array('profiles', 'users');
 
         // Remove display_name
-        foreach ( $profile_validation as $key => $values ) {
-            if ( $values['field'] == 'display_name' ) {
-                unset($profile_validation[$key]) ;
-                break ;
+        foreach ($profile_validation as $key => $values) {
+            if ($values['field'] == 'display_name') {
+                unset($profile_validation[$key]);
+                break;
             }
         }
 
         // Set the validation rules
-        $this->form_validation->set_rules(array_merge($validation, $profile_validation)) ;
+        $this->form_validation->set_rules(array_merge($validation, $profile_validation));
 
         // Get user profile data. This will be passed to our
         // streams insert_entry data in the model.
-        $assignments = $this->streams->streams->get_assignments('profiles', 'users') ;
-      
+        $assignments = $this->streams->streams->get_assignments('profiles', 'users');
+
         // This is the required profile data we have from
         // the register form
-        $profile_data = array() ;
+        $profile_data = array();
 
         // Get the profile data to pass to the register function.
-        foreach ( $assignments as $assign ) {
-            if ( $assign->field_slug != 'display_name' ) {
-                if ( isset($_POST[$assign->field_slug]) ) {
-                    $profile_data[$assign->field_slug] = $this->input->post($assign->field_slug) ;
+        foreach ($assignments as $assign) {
+            if ($assign->field_slug != 'display_name') {
+                if (isset($_POST[$assign->field_slug])) {
+                    $profile_data[$assign->field_slug] = $this->input->post($assign->field_slug);
                 }
             }
         }
 
         // --------------------------------
         // Set the validation rules
-        $this->form_validation->set_rules($validation) ;
+        $this->form_validation->set_rules($validation);
 
-        $user = new stdClass() ;
+        $user = new stdClass();
 
         // Set default values as empty or POST values
-        foreach ( $validation as $rule ) {
-            $user->{$rule['field']} = $this->input->post($rule['field']) ? $this->input->post($rule['field']) : null ;
+        foreach ($validation as $rule) {
+            $user->{$rule['field']} = $this->input->post($rule['field']) ? $this->input->post($rule['field']) : null;
         }
 
         // Are they TRYing to submit?
-        if ( $_POST ) {
-            if ( $this->form_validation->run() ) {
+        if ($_POST) {
+            if ($this->form_validation->run()) {
                 // Check for a bot usin' the old fashioned
                 // don't fill this input in trick.
-                if ( $this->input->post('d0ntf1llth1s1n') !== ' ' ) {
-                    $this->session->set_flashdata('error', lang('user:register_error')) ;
-                    redirect(current_url()) ;
+                if ($this->input->post('d0ntf1llth1s1n') !== ' ') {
+                    $this->session->set_flashdata('error', lang('user:register_error'));
+                    redirect(current_url());
                 }
 
-                $email    = $this->input->post('email') ;
-                $password = $this->input->post('password') ;
+                $email    = $this->input->post('email');
+                $password = $this->input->post('password');
 
                 // --------------------------------
                 // Auto-Username
@@ -258,72 +256,72 @@ class Users extends Public_Controller
                 // an alternate method.
                 // --------------------------------
 
-                if ( Settings::get('auto_username') ) {
-                    if ( $this->input->post('first_name') and $this->input->post('last_name') ) {
-                        $this->load->helper('url') ;
-                        $username = url_title($this->input->post('first_name') . '.' . $this->input->post('last_name'), '-', true) ;
+                if (Settings::get('auto_username')) {
+                    if ($this->input->post('first_name') and $this->input->post('last_name')) {
+                        $this->load->helper('url');
+                        $username = url_title($this->input->post('first_name') . '.' . $this->input->post('last_name'), '-', true);
 
                         // do they have a long first name + last name combo?
-                        if ( strlen($username) > 19 ) {
+                        if (strlen($username) > 19) {
                             // try only the last name
-                            $username = url_title($this->input->post('last_name'), '-', true) ;
+                            $username = url_title($this->input->post('last_name'), '-', true);
 
-                            if ( strlen($username) > 19 ) {
+                            if (strlen($username) > 19) {
                                 // even their last name is over 20 characters, snip it!
-                                $username = substr($username, 0, 20) ;
+                                $username = substr($username, 0, 20);
                             }
                         }
                     } else {
                         // If there is no first name/last name combo specified, let's
                         // user the identifier string from their email address
-                        $email_parts = explode('@', $email) ;
-                        $username    = $email_parts[0] ;
+                        $email_parts = explode('@', $email);
+                        $username    = $email_parts[0];
                     }
 
                     // Usernames absolutely need to be unique, so let's keep
                     // trying until we get a unique one
-                    $i = 1 ;
+                    $i = 1;
 
-                    $username_base = $username ;
+                    $username_base = $username;
 
-                    while ( $this->db->where('username', $username)
-                            ->count_all_results('users') > 0 ) {
+                    while ($this->db->where('username', $username)
+                            ->count_all_results('users') > 0) {
                         // make sure that we don't go over our 20 char username even with a 2 digit integer added
-                        $username = substr($username_base, 0, 18) . $i ;
+                        $username = substr($username_base, 0, 18) . $i;
 
-                        ++$i ;
+                        ++$i;
                     }
                 } else {
                     // The user specified a username, so let's use that.
-                    $username = $this->input->post('username') ;
+                    $username = $this->input->post('username');
                 }
 
                 // --------------------------------
                 // Do we have a display name? If so, let's use that.
                 // Othwerise we can use the username.
-                if ( !isset($profile_data['display_name']) or !$profile_data['display_name'] ) {
-                    $profile_data['display_name'] = $username ;
+                if (!isset($profile_data['display_name']) or ! $profile_data['display_name']) {
+                    $profile_data['display_name'] = $username;
                 }
 
                 // We are registering with a null group_id so we just
                 // use the default user ID in the settings.
-                $id = $this->ion_auth->register($username, $password, $email, null, $profile_data) ;
+                $id = $this->ion_auth->register($username, $password, $email, null, $profile_data);
 
                 // Try to create the user
-                if ( $id > 0 ) {
-                    
+                if ($id > 0) {
+
                     // Convert the array to an object
-                    $user->username     = $username ;
-                    $user->display_name = $username ;
-                    $user->email        = $email ;
-                    $user->password     = $password ;
+                    $user->username     = $username;
+                    $user->display_name = $username;
+                    $user->email        = $email;
+                    $user->password     = $password;
 
                     // trigger an event for third party devs
-                    Events::trigger('post_user_register', $id) ;
+                    Events::trigger('post_user_register', $id);
 
                     /* send the internal registered email if applicable */
-                    if ( Settings::get('registered_email') ) {
-                        $this->load->library('user_agent') ;
+                    if (Settings::get('registered_email')) {
+                        $this->load->library('user_agent');
 
                         Events::trigger('email', array(
                             'name'         => $user->display_name,
@@ -332,62 +330,61 @@ class Users extends Public_Controller
                             'sender_os'    => $this->agent->platform(),
                             'slug'         => 'registered',
                             'email'        => Settings::get('contact_email'),
-                                ), 'array') ;
+                                ), 'array');
                     }
 
                     // show the "you need to activate" page while they wait for their email
-                    if ( ( int ) Settings::get('activation_email') === 1 ) {
-                        $this->session->set_flashdata('notice', $this->ion_auth->messages()) ;
-                        if($this->input->is_ajax_request()){
-                            exit(json_encode(array('status'=> 'success','redirect' =>'users/activate')));
-                        }else{
-                         redirect('users/activate') ;
+                    if ((int) Settings::get('activation_email') === 1) {
+                        $this->session->set_flashdata('notice', $this->ion_auth->messages());
+                        if ($this->input->is_ajax_request()) {
+                            exit(json_encode(array('status' => 'success', 'redirect' => 'users/activate')));
+                        } else {
+                            redirect('users/activate');
                         }
                     }
                     // activate instantly
-                    elseif ( ( int ) Settings::get('activation_email') === 2 ) {
-                        $this->ion_auth->activate($id, false) ;
+                    elseif ((int) Settings::get('activation_email') === 2) {
+                        $this->ion_auth->activate($id, false);
 
-                        $this->ion_auth->login($this->input->post('email'), $this->input->post('password')) ;
-                        if ( $this->input->is_ajax_request() ) {
-                            exit(json_encode(array( 'status' => 'success', 'redirect' => $this->config->item('register_redirect', 'ion_auth') ))) ;
+                        $this->ion_auth->login($this->input->post('email'), $this->input->post('password'));
+                        if ($this->input->is_ajax_request()) {
+                            exit(json_encode(array('status' => 'success', 'redirect' => $this->config->item('register_redirect', 'ion_auth'))));
                         } else {
-                            redirect($this->config->item('register_redirect', 'ion_auth')) ;
+                            redirect($this->config->item('register_redirect', 'ion_auth'));
                         }
                     } else {
-                        $this->ion_auth->deactivate($id) ;
+                        $this->ion_auth->deactivate($id);
 
                         /* show that admin needs to activate your account */
-                        $this->session->set_flashdata('notice', lang('user:activation_by_admin_notice')) ;
-                        if ( $this->input->is_ajax_request() ) {
-                            exit(json_encode(array( 'status' => 'success', 'redirect' => 'users/register' ))) ;
-                        }else{
-                        redirect('users/register') ; /* bump it to show the flash data */
+                        $this->session->set_flashdata('notice', lang('user:activation_by_admin_notice'));
+                        if ($this->input->is_ajax_request()) {
+                            exit(json_encode(array('status' => 'success', 'redirect' => 'users/register')));
+                        } else {
+                            redirect('users/register'); /* bump it to show the flash data */
                         }
                     }
                 }
 
                 // Can't create the user, show why
                 else {
-                    $this->template->error_string = $this->ion_auth->errors() ;
+                    $this->template->error_string = $this->ion_auth->errors();
                 }
             } else {
-                 if($this->input->is_ajax_request()){
+                if ($this->input->is_ajax_request()) {
                     echo $this->form_validation->error_string();
-                    exit; 
+                    exit;
                 }
                 // Return the validation error
-                $this->template->error_string = $this->form_validation->error_string() ;
-               
+                $this->template->error_string = $this->form_validation->error_string();
             }
         }
 
         // Is there a user hash?
         else {
-            if ( ($user_hash = $this->session->userdata('user_hash') ) ) {
+            if (($user_hash = $this->session->userdata('user_hash'))) {
                 // Convert the array to an object
-                $user->email    = (!empty($user_hash['email'])) ? $user_hash['email'] : '' ;
-                $user->username = $user_hash['nickname'] ;
+                $user->email    = (!empty($user_hash['email'])) ? $user_hash['email'] : '';
+                $user->username = $user_hash['nickname'];
             }
         }
 
@@ -396,14 +393,14 @@ class Users extends Public_Controller
         // --------------------------------
         // Anything in the post?
 
-        $this->template->set('profile_fields', $this->streams->fields->get_stream_fields('profiles', 'users', $profile_data)) ;
+        $this->template->set('profile_fields', $this->streams->fields->get_stream_fields('profiles', 'users', $profile_data));
 
         // --------------------------------
 
         $this->template
                 ->title(lang('user:register_title'))
                 ->set('_user', $user)
-                ->build('register') ;
+                ->build('register');
     }
 
     // --------------------------------------------------------------------------
@@ -419,32 +416,32 @@ class Users extends Public_Controller
     public function activate($id = 0, $code = null)
     {
         // Get info from email
-        if ( $this->input->post('email') ) {
-            $this->template->activate_user = $this->ion_auth->get_user_by_email($this->input->post('email')) ;
-            $id                            = $this->template->activate_user->id ;
+        if ($this->input->post('email')) {
+            $this->template->activate_user = $this->ion_auth->get_user_by_email($this->input->post('email'));
+            $id                            = $this->template->activate_user->id;
         }
 
-        $code = ($this->input->post('activation_code')) ? $this->input->post('activation_code') : $code ;
+        $code = ($this->input->post('activation_code')) ? $this->input->post('activation_code') : $code;
 
         // If user has supplied both bits of information
-        if ( $id and $code ) {
+        if ($id and $code) {
             // Try to activate this user
-            if ( $this->ion_auth->activate($id, $code) ) {
-                $this->session->set_flashdata('activated_email', $this->ion_auth->messages()) ;
+            if ($this->ion_auth->activate($id, $code)) {
+                $this->session->set_flashdata('activated_email', $this->ion_auth->messages());
 
                 // trigger an event for third party devs
-                Events::trigger('post_user_activation', $id) ;
+                Events::trigger('post_user_activation', $id);
 
-                redirect('users/activated') ;
+                redirect('users/activated');
             } else {
-                $this->template->error_string = $this->ion_auth->errors() ;
+                $this->template->error_string = $this->ion_auth->errors();
             }
         }
 
         $this->template
                 ->title(lang('user:activate_account_title'))
                 ->set_breadcrumb(lang('user:activate_label'), 'users/activate')
-                ->build('activate') ;
+                ->build('activate');
     }
 
     /**
@@ -455,15 +452,15 @@ class Users extends Public_Controller
     public function activated()
     {
         //if they are logged in redirect them to the home page
-        if ( $this->current_user ) {
-            redirect(base_url()) ;
+        if ($this->current_user) {
+            redirect(base_url());
         }
 
-        $this->template->activated_email = ($email                           = $this->session->flashdata('activated_email')) ? $email : '' ;
+        $this->template->activated_email = ($email                           = $this->session->flashdata('activated_email')) ? $email : '';
 
         $this->template
                 ->title(lang('user:activated_account_title'))
-                ->build('activated') ;
+                ->build('activated');
     }
 
     /**
@@ -473,64 +470,64 @@ class Users extends Public_Controller
      */
     public function reset_pass($code = null)
     {
-        $this->template->title(lang('user:reset_password_title')) ;
+        $this->template->title(lang('user:reset_password_title'));
 
-        if ( PYRO_DEMO ) {
-            show_error(lang('global:demo_restrictions')) ;
+        if (PYRO_DEMO) {
+            show_error(lang('global:demo_restrictions'));
         }
 
         //if user is logged in they don't need to be here
-        if ( $this->current_user ) {
-            $this->session->set_flashdata('error', lang('user:already_logged_in')) ;
-            redirect('') ;
+        if ($this->current_user) {
+            $this->session->set_flashdata('error', lang('user:already_logged_in'));
+            redirect('');
         }
 
-        if ( $this->input->post('email') ) {
-            $uname = ( string ) $this->input->post('user_name') ;
-            $email = ( string ) $this->input->post('email') ;
+        if ($this->input->post('email')) {
+            $uname = (string) $this->input->post('user_name');
+            $email = (string) $this->input->post('email');
 
-            if ( !$uname and !$email ) {
+            if (!$uname and ! $email) {
                 // they submitted with an empty form, abort
                 $this->template->set('error_string', $this->ion_auth->errors())
-                        ->build('reset_pass') ;
+                        ->build('reset_pass');
             }
 
-            if ( !($user_meta = $this->ion_auth->get_user_by_email($email)) ) {
-                $user_meta = $this->ion_auth->get_user_by_username($email) ;
+            if (!($user_meta = $this->ion_auth->get_user_by_email($email))) {
+                $user_meta = $this->ion_auth->get_user_by_username($email);
             }
 
             // have we found a user?
-            if ( $user_meta ) {
-                $new_password = $this->ion_auth->forgotten_password($user_meta->email) ;
+            if ($user_meta) {
+                $new_password = $this->ion_auth->forgotten_password($user_meta->email);
 
-                if ( $new_password ) {
+                if ($new_password) {
                     //set success message
-                    $this->template->success_string = lang('forgot_password_successful') ;
+                    $this->template->success_string = lang('forgot_password_successful');
                 } else {
                     // Set an error message explaining the reset failed
-                    $this->template->error_string = $this->ion_auth->errors() ;
+                    $this->template->error_string = $this->ion_auth->errors();
                 }
             } else {
                 //wrong username / email combination
-                $this->template->error_string = lang('user:forgot_incorrect') ;
+                $this->template->error_string = lang('user:forgot_incorrect');
             }
         }
 
         // code is supplied in url so lets try to reset the password
-        if ( $code ) {
+        if ($code) {
             // verify reset_code against code stored in db
-            $reset = $this->ion_auth->forgotten_password_complete($code) ;
+            $reset = $this->ion_auth->forgotten_password_complete($code);
 
             // did the password reset?
-            if ( $reset ) {
-                redirect('users/reset_complete') ;
+            if ($reset) {
+                redirect('users/reset_complete');
             } else {
                 // nope, set error message
-                $this->template->error_string = $this->ion_auth->errors() ;
+                $this->template->error_string = $this->ion_auth->errors();
             }
         }
 
-        $this->template->build('reset_pass') ;
+        $this->template->build('reset_pass');
     }
 
     /**
@@ -538,17 +535,17 @@ class Users extends Public_Controller
      */
     public function reset_complete()
     {
-        PYRO_DEMO and show_error(lang('global:demo_restrictions')) ;
+        PYRO_DEMO and show_error(lang('global:demo_restrictions'));
 
         //if user is logged in they don't need to be here. and should use profile options
-        if ( $this->current_user ) {
-            $this->session->set_flashdata('error', lang('user:already_logged_in')) ;
-            redirect('my-profile') ;
+        if ($this->current_user) {
+            $this->session->set_flashdata('error', lang('user:already_logged_in'));
+            redirect('my-profile');
         }
 
         $this->template
                 ->title(lang('user:password_reset_title'))
-                ->build('reset_pass_complete') ;
+                ->build('reset_pass_complete');
     }
 
     /**
@@ -558,26 +555,26 @@ class Users extends Public_Controller
      */
     public function edit($id = 0)
     {
-        if ( $this->current_user and $this->current_user->group === 'admin' and $id > 0 ) {
-            $user = $this->user_m->get(array( 'id' => $id )) ;
+        if ($this->current_user and $this->current_user->group === 'admin' and $id > 0) {
+            $user = $this->user_m->get(array('id' => $id));
 
             // invalide user? Show them their own profile
-            $user or redirect('edit-profile') ;
+            $user or redirect('edit-profile');
         } else {
-            $user = $this->current_user or redirect('users/login/users/edit' . (($id > 0) ? '/' . $id : '')) ;
+            $user = $this->current_user or redirect('users/login/users/edit' . (($id > 0) ? '/' . $id : ''));
         }
 
-        $profile_data = array() ; // For our form
+        $profile_data = array(); // For our form
         // Get the profile data
-        $profile_row = $this->db->limit(1)
-                        ->where('user_id', $user->id)->get('profiles')->row() ;
+        $profile_row  = $this->db->limit(1)
+                        ->where('user_id', $user->id)->get('profiles')->row();
 
         // If we have API's enabled, load stuff
-        if ( Settings::get('api_enabled') and Settings::get('api_user_keys') ) {
-            $this->load->model('api/api_key_m') ;
-            $this->load->language('api/api') ;
+        if (Settings::get('api_enabled') and Settings::get('api_user_keys')) {
+            $this->load->model('api/api_key_m');
+            $this->load->language('api/api');
 
-            $api_key = $this->api_key_m->get_active_key($user->id) ;
+            $api_key = $this->api_key_m->get_active_key($user->id);
         }
 
         $this->validation_rules = array(
@@ -591,41 +588,40 @@ class Users extends Public_Controller
                 'label' => lang('profile_display_name'),
                 'rules' => 'required|xss_clean'
             )
-        ) ;
+                );
 
         // --------------------------------
         // Merge streams and users validation
         // --------------------------------
         // Get the profile fields validation array from streams
-        $this->load->driver('Streams') ;
-        $profile_validation = $this->streams->streams->validation_array('profiles', 'users', 'edit', array(), $profile_row->id) ;
-        
+        $this->load->driver('Streams');
+        $profile_validation = $this->streams->streams->validation_array('profiles', 'users', 'edit', array(), $profile_row->id);
+
         $validations = array();
-        foreach($profile_validation as $validation){
-            if($validation['field']=='captcha'){
-                continue; 
+        foreach ($profile_validation as $validation) {
+            if ($validation['field'] == 'captcha') {
+                continue;
             }
             array_push($validations, $validation);
-            
         }
-      
+
         // Set the validation rules
-        $this->form_validation->set_rules(array_merge($this->validation_rules, $validations)) ;
+        $this->form_validation->set_rules(array_merge($this->validation_rules, $validations));
 
         // Get user profile data. This will be passed to our
         // streams insert_entry data in the model.
-        $assignments = $this->streams->streams->get_assignments('profiles', 'users') ;
+        $assignments = $this->streams->streams->get_assignments('profiles', 'users');
 
         // --------------------------------
         // Settings valid?
-        if ( $this->form_validation->run() ) {
-            PYRO_DEMO and show_error(lang('global:demo_restrictions')) ;
+        if ($this->form_validation->run()) {
+            PYRO_DEMO and show_error(lang('global:demo_restrictions'));
 
             // Get our secure post
-            $secure_post = $this->input->post() ;
+            $secure_post = $this->input->post();
 
-            $user_data    = array() ; // Data for our user table
-            $profile_data = array() ; // Data for our profile table
+            $user_data    = array(); // Data for our user table
+            $profile_data = array(); // Data for our profile table
             // --------------------------------
             // Deal with non-profile fields
             // --------------------------------
@@ -635,21 +631,21 @@ class Users extends Public_Controller
             // The rest are streams
             // --------------------------------
 
-            $user_data['email'] = $secure_post['email'] ;
+            $user_data['email'] = $secure_post['email'];
 
             // If password is being changed (and matches)
-            if ( $secure_post['password'] ) {
-                $user_data['password'] = $secure_post['password'] ;
-                unset($secure_post['password']) ;
+            if ($secure_post['password']) {
+                $user_data['password'] = $secure_post['password'];
+                unset($secure_post['password']);
             }
 
             // --------------------------------
             // Set the language for this user
             // --------------------------------
 
-            if ( isset($secure_post['lang']) and $secure_post['lang'] ) {
-                $this->ion_auth->set_lang($secure_post['lang']) ;
-                $_SESSION['lang_code'] = $secure_post['lang'] ;
+            if (isset($secure_post['lang']) and $secure_post['lang']) {
+                $this->ion_auth->set_lang($secure_post['lang']);
+                $_SESSION['lang_code'] = $secure_post['lang'];
             }
 
             // --------------------------------
@@ -657,16 +653,16 @@ class Users extends Public_Controller
             // over from secure_post.
             // --------------------------------
 
-            $profile_data = $secure_post ;
+            $profile_data = $secure_post;
 
-            if ( $this->ion_auth->update_user($user->id, $user_data, $profile_data) !== false ) {
-                Events::trigger('post_user_update') ;
-                $this->session->set_flashdata('success', $this->ion_auth->messages()) ;
+            if ($this->ion_auth->update_user($user->id, $user_data, $profile_data) !== false) {
+                Events::trigger('post_user_update');
+                $this->session->set_flashdata('success', $this->ion_auth->messages());
             } else {
-                $this->session->set_flashdata('error', $this->ion_auth->errors()) ;
+                $this->session->set_flashdata('error', $this->ion_auth->errors());
             }
 
-            redirect('users/edit' . (($id > 0) ? '/' . $id : '')) ;
+            redirect('users/edit' . (($id > 0) ? '/' . $id : ''));
         } else {
             // --------------------------------
             // Grab user data
@@ -674,8 +670,8 @@ class Users extends Public_Controller
             // Currently just the email.
             // --------------------------------		
 
-            if ( isset($_POST['email']) ) {
-                $user->email = $_POST['email'] ;
+            if (isset($_POST['email'])) {
+                $user->email = $_POST['email'];
             }
         }
 
@@ -683,11 +679,11 @@ class Users extends Public_Controller
         // Grab user profile data
         // --------------------------------
 
-        foreach ( $assignments as $assign ) {
-            if ( isset($_POST[$assign->field_slug]) ) {
-                $profile_data[$assign->field_slug] = $this->input->post($assign->field_slug) ;
+        foreach ($assignments as $assign) {
+            if (isset($_POST[$assign->field_slug])) {
+                $profile_data[$assign->field_slug] = $this->input->post($assign->field_slug);
             } else {
-                $profile_data[$assign->field_slug] = $profile_row->{$assign->field_slug} ;
+                $profile_data[$assign->field_slug] = $profile_row->{$assign->field_slug};
             }
         }
 
@@ -695,9 +691,9 @@ class Users extends Public_Controller
         // Run Stream Events
         // --------------------------------
 
-        $profile_stream_id = $this->streams_m->get_stream_id_from_slug('profiles', 'users') ;
-        $this->fields->run_field_events($this->streams_m->get_stream_fields($profile_stream_id), array()) ;
-        if($this->input->is_ajax_request()){
+        $profile_stream_id = $this->streams_m->get_stream_id_from_slug('profiles', 'users');
+        $this->fields->run_field_events($this->streams_m->get_stream_fields($profile_stream_id), array());
+        if ($this->input->is_ajax_request()) {
             $this->template->set_layout(false);
         }
 
@@ -708,7 +704,7 @@ class Users extends Public_Controller
             'display_name'   => $profile_row->display_name,
             'profile_fields' => $this->streams->fields->get_stream_fields('profiles', 'users', $profile_data),
             'api_key'        => isset($api_key) ? $api_key : null,
-        )) ;
+        ));
     }
 
     /**
@@ -720,20 +716,20 @@ class Users extends Public_Controller
      */
     public function _check_login($email)
     {
-        $remember = false ;
-        if ( $this->input->post('remember') == 1 ) {
-            $remember = true ;
+        $remember = false;
+        if ($this->input->post('remember') == 1) {
+            $remember = true;
         }
 
-        if ( $this->ion_auth->login($email, $this->input->post('password'), $remember) ) {
-            return true ;
+        if ($this->ion_auth->login($email, $this->input->post('password'), $remember)) {
+            return true;
         }
 
-        Events::trigger('login_failed', $email) ;
-        error_log('Login failed for user ' . $email) ;
+        Events::trigger('login_failed', $email);
+        error_log('Login failed for user ' . $email);
 
-        $this->form_validation->set_message('_check_login', $this->ion_auth->errors()) ;
-        return false ;
+        $this->form_validation->set_message('_check_login', $this->ion_auth->errors());
+        return false;
     }
 
     /**
@@ -747,12 +743,12 @@ class Users extends Public_Controller
      */
     public function _username_check($username)
     {
-        if ( $this->ion_auth->username_check($username) ) {
-            $this->form_validation->set_message('_username_check', lang('user:error_username')) ;
-            return false ;
+        if ($this->ion_auth->username_check($username)) {
+            $this->form_validation->set_message('_username_check', lang('user:error_username'));
+            return false;
         }
 
-        return true ;
+        return true;
     }
 
     /**
@@ -766,25 +762,25 @@ class Users extends Public_Controller
      */
     public function _email_check($email)
     {
-        if ( $this->ion_auth->email_check($email) ) {
-            $this->form_validation->set_message('_email_check', lang('user:error_email')) ;
-            return false ;
+        if ($this->ion_auth->email_check($email)) {
+            $this->form_validation->set_message('_email_check', lang('user:error_email'));
+            return false;
         }
 
-        return true ;
+        return true;
     }
-    
+
     private function _settings($username)
     {
         $this->template->set_layout('user');
-        if ( $this->input->is_ajax_request() ) {
+        if ($this->input->is_ajax_request()) {
             $this->template
                     ->set_layout(false);
         }
-        
+
         // No user? Show a 404 error
         // Don't make a 2nd db call if the user profile is the same as the logged in user
-        if ( $this->current_user && $username === $this->current_user->username ) {
+        if ($this->current_user && $username === $this->current_user->username) {
             $user = $this->current_user;
         }
         // Fine, just grab the user from the DB
@@ -809,60 +805,60 @@ class Users extends Public_Controller
 
     public function about($username = null)
     {
-       $user = $this->_settings($username);
+        $user = $this->_settings($username);
 
         $this->template
-                ->build('profile/about',  array(
-            '_user' => $user,
+                ->build('profile/about', array(
+                    '_user' => $user,
         ));
     }
-    
-     public function photos($username = null)
+
+    public function photos($username = null)
     {
-        $user = $this->_settings($username);
+        $user   = $this->_settings($username);
         $photos = $this->album_m->get_image_files($user->id);
 
         $this->template
-                ->build('profile/photos',  array(
-            '_user' => $user,
-            'photos' => $photos
+                ->build('profile/photos', array(
+                    '_user'  => $user,
+                    'photos' => $photos
         ));
     }
-    
-     public function events($username = null)
+
+    public function events($username = null)
     {
         $user = $this->_settings($username);
         $this->template->build('profile/events', array(
             '_user' => $user,
         ));
     }
-    
-     public function interests($username = null)
+
+    public function interests($username = null)
     {
         $user = $this->_settings($username);
         $this->template->build('profile/interests', array(
             '_user' => $user,
         ));
     }
-    
-     public function friends($username = null)
+
+    public function friends($username = null)
     {
-        $user = $this->_settings($username);
+        $user    = $this->_settings($username);
         $this->load->model('friend/friend_m');
         $friends = $this->friend_m->get_friends($user->id);
-        
-        $this->template->build('profile/friends',  array(
-            '_user' => $user,
+
+        $this->template->build('profile/friends', array(
+            '_user'   => $user,
             'friends' => $friends
         ));
     }
 
-    
     public function favorites($username = null)
     {
         $user = $this->_settings($username);
-        $this->template->build('profile/favorites',  array(
+        $this->template->build('profile/favorites', array(
             '_user' => $user,
         ));
     }
+
 }
