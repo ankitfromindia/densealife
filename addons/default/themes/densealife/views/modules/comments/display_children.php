@@ -1,19 +1,23 @@
-
-<?php if ( $comments ): ?>
-    <?php foreach ( $comments as $item ): ?>
-        <li>
-            <span>{{user:profile_pic user_id='<?php echo $item->user_id;?>'}}</span> 
-            <div class="status-aera">
-                <span class="name"><?php echo $item->user_name ?></span> 
-                <span>
-                    <?php if ( Settings::get('comment_markdown') and $item->parsed ): ?>
-                        <?php echo $item->parsed ?>
-                    <?php else: ?>
-                        <p><?php echo nl2br($item->comment) ?></p>
-                    <?php endif ?>
-                </span>
+<?php if ($comments): ?>
+    <?php foreach ($comments as $item): ?>
+        <li class="comment_children mb10 li_child">
+            <div class="header">
+                <div class="profile_pic">
+                    {{user:profile_pic user_id='<?php echo $item->user_id; ?>' dim='32'}}
+                </div>
+                <div>
+                    <span class="display_name"><?php echo $item->display_name; ?></span>
+                    &nbsp;
+                    <?php echo nl2br($item->comment) ?>  
+                    <br/>
+                    <span class="time time-ago">
+                        <?php echo time_passed(strtotime($item->created_on));?>
+                    </span>
+                </div>
             </div>
         </li>
     <?php endforeach ?>
-<?php endif ; ?>
+    <?php
 
+ endif ;
+ 

@@ -302,6 +302,7 @@ class Comment_m extends MY_Model
         $this->db
                 ->join('default_shares as ds','c.id = fk_comment_id', 'left')
                 ->where('c.user_id', $user_id)
+                ->where('c.parent_id', 0)
                 ->or_where('ds.user_id IN ('.$var1.')');
 
         $this->db->order_by('c.created_on', Settings::get('comment_order'));

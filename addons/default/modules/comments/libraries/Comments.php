@@ -125,7 +125,7 @@ class Comments
                     }
                 }
 		// Return the awesome comments view
-		return $this->load_view('display', compact(array('comments')));
+		return $this->load_view('display_my_comments', compact(array('comments')));
 	}
         
         public function display_my_comments($user = null)
@@ -134,10 +134,7 @@ class Comments
             ci()->load->library('trends/trends');
             
 		// Fetch comments, then process them
-//		$comments = $this->process(ci()->comment_m->get_by_user($user_id));
-		$comments = $this->process(ci()->comment_m->get_wall_posts($user_id));
-               // echo ci()->comment_m->last_query();exit;
-               //p($comments); exit; 
+		$comments = $this->process(ci()->comment_m->get_by_user($user_id));
                
                 foreach($comments as &$comment){
                     $comment->count_stars = '';//ci()->trends->comment_count(Trends::TREND_STAR, $comment->id);

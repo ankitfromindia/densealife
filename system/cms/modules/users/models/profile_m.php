@@ -79,11 +79,11 @@ class Profile_m extends MY_Model
                     
         }
         
-        public function get_profile_pic($user_id)
+        public function get_profile_pic($user_id, $dim='70')
         {
             $profile = $this->select('profile_pic, display_name')->get_by('user_id', $user_id);
-            $width  = 70;
-            $height  = 70;
+            $width  = $dim;
+            $height  = $dim;
             $mode  = 'fit';
             if($profile->profile_pic){
                 return '<a href="/user/'.$profile->display_name.'">'.img(array( 'src' => 'files/thumb/' . $profile->profile_pic . '/'.$width.'/'.$height.'/'.$mode)).'</a>';

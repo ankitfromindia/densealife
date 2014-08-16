@@ -24,7 +24,13 @@ label{clear:both;width:70%;float:left;margin:5px 2%;padding:5px 2% 5px 0px;}
 input[type=text],  input[type=password]{width:70%;margin:5px 2%;border:1px solid #d8d8d8;line-height:25px; height:25px;padding:5px 2%;-webkit-box-shadow:inset 0 0 20px 5px #eae6e6;box-shadow:inset 0 0 20px 5px #eae6e6;}
 input[type=text].inputwidth{width:90%;}
 input[type=text]:focus, input[type=password]:focus{background-color:#FFFFFF;-webkit-box-shadow:inset 0 0 20px 5px #ffffff;box-shadow:inset 0 0 20px 5px #ffffff;}
-textarea{width:90%;margin:5px 2%;border:1px solid #d8d8d8;line-height:25px; height:75px;padding:5px 2%;-webkit-box-shadow:inset 0 0 20px 5px #eae6e6;box-shadow:inset 0 0 20px 5px #eae6e6;}
+textarea{  border: 1px solid #d8d8d8;
+    box-shadow: 0 0 20px 5px #eae6e6 inset;
+    height: 64px;
+    line-height: 25px;
+    margin: 5px 0;
+    padding: 5px 2%;
+    width: 586px;}
 .search-box input[type=text]{width:95%; height:20px; float:left;margin: 5px 2% 0 0;}
 .search-box button{width:auto;margin: 4px 0 0 0px;height: 33px;padding: 0 10px;}
 .captchawidth{width:49% !important;float:left;}
@@ -166,7 +172,7 @@ span.follower a, span.stars a{font-size:11px;text-decoration:none;color:#236aa0;
 .activity-feeds ul li span {display:block;}
 .activity-feeds ul li span.text {float:left;padding:5px;font-size: 10px;width: 75%; line-height:10px;}
 .activity-feeds ul li span.head {font-weight: bold;}
-span.name {display:block;margin: 4px auto 0px;padding: 5px;font-weight: bold;}
+span.name {display:block;margin: 4px auto 0px;padding: 5px;font-weight: bold; color:#3b5998;}
 span.name a{font-size:10px;}
 .activity-feeds span.more {display:block; text-align:right; padding:11px 0px 11px;clear: both; color:#236aa0;}
 .activity-feeds ul li span img{width:50px; height:50px;background-color:#CCCCCC;margin:10px auto;}
@@ -298,11 +304,15 @@ ul.status li{float:left; width: auto;margin: 20px auto;}
 ul.status li span{float:left;padding:0 10px;}
 .status-box{position:relative;float: left;width: 100%;}
 .post-btn{position: absolute;bottom: -6px;float: left;width: 71px;padding: 3px;font-size: 11px;right: -5px;}
-.status-bg{height: 30px;background-color: #f2f2f2;margin: -9px 23px 2% 2%;position: relative;border:1px solid #b4bbcd;}
+.status-bg{ background-color: #f2f2f2;
+    border: 1px solid #b4bbcd;
+    height: 30px;
+    margin: -4px 0 2% 0;
+    position: relative;}
 ul.status-blog{clear:both;width: 100%;float: left;margin: 0px;padding: 0px;}
-ul.status-blog li {margin-bottom:5px;border-bottom:1px dashed #ccc;width:100%;float:left; padding-bottom:10px;}
+ul.status-blog li {width:100%;float:left;}
 ul.status-blog li span{float:left;}
-ul.status-blog li span img{width:50px; height:50px;background-color:#CCCCCC;margin:5px auto;}
+/*ul.status-blog li span img{width:50px; height:50px;background-color:#CCCCCC;margin:5px auto;}*/
 ul.status-blog li:last-child{border:none;} 
 ul.status-blog li div.status-aera{float:left;width:80%;}
 ul.status-blog li div.status-aera input[type=text]{width: 105%;height: 16px;margin-top: 10px;}

@@ -167,11 +167,15 @@ class Comments extends Public_Controller
                         $response['entry']      = $this->input->post('entry');
 
                         $this->load->model('users/profile_m');
-
-                        $response['pic']        = $this->profile_m->get_profile_pic($comment->user_id);
+                        $response['pic_creator']        = $this->profile_m->get_profile_pic($comment->user_id, 50);
+                        $response['pic']        = $this->profile_m->get_profile_pic($comment->user_id, 32);
                         $response['user_email'] = $comment->user_email;
-                        $response['user_name']  = $comment->user_name;
+                        $response['user_name']  = $this->current_user->display_name; 
                         $response['media']      = '';
+                        $response['time_ago']   = time_passed(strtotime($comment->created_on));
+                        if(!isset($comment->display_name)){
+                            $comment->display_name = $this->current_user->display_name; 
+                        }
                         if (!empty($media['data'])) {
                             $response['media']['baseurl']  = base_url();
                             $response['media']['id']       = $media['data']['id'];

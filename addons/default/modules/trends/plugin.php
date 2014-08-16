@@ -202,9 +202,16 @@ class Plugin_Trends extends Plugin
     {
         $entry_id = $this->attribute('entry_id');
         $this->load->library('trends/Trends');
-        
         return $this->trends->link_follow($entry_id);
     }
+    
+    public function link_star()
+    {
+        $post_id = $this->attribute('post_id');
+        $this->load->library('comments/Comments');
+        return $this->comments->link_star($post_id);
+    }
+
 }
 
 /* End of file plugin.php */

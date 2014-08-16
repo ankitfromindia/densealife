@@ -427,8 +427,9 @@ class Plugin_User extends Plugin
             $user_id  = $this->attribute('user_id');
             $pic_info = $this->get_user_var('profile_pic', $user_id);
             $username = $this->get_user_var('username', $user_id);
-            $width  = $this->attribute('w','70');
-            $height  = $this->attribute('h', '70');
+            $dim = $this->attribute('dim', 50);
+            $width  = $this->attribute('w',$dim);
+            $height  = $this->attribute('h', $dim);
             $mode  = $this->attribute('mode', 'fit');
             if(!empty($pic_info)){
                 $x = current($pic_info);

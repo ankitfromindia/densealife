@@ -32,7 +32,7 @@
                 </div>
                 <!--Start left-body-container-->
                 <div class="left-bodyinnre-container">
-                    <div class="logo-densea-life-inner">{{user:profile_pic user_id="<?php echo $user->id;?>"}}</div>
+                    <div class="logo-densea-life-inner">{{user:profile_pic user_id="<?php echo $user->id;?>" dim="70"}}</div>
                     <!--<div class="logo-densea-life-inner">{{ theme:image file="logo.png"}}</div>-->
                     <span class="user-profile"><?php echo $user->display_name;?><?php if($user->id==$this->current_user->id):?><a class="fancybox fancybox.ajax" href="/edit-profile">Edit</a><?php endif;?></span>
                     <div class="comman-box">
@@ -46,15 +46,6 @@
                         {{ theme:partial name="blocks/interests" }}
                         
                     </div>
-<!--                    <div class="comman-box">
-                        <span class="heading-comman">Music</span>
-                        <ul>
-                            <li title="Trending">{{ theme:image file="trending.png"}}<span class="left-links"><a href="">Trending</a></span></li>
-                            <li title="Artist">{{ theme:image file="artist.png"}}<span class="left-links"><a href="">Artist</a></span></li>
-                            <li title="Songs">{{ theme:image file="events-icon.png"}}<span class="left-links"><a href="">Genre</a></span></li>
-                            <li title="Favorite">{{ theme:image file="favrate-icon.png"}}<span class="left-links"><a href="">Favorite</a></span></li>
-                        </ul>
-                    </div>-->
                     <?php if(!empty($friends)):?>
                     <div class="comman-box">
                         <span class="heading-comman">Friends</span>
@@ -105,12 +96,12 @@
                         <div class="search-box">
                             <label for="SearchBox"></label>
                             <input type="text" name="stream_search" id="stream_search" placeholder="Search streams"/>
-                            <!--<button type="submit" id='go-stream-search'>Go</button>-->
                         </div>
                         
                         <ul class="stream" id="stream_search_result">
                             {{eventsmanager:get_all_events limit='10'}}
                             <li class="txt-center">
+                                <div class='seperator'>&nbsp;</div>
                                 <span class="f-bold fs14"><a href="/eventsmanager/{{slug}}" title="{{title}}">{{title}}</a></span>
                                 <span class="image">
                                     <a href="/eventsmanager/{{slug}}" title="{{title}}" >
@@ -123,8 +114,8 @@
                                 </span> 
                                     <table width="100%" border="0">
                                         <tr>
-                                            <td width="50%"><a href="javascript:void(0);" class="float-left"><span class="d-inline count_star_{{id}}">{{star_count}}</span> &nbsp; Stars</a> </td>
-                                            <td  width="50%"><a href="javascript:void(0);" class="float-right"><span class="d-inline count_follow_{{id}}" >{{follow_count}}</span> &nbsp; Followers</a></span> </td>
+                                            <td width="50%"><a href="javascript:void(0);" class="float-left"><span class="count_star_{{id}} fl" style='display:inline-block;'>{{star_count}}</span><span class='fl'>&nbsp; Stars</span> </a> </td>
+                                            <td  width="50%"><a href="javascript:void(0);" class="float-right"><span class="count_follow_{{id}} fl" style='display:inline-block;'>{{follow_count}}</span><span class='fl'>&nbsp; Followers</span> </a></span> </td>
                                         </tr>
                                     </table>
                             </li>

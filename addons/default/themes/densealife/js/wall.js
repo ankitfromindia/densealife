@@ -120,19 +120,17 @@ $('.form-status').ajaxForm({
         $('.status-box-text').show();
         $('.status-box-media').hide().remove();
         $('.main-comment').val('');
-        if (response.parent_id == 0) {
-            content = ' <span>' + response.pic + '</span><div class="status-aera"><span class="name">' + response.user_name + '</span>' + this.media(response) + '<span><p>' + response.comment + '</p></span><span class="comman-star stars">'+response.link_star+'<a href="">Share</a></span></div><ul class="comments-hare"><li class="li-child-' + response.comment_id + '"><span>' + response.pic + '</span><div class="status-aera children">' + this.commentForm(response) + '</div></li></ul>';
+        if (response.parent_id === 0) {
+            content = '<div class="container"><div class="header"><div class="profile_pic">' + response.pic_creator + '</div><div class="post_title"><span class="display_name">' + response.user_name + '</span><br/><span class="time time-ago">'+response.time_ago+'</span></div></div><div class="comments">' + this.media(response) + '<span class="clear"></span><span class="fl">' + response.comment + '</span><span class="clear">&nbsp;</span><span class="comman-star stars">'+response.link_star+'</span><span><a href="/comments/share/'+response.comment_id+'" class="fancybox fancybox.ajax">Share</a></span></div><div class="comment-box"><ul><li><span>' + response.pic + '</span> <div class="status-aera children">' + this.commentForm(response) + '</div></li></ul></div></div><span class="seperator">&nbsp;</span>';
             if ($('.status-blog ul').siblings().length > 0) {
                 $('.status-blog li:first').before('<li class="li-' + response.comment_id + '">' + content + '</li>');
             } else {
-                $('.status-box').after('<ul class="status-blog"><li class="li-' + response.comment_id + '">' + content + '</li></ul>')
+                $('.status-box').after('<ul class="status-blog"><li class="li-' + response.comment_id + '">' + content + '</li></ul>');
             }
         } else {
-            content = ' <span>' + response.pic + '</span><div class="status-aera"><span class="name">' + response.user_name + '</span><span><p>' + response.comment + '</p></span></div>';
-            $('.li-' + response.parent_id).find('ul li:last').before('<li class="li-' + response.comment_id + '">' + content + '</li>')
+            content = '<div class="header"><div class="profile_pic"><a href="/user/ankit">'+response.pic+'</a></div><div><span class="display_name">'+response.user_name+'</span>&nbsp;'+response.comment+ '<br><span class="time time-ago">'+response.time_ago+'</span></div></div>';
+            $('.li-' + response.parent_id).find('ul li:last').before('<li class="li-' + response.comment_id + ' mb10">' + content + '</li>');
         }
-
-
     },
     complete: function() {
         $.fancybox.hideLoading();
