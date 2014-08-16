@@ -107,7 +107,7 @@ select{width:74%;margin:5px 2%;border:1px solid #d8d8d8;line-height:34px; height
 }
 .li_child{
     text-align: justify;
-    width: 539px !important;
+    width: 583px !important;
     word-wrap: break-word;
 }
 .time-ago{
@@ -118,4 +118,9 @@ select{width:74%;margin:5px 2%;border:1px solid #d8d8d8;line-height:34px; height
     -webkit-transition: height 0.2s;
     -moz-transition: height 0.2s;
     transition: height 0.2s;
+}
+
+.delete_post{
+    float:right !important;
+    font-size:11px;
 }

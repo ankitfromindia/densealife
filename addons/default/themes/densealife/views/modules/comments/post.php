@@ -1,4 +1,7 @@
 <div class="container">
+    <?php if($item->user_id == $this->current_user->id):?>
+        <span class="delete_post"><a href="javascript:void(0);" class="post-delete" data-id = '<?php echo $item->id;?>' title="Delete">[x]</a></span>
+    <?php endif;?>
     <div class="header">
         <div class="profile_pic">
             {{user:profile_pic user_id='<?php echo $item->user_id; ?>'}}
@@ -31,7 +34,7 @@
         </span>
         <span class='clear'>&nbsp;</span>
         <span class='comman-star stars'>
-            <?php echo link_star($item->id);?>
+            <?php echo  $this->comments->link_star($item->id);?>
         </span> 
         <span>
             <a href="/comments/share/<?php echo $item->id; ?>" class="fancybox fancybox.ajax">Share</a>
@@ -39,15 +42,11 @@
     </div>
     <div class="comment-box">
         <ul>
-            <?php echo display_post_children($item->id);?>
-            <?php //echo $this->comments->display_my_children($item->id); ?>
+            <?php echo $this->comments->display_my_children($item->id); ?>
             <li>
             <span>{{user:profile_pic user_id='<?php echo $this->current_user->id; ?>' dim='32'}}</span> 
             <div class="status-aera children">
-                <?php echo comment_form($item->id);?>
-                
-            <!--{{comments:comment_form post_id="<?php echo $item->id;?>"}}-->
-                <?php //echo $this->comments->form($item->id); ?>
+                <?php echo $this->comments->form($item->id); ?>
             </div>
             </li>
         </ul>

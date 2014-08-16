@@ -92,7 +92,8 @@ class Comment_m extends MY_Model
 
         $this->db
                 ->where('c.parent_id', $parent_id)
-                ->where('c.user_id', $user_id);
+                ->where('c.user_id', $user_id)
+                ->where('c.is_active', 1);
 
         if ($parent_id == 0) {
             $this->db->order_by('c.created_on', Settings::get('comment_order'));
@@ -310,4 +311,8 @@ class Comment_m extends MY_Model
         }
     }
     
+    public function soft_delete($post_id)
+    {
+        return parent::update($post_id, array('is_active' => 0)); 
+    }
 }

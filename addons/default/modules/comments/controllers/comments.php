@@ -568,4 +568,19 @@ class Comments extends Public_Controller
            }
        }
    }
+   
+   public function delete()
+   {
+       if ($this->input->is_ajax_request()) {
+            $post = $this->comment_m->get_by('id', $this->input->post('id'));
+            if (!empty($post) and $post->user_id == $this->current_user->id) {
+                if ($this->comment_m->soft_delete($this->input->post('id'))) {
+                    $this->template
+                            ->build_json(array('status' => 'success', 'msg' => 'Post deleted successfully'));
+                }
+            }
+        } else {
+            redirect('/densealife-page');
+        }
+   }
 }
