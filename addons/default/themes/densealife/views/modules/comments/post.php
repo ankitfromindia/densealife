@@ -41,8 +41,16 @@
         </span>
     </div>
     <div class="comment-box">
-        <ul>
-            <?php echo $this->comments->display_my_children($item->id); ?>
+        <ul class="post_comments">
+            <?php echo $this->comments->display_my_children($item->id, false); ?>
+            <?php $count_post_comments = $this->comments->count_post_comments($item->id);?>
+            <?php if($count_post_comments > Comments::LIMIT_POST_COMMENTS):?>
+            <li class='f-bold txt-center mb10'>
+                <a href="javascript:void(0);" title="View More" class="color-blue view_more_comments" data-id="<?php echo $item->id;?>" data-offset="0">
+                    View More (<?php echo ($count_post_comments - Comments::LIMIT_POST_COMMENTS);?>)
+                </a>
+            </li>
+            <?php endif;?>
             <li>
             <span>{{user:profile_pic user_id='<?php echo $this->current_user->id; ?>' dim='32'}}</span> 
             <div class="status-aera children">
@@ -52,6 +60,4 @@
         </ul>
     </div>
 </div>
-
 <span class="seperator">&nbsp;</span>
-

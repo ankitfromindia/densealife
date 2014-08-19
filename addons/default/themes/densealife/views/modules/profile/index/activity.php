@@ -13,4 +13,4 @@
 <div class="status-box status-box-text">
     <?php echo $this->comments->form(); ?>
 </div>
-<?php echo $this->comments->display_my_comments($user);
+<?php echo $this->comments->display_my_comments($user, true);

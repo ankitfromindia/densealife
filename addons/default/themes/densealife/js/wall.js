@@ -1,9 +1,24 @@
 $(document).ready(function() {
 
+    $('.view_more_comments').click(function(){
+        var $_this = $(this);
+        $_this.hide();
+        $_this.parent('li').before('<li class="txt-center loading_more color-blue">Loading More...</li>');
+        $.post('/comments/view_more',{'post_id': $_this.data('id'), 'offset' : $_this.data('offset')}, function(res){
+            $_this.parent('li').siblings('.loading_more').remove();
+            $_this.parent('li').before(res.html);
+            if(res.remaining === 0){
+                $_this.hide();
+            }else{
+                $_this.attr('data-offset', res.offset);
+            }
+        },'json');
+    });
+    
     $('.page-about').click(function() {
         $(".wall").load("/eventsmanager/about/" + $(this).data('slug'), function() {
             $('.comman-links').find('li').each(function() {
-                $(this).removeClass('active')
+                $(this).removeClass('active');
             });
             $('.page-event').addClass('active');
         });
@@ -12,7 +27,7 @@ $(document).ready(function() {
     $('.page-album').click(function() {
         $(".wall").load("/eventsmanager/albums/" + $(this).data('slug'), function() {
             $('.comman-links').find('li').each(function() {
-                $(this).removeClass('active')
+                $(this).removeClass('active');
             });
             $('.page-album').addClass('active');
         });

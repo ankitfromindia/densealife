@@ -66,6 +66,11 @@ class Comments
 	 * @var 	int
 	 */
 	protected $count = 0;
+        
+        /**
+         * number of comments on any post visible to any user when lands on a page. 
+         */
+        const LIMIT_POST_COMMENTS = 5;
 
 	/**
 	 * Function to display a comment
@@ -106,6 +111,23 @@ class Comments
             return ci()->trends->link_star($entry_id, $entry_type);
         }
         
+        /**
+         * this function will show the entire posts that are posted in my wall 
+         * by me me or by another
+         */
+        public function display_wall_posts()
+        {
+            
+        }
+        public function wall_post_comments()
+        {
+            
+        }
+        public function count_post_comments($post_id)
+        {
+            return ci()->comment_m->from('comments')->where('is_active', 1)->count_by('parent_id', $post_id);
+        }
+        
 	/**
 	 * Display comments
 	 *
@@ -132,20 +154,10 @@ class Comments
 	{
             $user_id = !isset($user->id) ? ci()->current_user->id : $user->id;
             ci()->load->library('trends/trends');
-            
-		// Fetch comments, then process them
-		$comments = $this->process(ci()->comment_m->get_by_user($user_id));
-               
-                foreach($comments as &$comment){
-                    $comment->count_stars = '';//ci()->trends->comment_count(Trends::TREND_STAR, $comment->id);
-                    if($user_id!=''){
-                        $comment->my_stars = '';//ci()->trends->comment_count(Trends::TREND_STAR, $comment->id , $user_id);
-                    }else{
-                        $comment->my_starts = '-1';
-                    }
-                }
-		// Return the awesome comments view
-		return $this->load_view('display_my_comments', compact(array('comments')));
+            // Fetch comments, then process them
+            $comments = $this->process(ci()->comment_m->get_by_user($user_id));
+            // Return the awesome comments view
+            return $this->load_view('display_my_comments', compact(array('comments')));
 	}
         
         public function display_children($parent_id = null)
@@ -156,10 +168,10 @@ class Comments
 		return $this->load_view('display_children', compact(array('comments')));
 	}
        
-        public function display_my_children($parent_id = null)
+        public function display_my_children($parent_id = null, $is_main_post = true)
 	{
 		// Fetch comments, then process them
-		$comments = $this->process(ci()->comment_m->get_by_user(ci()->current_user->id, $parent_id));
+		$comments = $this->process(ci()->comment_m->get_by_user(ci()->current_user->id, $parent_id, $is_main_post));
 		// Return the awesome comments view
 		return $this->load_view('display_children', compact(array('comments')));
 	}

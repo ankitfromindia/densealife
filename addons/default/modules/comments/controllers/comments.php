@@ -583,4 +583,23 @@ class Comments extends Public_Controller
             redirect('/densealife-page');
         }
    }
+   
+   public function view_more()
+   {
+       $parent = $this->input->post('post_id'); 
+       $limit = 100;
+       $offset = $this->input->post('offset');
+       $offset = empty($offset) ? 5 : $offset ;
+       
+       $this->template
+               ->set_layout(false);
+       $html = $this->template
+               ->set_layout(false)
+               ->set('comments', $this->comment_m->get_by_parent($parent, $limit, $offset))
+               ->build('display_children');
+       $remaining = $this->comment_m->from('comments')->limit($limit, $offset)->count_by(array('parent_id' => $parent, 'is_active' => 1));
+       
+       $this->template
+               ->build_json(array('html' => $html, 'offset' => (($offset+1) + $limit), 'remaining' => $remaining ));
+   }
 }

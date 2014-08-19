@@ -849,4 +849,7 @@ input.blank, textarea.blank, select.blank {
     width:400px;
 }
 
+.color-blue{
+    color: #3b5998 !important;
+}
 /* stylist(Designer Tab) ends*/

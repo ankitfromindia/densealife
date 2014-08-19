@@ -84,6 +84,7 @@
             <div id="body-container-inner" class="clearfix"> 
                 <div class="links-header">
                     <ul class="txt-center comman-links event-links">
+                        <li><?php echo anchor('/densealife-page', 'Activity') ;  ?></li>
                         <li class="<?php echo (($this->router->fetch_method() == 'about') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">About</a><?php //echo anchor('eventsmanager/about/' . $event->slug, 'About') ;  ?></li>
                         <li class="<?php echo (($this->router->fetch_method() == 'albums') ? 'active' : ''); ?>page-album" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Albums</a><?php //echo anchor('eventsmanager/albums/' . $event->slug, 'Albums') ;  ?></li>
                         <li class="<?php echo (($this->router->fetch_method() == 'videos') ? 'active' : ''); ?>page-video" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Videos</a><?php //echo anchor('eventsmanager/videos/' . $event->slug, 'Videos') ;  ?></li>
@@ -92,7 +93,7 @@
                 </div>
                 <!--Start left-body-container-->
                 <div class="left-bodyinnre-container">
-                    <span class="follower-right"><?php echo anchor('eventsmanager/wall/' . $event->slug, $event->title); ?></span>
+                    <span class="follower-right f-bold fs14"><?php echo anchor('eventsmanager/wall/' . $event->slug, $event->title); ?></span>
                     <?php if($event->author == $this->current_user->id):?>
                         <span class="follower-right"><?php echo anchor('eventsmanager/edit/' . $event->slug, 'Edit'); ?></span>
                     <?php endif;?>

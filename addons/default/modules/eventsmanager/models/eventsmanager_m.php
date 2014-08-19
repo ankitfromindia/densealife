@@ -29,6 +29,12 @@ class EventsManager_m extends MY_Model
                 //->join('trends as t', 'e.id = t.entry_id', 'right')
                 $this->db->where('e.author', $user_id);
         }
+        if($entry_type == 'event') {
+            $this->db->where('category_id', '1');
+        }else{
+            $this->db->where('category_id', '2');
+        }
+        
                 //->where('t.entry_type', $entry_type);
 //        if ( $user_id != '' ) {
 //            $this->db->where('t.user_id', $user_id);

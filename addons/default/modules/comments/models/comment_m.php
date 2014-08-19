@@ -86,19 +86,22 @@ class Comment_m extends MY_Model
         return $this->get_all();
     }
 
-    public function get_by_user($user_id, $parent_id = 0)
+    public function get_by_user($user_id, $parent_id = 0, $is_main_post = true, $limit = null, $offset = null)
     {
-        $this->_get_all_setup();
+       $this->_get_all_setup();
 
         $this->db
                 ->where('c.parent_id', $parent_id)
                 ->where('c.user_id', $user_id)
                 ->where('c.is_active', 1);
-
+                if(!$is_main_post){
+                    $limit = !is_null($limit)  ? $limit : Comments::LIMIT_POST_COMMENTS;
+                    $offset = !is_null($offset) ? $offset : 0 ; 
+                    $this->db->limit($limit, $offset);
+                }
         if ($parent_id == 0) {
             $this->db->order_by('c.created_on', Settings::get('comment_order'));
         }
-
         return $this->get_all();
     }
 
@@ -314,5 +317,20 @@ class Comment_m extends MY_Model
     public function soft_delete($post_id)
     {
         return parent::update($post_id, array('is_active' => 0)); 
+    }
+    
+    public function get_by_parent($parent_id, $limit, $offset)
+    {
+        $this->_get_all_setup();
+
+        $this->db
+                ->where('c.parent_id', $parent_id)
+                ->where('c.is_active', 1);
+        $limit = !is_null($limit)  ? $limit : Comments::LIMIT_POST_COMMENTS;
+        $offset = !is_null($offset) ? $offset : 0 ; 
+        $this->db->limit($limit, $offset);
+        
+        $rs = $this->get_all();
+        return $rs; 
     }
 }
