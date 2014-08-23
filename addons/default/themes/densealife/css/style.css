@@ -296,7 +296,7 @@ span.heading-comman{padding:10px; text-transform:uppercase;color:#236aa0;font-si
 .message-reply-block{position:absolute; bottom:0px; width:100%; background-color:#ffffff;}
 .message-reply-block .status-box textarea{height:50px;}
 ul.videos li{float:left;margin:5px 4px;}
-ul.videos li img{height:145px; width:145px;background-color:#CCCCCC;}
+/*ul.videos li img{height:145px; width:145px;background-color:#CCCCCC;}*/
 ul.followers li{float:left; width: 46%;margin: 2px 2%;}
 ul.followers li span{float:left;}
 ul.followers li span img{width:50px; height:50px;background-color:#CCCCCC;margin:10px auto;}
