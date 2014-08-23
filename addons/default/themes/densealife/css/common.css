@@ -852,4 +852,7 @@ input.blank, textarea.blank, select.blank {
 .color-blue{
     color: #3b5998 !important;
 }
+.capitalize{
+    text-transform: capitalize; 
+}
 /* stylist(Designer Tab) ends*/

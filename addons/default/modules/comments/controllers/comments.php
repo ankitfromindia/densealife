@@ -587,7 +587,7 @@ class Comments extends Public_Controller
    public function view_more()
    {
        $parent = $this->input->post('post_id'); 
-       $limit = 100;
+       $limit = 10;
        $offset = $this->input->post('offset');
        $offset = empty($offset) ? 5 : $offset ;
        

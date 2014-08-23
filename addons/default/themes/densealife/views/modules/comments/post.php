@@ -8,10 +8,11 @@
         </div>
         <div class="post_title">
             <span class="display_name"><?php echo $item->display_name; ?> </span>
+
             <?php if ($item->entry_title) : ?>> <?php endif; ?><?php echo $item->entry_title; ?>
             <br />
             <span class="time time-ago">
-                <?php echo time_passed(strtotime($item->created_on)); ?>
+                <?php echo time_passed(strtotime($item->priority)); ?>
             </span>
         </div>
     </div>

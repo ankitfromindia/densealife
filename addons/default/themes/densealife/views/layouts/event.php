@@ -2,36 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         {{ theme:partial name='metadata' }}
-        <?php if ( $this->current_user->id == $event->author ): ?>
+        <?php if ($this->current_user->id == $event->author): ?>
             <script type="text/javascript" src="<?php echo base_url('assets/jdrag/js/jquery.imagedrag.js'); ?>"></script>
             <script type="text/javascript">
     $(function() {
 
-        $('.cp-wrap').imagedrag({
-            input: "#output",
-            position: 'middle',
-            attribute: "value",
-            pixel: '{{event:cover_photo_pos}}'
-        });
-        $('#save_cp_pos').ajaxForm({
-            success: function(response) {
+    $('.cp-wrap').imagedrag({
+        input: "#output",
+        position: 'middle',
+        attribute: "value",
+        pixel: '{{event:cover_photo_pos}}'
+    });
+    $('#save_cp_pos').ajaxForm({
+        success: function(response) {
 
-            }
-        });
+        }
+    });
     });
             </script>
         <?php endif; ?>
-        <style type="text/css">
-            .cp-wrap {
-                width: 1013px;
-                height: 300px;
-                overflow: hidden;
-                margin: auto;
-                cursor: -webkit-grab;
-
-            }
-        </style>
-
     </head>
 
     <body>
@@ -50,17 +39,17 @@
                 </div>
                 <div class="logo-densea-life">   
                     <?php
-                    if ( is_file(UPLOAD_PATH . 'files/' . $event->thumbnail) ) :
-                        echo img(array( 'src' => UPLOAD_PATH . 'files/' . $event->thumbnail, 'height' => 150, 'width' => 150 ));
-                    elseif ( isset($event->picture_id) ) :
-                        echo img(array( 'src' => 'files/thumb/' . $event->picture_id . '/150' ));
+                    if (is_file(UPLOAD_PATH . 'files/' . $event->thumbnail)) :
+                        echo img(array('src' => UPLOAD_PATH . 'files/' . $event->thumbnail, 'height' => 150, 'width' => 150));
+                    elseif (isset($event->picture_id)) :
+                        echo img(array('src' => 'files/thumb/' . $event->picture_id . '/150'));
                     else :
-                        echo img(array( 'src' => $module_path . '/img/event.png' ));
+                        echo img(array('src' => $module_path . '/img/event.png'));
                     endif;
                     ?>   
 
                 </div>
-                <?php if ( $this->current_user->id == $event->author ): ?>
+                <?php if ($this->current_user->id == $event->author): ?>
                     <div class="cp_save_button">
 
                         <form method="post" action="/eventsmanager/save_cp_pos" id="save_cp_pos">
@@ -84,32 +73,39 @@
             <div id="body-container-inner" class="clearfix"> 
                 <div class="links-header">
                     <ul class="txt-center comman-links event-links">
-                        <li><?php echo anchor('/densealife-page', 'Activity') ;  ?></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'about') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">About</a><?php //echo anchor('eventsmanager/about/' . $event->slug, 'About') ;  ?></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'albums') ? 'active' : ''); ?>page-album" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Albums</a><?php //echo anchor('eventsmanager/albums/' . $event->slug, 'Albums') ;  ?></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'videos') ? 'active' : ''); ?>page-video" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Videos</a><?php //echo anchor('eventsmanager/videos/' . $event->slug, 'Videos') ;  ?></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'followers') ? 'active' : ''); ?>page-follower" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Followers</a><?php //echo anchor('eventsmanager/followers/' . $event->slug, 'Followers') ;  ?></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'wall') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Activity</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'about') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">About</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'albums') ? 'active' : ''); ?>page-album" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Albums</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'videos') ? 'active' : ''); ?>page-video" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Videos</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'followers') ? 'active' : ''); ?>page-follower" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Followers</a></li>
                     </ul>
                 </div>
                 <!--Start left-body-container-->
                 <div class="left-bodyinnre-container">
                     <span class="follower-right f-bold fs14"><?php echo anchor('eventsmanager/wall/' . $event->slug, $event->title); ?></span>
-                    <?php if($event->author == $this->current_user->id):?>
+                    <?php if ($event->author == $this->current_user->id): ?>
                         <span class="follower-right"><?php echo anchor('eventsmanager/edit/' . $event->slug, 'Edit'); ?></span>
-                    <?php endif;?>
+                    <?php endif; ?>
                     <div class="comman-box">
                         <span class="heading-comman">Information</span>
                         <p><?php echo $event->about ? $event->about : ''; ?></p>
                     </div>
-                    {{button:follow_event event_id='<?php echo $event->id;?>'}}
-                    {{button:favorite_event event_id='<?php echo $event->id;?>'}}
-                    <span class=""><?php echo $this->trends->link_star($event->id); ?></span>
+                    {{button:follow_event event_id='<?php echo $event->id; ?>'}}
+                    {{button:favorite_event event_id='<?php echo $event->id; ?>'}}
+                    <div>
+                        <span>
+                            {{button:star_event event_id='<?php echo $event->id; ?>'}}
+                        </span>
+                        <span>
+                            <span class="d-inline count_star_<?php echo $event->id; ?>"><?php echo $event->star_count; ?></span>  &nbsp;Stars</a> 
+                        </span>
+                    </div>
                     <span class="location">Location : <?php echo $event->place; ?></span>
                     <span class="location">
                         Date: 
                         <?php
-                        if ( $event->end_date_defined && isset($event->end_date) ):
-                            if ( date('Y-m-d', strtotime($event->start_date)) != date('Y-m-d', strtotime($event->end_date)) ):
+                        if ($event->end_date_defined && isset($event->end_date)):
+                            if (date('Y-m-d', strtotime($event->start_date)) != date('Y-m-d', strtotime($event->end_date))):
 
                                 echo lang('eventsmanager:from_date_label') . '&nbsp' . format_date($event->start_date) . '&nbsp' .
                                 lang('eventsmanager:at_time_label') . '&nbsp' . $event->start_time . '&nbsp - &nbsp' .
@@ -130,33 +126,26 @@
                         ?>
                     </span>
                 </div>
-                <!--End left-body-container--> 
-                <!--Start center-body-container-->
                 <div class="center-bodyinnre-container">
                     <div class="comman-box clearfix wall">
                         {{ theme:partial name="content" }}
                     </div>
                 </div>
-                <!--End center-body-container--> 
-                <!--Start right-body-container-->
                 <div class="right-bodyinnre-container">
-                    <span class="f-bold follower-right"><?php echo $this->trends->count_followers($event->id); ?> Followers <?php //if ( $this->trends->count_new(Trends::TREND_FOLLOW) ):  ?>(<?php //echo $this->trends->count_new(Trends::TREND_FOLLOW) ;  ?> New) <?php //endif ;  ?></span>
+                    <span class="f-bold follower-right"><?php echo $this->trends->count_followers($event->id); ?> Followers <?php //if ( $this->trends->count_new(Trends::TREND_FOLLOW) ):    ?>(<?php //echo $this->trends->count_new(Trends::TREND_FOLLOW) ;    ?> New) <?php //endif ;    ?></span>
                     <script>
                         $(function() {
-
                             $('.add_friend').click(function() {
-
                                 $.fancybox({
                                     // fallback size
                                     fitToView: false, // set the specific size without scaling to the view port
                                     autoSize: false,
                                     'href': '/eventsmanager/add_friend/{{event:slug}}',
-                                    'type': 'iframe',
+                                    'type': 'iframe'
                                 });
 
                                 return false;
                             });
-
                             $('.invite_by_mail').click(function() {
 
                                 $.fancybox({
@@ -175,47 +164,44 @@
 
                     <button class="btn-color common add_friend">Add Friend</button>
                     <button class="common invite_by_mail">Invite by Mail</button>
-                    <!-- AddThis Button BEGIN -->
-                    <!--<div class="addthis_toolbox addthis_default_style addthis_32x32_style">-->
-<!--                        <a class="addthis_button_facebook"></a>
-                        <a class="addthis_button_twitter"></a>
-                        <a class="addthis_button_pinterest_share"></a>
-                        <a class="addthis_button_google_plusone_share"></a>
-                    </div>
-                    <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
-                    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50d1c64c6188fd02"></script>-->
-                    <!-- AddThis Button END -->
-                        <?php if ( !empty($follower_friends) ): ?>
+
+                    <?php if (!empty($follower_friends)): ?>
                         <div class="comman-box clearfix clear">
                             <span class="heading-comman">Friends Following</span>
                             <ul class="friends-follow">
-                                <?php foreach ( $follower_friends as $follower ): ?>
-                                    <li><a href="" title="<?php //echo $follower->name; ?>">{{user:profile_pic user_id='<?php echo $follower->user_id; ?>'}}</a></li>
+                                <?php foreach ($follower_friends as $follower): ?>
+                                    <li>
+                                        <a href="" title="<?php echo $follower->name; ?>">
+                                            {{user:profile_pic user_id='<?php echo $follower->user_id; ?>'}}
+                                        </a>
+                                    </li>
                                 <?php endforeach; ?>
                             </ul>
-                            <!--<span class="block">6 mutual friends</span>-->
                         </div>
-                        <?php endif; ?>
-                        <div class="activity-feeds"> 
+                    <?php endif; ?>
+                    <div class="fl activity-feeds"> 
                         {{friend:list_friends}}
                         <span class="heading">Friends Suggestions</span>
                         <ul class="friend_suggestions">
                             {{friend:list_friends}}
-                            <li class="li_{{user_id}}">
-                                <span>{{user:profile_pic user_id='{{user_id}}'}}
-                                    <span class="name"><a href='/densealife-page/{{username}}'>{{display_name}}</a></span> 
-                                    <span class="name">
-                                        <!--                                           <a href=''>Invite</a>-->
+                            <li class="li_{{user_id}} mt10">
+                                <div class="fl">
+                                    {{user:profile_pic user_id='{{user_id}}'}}
+                                </div>
+                                <div>
+                                    <span>
+                                        <a class="color-blue fb fs14 capitalize" href='/densealife-page/{{username}}'>{{display_name}}</a>
+                                    </span>
+                                    <br/>
+                                    <span class="fs10">
                                         {{button:invite_friend eid=event:id fid="{{user_id}}"}}
-                                    </span> 
-                                </span> 
+                                    </span>
+                                </div> 
                             </li>
                             {{/friend:list_friends}}
                         </ul>
                         <hr />
-                        <span class="more">See more suggestion</span> 
-
-                        <!--{{ widgets:instance id="3"}} widget friend suggestions-->
+                        <span class="more">See more suggestion</span>
                     </div>
                 </div>
                 <!--End Right-body-container--> 

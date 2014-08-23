@@ -88,11 +88,26 @@ class Comment_m extends MY_Model
 
     public function get_by_user($user_id, $parent_id = 0, $is_main_post = true, $limit = null, $offset = null)
     {
-       $this->_get_all_setup();
+        $this->load->model('friend/friend_m');
+        $friends = $this->friend_m->get_friends($user_id, 'p.user_id');
+        $friends_ids = array();
+        foreach($friends as $friend) {
+            $friends_ids[] = $friend->user_id;
+        }
+        $this->_get_all_setup();
+        $sharedIncluded = false;
+        if(!empty($friends_ids)){
+            $this->db->select('s.comment as comment_on_share, s.shared_at');
+            $this->db->select("IF(s.shared_at is null, c.created_on,s.shared_at) AS priority", false);
+            $this->db->join('shares as s','s.fk_comment_id = c.id', 'left');
+            $this->db->where("(s.user_id IN (". implode(',',$friends_ids).") OR s.user_id =".$user_id." OR c.user_id =".$user_id.")");
+            $sharedIncluded = true; 
+        }else{
+            $this->db->where('c.user_id', $user_id);
+        }
 
         $this->db
                 ->where('c.parent_id', $parent_id)
-                ->where('c.user_id', $user_id)
                 ->where('c.is_active', 1);
                 if(!$is_main_post){
                     $limit = !is_null($limit)  ? $limit : Comments::LIMIT_POST_COMMENTS;
@@ -100,9 +115,11 @@ class Comment_m extends MY_Model
                     $this->db->limit($limit, $offset);
                 }
         if ($parent_id == 0) {
-            $this->db->order_by('c.created_on', Settings::get('comment_order'));
+            $this->db->order_by('priority','DESC');
         }
-        return $this->get_all();
+        
+        $result_set = $this->get_all();
+        return $result_set;
     }
 
     public function get_latest_entry($module, $entry_key, $entry_id, $is_active = true, $parent_id = 0)

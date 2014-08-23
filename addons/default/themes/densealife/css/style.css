@@ -165,11 +165,11 @@ span.follower a, span.stars a{font-size:11px;text-decoration:none;color:#236aa0;
 #body-container .right-body-container .login-form-block span.key-icon{display:block;background:url(../img/key-icon.png);background-repeat:no-repeat; background-position:97% 12px; padding:10px;text-indent:-999px;overflow: hidden;}
 #body-container .right-body-container .login-form-block input[type=text],  input[type=password]{width:91%;margin:2%;border:1px solid #d8d8d8;line-height:25px; height:25px;padding:2%;-webkit-box-shadow:inset 0 0 20px 5px #eae6e6;box-shadow:inset 0 0 20px 5px #eae6e6;}
 .activity-feeds{border:1px solid #d8d8d8;height:auto;width:96%; padding:2%;background:url(../img/activity-icon.png);background-repeat:no-repeat; background-position: -1px 0px;margin: 15px auto;}
-.activity-feeds span.heading{padding:10px; text-transform:uppercase;color:#236aa0;font-size: 20px;}
+.activity-feeds span.heading{padding:10px; text-transform:uppercase;color:#236aa0;font-size: 16px;}
 .activity-feeds ul{width:100%;float:left;margin:0px; padding:0px;}
 .activity-feeds ul li{border-bottom:1px solid #d8d8d8;overflow: hidden;}
 /*.activity-feeds ul li span {display:block;float:left;width:100%;}*/
-.activity-feeds ul li span {display:block;}
+.activity-feeds ul li span {padding-left: 10px;width: 100%;}
 .activity-feeds ul li span.text {float:left;padding:5px;font-size: 10px;width: 75%; line-height:10px;}
 .activity-feeds ul li span.head {font-weight: bold;}
 span.name {display:block;margin: 4px auto 0px;padding: 5px;font-weight: bold; color:#3b5998;}
@@ -256,7 +256,7 @@ h2.heading{margin:10px 0;padding:1% 2%;font-size:14px; background-color:#f6f6f6;
 div.tabs{margin:10px 0;font-size:12px; background-color:#f6f6f6; border:1px solid #d8d8d8;float:left; width:99%; color:#23699e;padding-right: 5px;}
 div.tabs ul li{ width:auto; padding:1% 2%; font-weight:normal; float:left;border-right:1px solid #d8d8d8;}
 .comman-heading{background-color:#05a8cf;width:98%;padding:1%;float:left;text-align:left;color:#ffffff;font-weight:bold;font-size: 16px;}
-.comman-heading button{float:right; width: 119px;margin: 0;border:none;border-radius:5px; font-weight:bold; font-size:12px; color:#000000;
+.comman-heading button{float:right;margin: 0;border:none;border-radius:5px; font-weight:bold; font-size:12px; color:#000000;
 	background: #b4e391; /* Old browsers */
 	background: -moz-linear-gradient(top,  #b4e391 0%, #61c419 50%, #b4e391 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b4e391), color-stop(50%,#61c419), color-stop(100%,#b4e391)); /* Chrome,Safari4+ */

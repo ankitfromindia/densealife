@@ -237,6 +237,12 @@ class Friend_m extends MY_Model
     }
     
     
+    /**
+     * fetch the resultset containing 
+     * @param type $event_id
+     * @param type $user_id
+     * @return type
+     */
     public function get_follower_friends($event_id, $user_id)
     {
         $query  = $this->query("
@@ -260,12 +266,11 @@ class Friend_m extends MY_Model
     }
 
     
-    public function get_friends($user_id)
+    public function get_friends($user_id, $select = "`p`.*, `u`.`username`")
     {
         if(!is_null($user_id)){
             $var1    = "";
-            $var1 .= "SELECT `p`.*, ";
-            $var1 .= "       `u`.`username` ";
+            $var1 .= "SELECT {$select} ";
             $var1 .= "FROM   `default_profiles` AS `p` ";
             $var1 .= "       INNER JOIN `default_users` AS `u` ";
             $var1 .= "               ON `p`.`user_id` = `u`.`id` ";

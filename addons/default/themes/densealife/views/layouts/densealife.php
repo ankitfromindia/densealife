@@ -16,13 +16,13 @@
             <!--Start Body Container-->
             <div id="body-container-inner" class="clearfix"> 
                 <div class="links-header txt-center">
-                    <ul class="comman-links link-header-event <?php echo (!isset($type) || $type == 'event') ? 'd-inline ' : 'd-none'; ?>">
+                    <ul class="comman-links link-header-event <?php echo (!isset($type) || $type == 'event') ? 'd-block' : 'd-none'; ?>">
                         <li class="<?php echo (($this->router->fetch_method()=='events') ? ' active ' : '');?>page-events" data-page="events"><a href="#events">Events</a><?php //echo anchor('' , 'Events') ; ?></li>
                         <li class="<?php echo (($this->router->fetch_method()=='trending') ? ' active ' : '');?>page-trending" data-page="trending"><a href="#trending">Trending</a><?php //echo anchor('profile/page/upcoming' , 'Upcoming') ; ?></li>
                         <li class="<?php echo (($this->router->fetch_method()=='upcoming') ? ' active ' : '');?>page-upcoming" data-page="upcoming"><a href="#upcoming">Upcoming</a><?php //echo anchor('profile/page/upcoming' , 'Upcoming') ; ?></li>
                         <li class="<?php echo (($this->router->fetch_method()=='favorites') ? 'active ' : '');?>page-favorite" data-page="favorite"><a href="#favorite">Favorites</a><?php //echo anchor('profile/page/favorites' , 'Favorites') ; ?></li>
                     </ul>
-                    <ul class="comman-links <?php echo (isset($type) && $type == 'interest') ? 'd-inline' : 'd-none'; ?> link-header-interest">
+                    <ul class="comman-links <?php echo (isset($type) && $type == 'interest') ? 'd-block' : 'd-none'; ?> link-header-interest">
                         <li class="<?php echo (($this->router->fetch_method()=='interests') ? ' active ' : '');?>"><a href="#i-interests">Interests</a></li>
                         <li class="<?php echo (($this->router->fetch_method()=='trending') ? ' active ' : '');?>"><a href="#i-trending">Trending</a></li>
                         <li class="<?php echo (($this->router->fetch_method()=='popular') ? ' active ' : '');?>"><a href="#i-popular">Populars</a></li>

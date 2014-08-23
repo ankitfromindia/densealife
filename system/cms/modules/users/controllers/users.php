@@ -825,19 +825,31 @@ class Users extends Public_Controller
         ));
     }
 
+    private function _load_list_view($user_id, $type='event')
+    {
+        $this->load->model('eventsmanager/eventsmanager_m');
+        $events = $this->eventsmanager_m->get_all_events($user_id, $type);
+        $list = null;
+        foreach ($events as $event):
+            $list.= load_view('profile', '/index/loop', array('data' => $event));
+        endforeach;
+        return $list; 
+    }
     public function events($username = null)
     {
         $user = $this->_settings($username);
         $this->template->build('profile/events', array(
-            '_user' => $user,
+            'title'=> 'Events',
+            'list' => $this->_load_list_view($user->id),
         ));
     }
 
     public function interests($username = null)
     {
         $user = $this->_settings($username);
-        $this->template->build('profile/interests', array(
-            '_user' => $user,
+        $this->template->build('profile/events', array(
+            'title'=> 'Interest',
+            'list' => $this->_load_list_view($user->id, 'interest'),
         ));
     }
 

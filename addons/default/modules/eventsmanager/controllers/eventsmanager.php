@@ -38,6 +38,7 @@ class EventsManager extends Public_Controller
         }
         $this->load->model('files/file_folders_m');
         $this->load->model('event_categories_m');
+        $this->load->model('trends/trend_m');
         $this->lang->load('categories');
         $this->lang->load('eventsmanager');
         $this->lang->load('blog');
@@ -450,7 +451,6 @@ class EventsManager extends Public_Controller
 
     public function wall($slug = null)
     {
-
         $this->_set_template_content($slug);
         $event = $this->eventsmanager_m->getBy('slug', $slug);
         $this->load->model('profile/auto_approval_m'); 
@@ -532,6 +532,7 @@ class EventsManager extends Public_Controller
     {
         $this->_set_template_content($slug);
         $event     = $this->eventsmanager_m->getBy('slug', $slug);
+        $this->load->library('trends/Trends');
         $followers = $this->trends->get_followers($event->id);
 
         $this->load->library('friend/friend');

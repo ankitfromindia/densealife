@@ -2,13 +2,11 @@
 <li class="txt-center">
     <span class="f-bold fs14"><a href="/eventsmanager/<?php echo $data->slug; ?>" title="<?php echo $data->title; ?>"><?php echo $data->title; ?></a></span>
     <span class="image">
-        <a href="/eventsmanager/{{data:slug}}" title="<?php echo $data->title; ?>" >
+        <a href="/eventsmanager/<?php echo $data->slug; ?>" title="<?php echo $data->title; ?>" >
             {{ eventsmanager:thumb name="<?php echo $data->thumbnail;?>" }}
             <div class="display-none hover-aera">
                 {{button:star_event event_id='<?php echo $data->id;?>'}}
-<!--                <a href="" class="float-left star-aera">Star</a>  -->
                 {{button:follow_event event_id='<?php echo $data->id;?>' class='float-right ctrl_trend'}}
-                <!--<button type="button" class="float-right">follow</button>-->
             </div>
         </a>
     </span> 
