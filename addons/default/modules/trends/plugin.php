@@ -180,14 +180,11 @@ class Plugin_Trends extends Plugin
         return $result ;
     }
     
-    public function followers_count(){
+    public function followers_count()
+    {
         $entry_id = $this->attribute('entry_id');
-        $this->load->library('trends/Trends', array(
-            'module'   => 'eventsmanager',
-            'singular' => 'eventsmanager:event',
-            'plural'   => 'eventsmanager:events',
-            'entry_id'=> $entry_id)) ;
-        return count($this->trends->get_followers($entry_id)) ;
+        $this->load->library('trends/Trends');
+        return $this->trends->count_followers($entry_id);
     }
     
     public function favorites()

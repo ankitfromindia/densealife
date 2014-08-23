@@ -328,7 +328,7 @@ class Trends
         $where['entry_id'] = $entry_id ;
         $where['entry_type'] = $entry_type ;
         $where['follow'] = 'true';
-        return ( int ) ci()->db->where($where)->count_all_results('trends') ;
+        return ci()->db->where($where)->count_all_results('trends') ;
     }
     public function count($trend, $entry_type = null, $user_id = null)
     {

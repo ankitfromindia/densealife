@@ -132,7 +132,9 @@
                     </div>
                 </div>
                 <div class="right-bodyinnre-container">
-                    <span class="f-bold follower-right"><?php echo $this->trends->count_followers($event->id); ?> Followers <?php //if ( $this->trends->count_new(Trends::TREND_FOLLOW) ):    ?>(<?php //echo $this->trends->count_new(Trends::TREND_FOLLOW) ;    ?> New) <?php //endif ;    ?></span>
+                    <span class="f-bold follower-right">
+                        {{trends:followers_count entry_id='{{event:id}}'}} Followers
+                    </span>
                     <script>
                         $(function() {
                             $('.add_friend').click(function() {
@@ -147,18 +149,14 @@
                                 return false;
                             });
                             $('.invite_by_mail').click(function() {
-
                                 $.fancybox({
                                     width: 500,
                                     minHeight: 200,
                                     'href': '/eventsmanager/invite_by_mail/{{event:slug}}',
-                                    'type': 'iframe',
+                                    'type': 'iframe'
                                 });
-
                                 return false;
                             });
-
-
                         });
                     </script>
 
@@ -204,9 +202,7 @@
                         <span class="more">See more suggestion</span>
                     </div>
                 </div>
-                <!--End Right-body-container--> 
             </div>
-            <!--End Body Container-->
             <footer>
                 {{ theme:partial name="footer" }}   
             </footer>

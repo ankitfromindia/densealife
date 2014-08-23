@@ -71,6 +71,7 @@ class Comment_m extends MY_Model
         $this->_get_all_setup();
 
         $this->db
+                ->select('c.created_on as priority')
                 ->where('c.module', $module)
                 ->where('c.entry_id', $entry_id)
                 ->where('c.entry_key', $entry_key)
