@@ -29,14 +29,7 @@
         <div id="wepper-inner"> 
             <!--Start Header-->
             <header id="wepper">
-                <div class="top-scrip"> <span><a href="/densealife-page">{{ theme:image file="logoname.png" width="111" height='24'}} </a></span>
-                    <ul class="innerpages">
-                        <li title="Friend Request">{{ theme:image file="friendreq.png" alt="Friend Request" }}</li>
-                        <li title="Message">{{ theme:image file="msg.png" alt="Message" }}</li>
-                        <li title="Notification">{{ theme:image file="notification.png" alt="Notification" }}</li>
-                        <li title="My Account">{{ theme:image file="myaccount.png" alt="My Account" }}</li>
-                    </ul>
-                </div>
+                {{ theme:partial name='head' }}
                 <div class="logo-densea-life">   
                     <?php
                     if (is_file(UPLOAD_PATH . 'files/' . $event->thumbnail)) :
