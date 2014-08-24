@@ -1,5 +1,30 @@
-$(document).ready(function() {
+var hashUpdate = function(curr_hash) {
+    $('.wall').animate({'opacity': '0.3'});
+    $.fancybox.showLoading();
+    var page_to_load = curr_hash.substr(1);
+    var splitten = window.location.pathname.split('/');
+    var loadurl = '/' + splitten[1] + '/' + page_to_load +'/' + splitten[2];
+     $(".wall").load(loadurl, function() {
+        $('.wall').animate({'opacity': '1'});
+        $.fancybox.hideLoading();
+        $('.comman-links').find('li').each(function() {
+            $(this).removeClass('active');
+        });
+        if(page_to_load.indexOf('/') > 0){
+            mypage = page_to_load.substr(0, page_to_load.indexOf('/')-1);
+        }else{
+            mypage = page_to_load;
+        }
+        $('.page-'+mypage).addClass('active');
+    }); 
+};
 
+$(document).ready(function() {
+    $(window).bind('hashchange', function(e) {
+        hashUpdate(e.target.location.hash);
+    });
+    window.location.hash && hashUpdate(window.location.hash);
+    
     $('.view_more_comments').click(function(){
         var $_this = $(this);
         $_this.hide();
@@ -15,43 +40,43 @@ $(document).ready(function() {
         },'json');
     });
     
-    $('.page-about').click(function() {
-        $(".wall").load("/eventsmanager/about/" + $(this).data('slug'), function() {
-            $('.comman-links').find('li').each(function() {
-                $(this).removeClass('active');
-            });
-            $('.page-event').addClass('active');
-        });
-    });
-
-    $('.page-album').click(function() {
-        $(".wall").load("/eventsmanager/albums/" + $(this).data('slug'), function() {
-            $('.comman-links').find('li').each(function() {
-                $(this).removeClass('active');
-            });
-            $('.page-album').addClass('active');
-        });
-    });
-
-
-
-    $('.page-video').click(function() {
-        $(".wall").load("/eventsmanager/videos/" + $(this).data('slug'), function() {
-            $('.comman-links').find('li').each(function() {
-                $(this).removeClass('active')
-            });
-            $('.page-video').addClass('active');
-        });
-    });
-
-    $('.page-follower').click(function() {
-        $(".wall").load("/eventsmanager/followers/" + $(this).data('slug'), function() {
-            $('.comman-links').find('li').each(function() {
-                $(this).removeClass('active')
-            });
-            $('.page-follower').addClass('active');
-        });
-    });
+//    $('.page-about').click(function() {
+//        $(".wall").load("/eventsmanager/about/" + $(this).data('slug'), function() {
+//            $('.comman-links').find('li').each(function() {
+//                $(this).removeClass('active');
+//            });
+//            $('.page-event').addClass('active');
+//        });
+//    });
+//
+//    $('.page-album').click(function() {
+//        $(".wall").load("/eventsmanager/albums/" + $(this).data('slug'), function() {
+//            $('.comman-links').find('li').each(function() {
+//                $(this).removeClass('active');
+//            });
+//            $('.page-album').addClass('active');
+//        });
+//    });
+//
+//
+//
+//    $('.page-video').click(function() {
+//        $(".wall").load("/eventsmanager/videos/" + $(this).data('slug'), function() {
+//            $('.comman-links').find('li').each(function() {
+//                $(this).removeClass('active')
+//            });
+//            $('.page-video').addClass('active');
+//        });
+//    });
+//
+//    $('.page-follower').click(function() {
+//        $(".wall").load("/eventsmanager/followers/" + $(this).data('slug'), function() {
+//            $('.comman-links').find('li').each(function() {
+//                $(this).removeClass('active')
+//            });
+//            $('.page-follower').addClass('active');
+//        });
+//    });
 
     $('body').on('keydown', '.form-post-comment', function(event) {
         if (event.keyCode == 13 && $(this).val() != '' && !event.shiftKey) {

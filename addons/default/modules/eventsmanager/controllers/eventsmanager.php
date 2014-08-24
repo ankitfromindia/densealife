@@ -28,9 +28,10 @@ class EventsManager extends Public_Controller
             redirect('users/login');
         }
         $this->template->append_metadata(
-                "<script>
-                                                var baseurl = '" . base_url() . "'
-                                             </script>"
+            "<script>
+                var baseurl = '" . base_url() . "',
+                //var currenturl = '".current_url()."',
+            </script>"
         );
         $this->template->set_layout('event');
         if ($this->input->is_ajax_request()) {
@@ -42,6 +43,8 @@ class EventsManager extends Public_Controller
         $this->lang->load('categories');
         $this->lang->load('eventsmanager');
         $this->lang->load('blog');
+        Asset::add_path('users', 'system/cms/modules/users/');
+        $this->template->append_js('users::album.js');
     }
 
     private function _set_template_content($slug = null)
@@ -498,9 +501,8 @@ class EventsManager extends Public_Controller
             }
         }
         $user_uploads = $this->eventsmanager_m->get_user_uploads_by_event_id($event->id);
-
         $this->template
-                ->set('content', $this->load_view('albums', array('albums' => $albums, 'photos' => $user_uploads)))
+                ->set('content', $this->load_view('albums', array('albums' => $albums, 'photos' => $user_uploads, 'event' => $event)))
                 ->build('eventsmanager/index');
     }
 

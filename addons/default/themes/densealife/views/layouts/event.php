@@ -73,11 +73,11 @@
             <div id="body-container-inner" class="clearfix"> 
                 <div class="links-header">
                     <ul class="txt-center comman-links event-links">
-                        <li class="<?php echo (($this->router->fetch_method() == 'wall') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Activity</a></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'about') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">About</a></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'albums') ? 'active' : ''); ?>page-album" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Albums</a></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'videos') ? 'active' : ''); ?>page-video" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Videos</a></li>
-                        <li class="<?php echo (($this->router->fetch_method() == 'followers') ? 'active' : ''); ?>page-follower" data-slug="<?php echo $event->slug; ?>"><a href="javascript:void(0);">Followers</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'wall') ? 'active ' : ''); ?>page-index" data-slug="<?php echo $event->slug; ?>"><a href="#wall">Activity</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'about') ? 'active ' : ''); ?>page-about" data-slug="<?php echo $event->slug; ?>"><a href="#about">About</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'albums') ? 'active' : ''); ?>page-albums" data-slug="<?php echo $event->slug; ?>"><a href="#albums">Albums</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'videos') ? 'active' : ''); ?>page-videos" data-slug="<?php echo $event->slug; ?>"><a href="#videos">Videos</a></li>
+                        <li class="<?php echo (($this->router->fetch_method() == 'followers') ? 'active' : ''); ?>page-followers" data-slug="<?php echo $event->slug; ?>"><a href="#followers">Followers</a></li>
                     </ul>
                 </div>
                 <!--Start left-body-container-->

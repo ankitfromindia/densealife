@@ -1,16 +1,17 @@
-<?php //p($event); ?>
 <form method="post" id='form-create-event'>
     <table style='width:100%;'>
         <tr>
-        <td>
-        <label for="title"><?php echo lang('eventsmanager:title_label'); ?> <span>*</span></label>
-        </td>
+            <td>
+                <label for="title">
+                    <?php echo lang('eventsmanager:title_label'); ?> <span>*</span>
+                </label>
+            </td>
         </tr>
 
         <tr>
-        <td>
-            <div class='input'><?php echo form_input('title', htmlspecialchars_decode($event->title), 'maxlength="255" id="title"') ?></div>
-        </td>
+            <td>
+                <div class='input'><?php echo form_input('title', htmlspecialchars_decode($event->title), 'maxlength="255" id="title"') ?></div>
+            </td>
         </tr>
 
         <tr>
@@ -190,9 +191,11 @@
             <div class="input">
                 <p>Comment Permissions</p>
                 <input type="radio" name="comment_permission" value="FOLLOWER" <?php if (isset($event->comment_permission) && $event->comment_permission == 'FOLLOWER') : echo 'checked="checked"';
-            endif; ?>>Followers can comment
+            endif;
+            ?>>Followers can comment
                 <input type="radio" name="comment_permission" value="CREATER" <?php if (isset($event->comment_permission) && $event->comment_permission == 'CREATER') : echo 'checked="checked"';
-            endif; ?>>Only I can post
+                       endif;
+            ?>>Only I can post
             </div>
         </td>
         </tr>
@@ -202,7 +205,8 @@
             <div class="input">
                 <p>Comment approval</p>
                 <input type="checkbox" name="comment_approval" value="YES" <?php if (isset($event->comment_approval) && $event->comment_approval == 'YES') : echo 'checked="checked"';
-            endif; ?>>Comments by user must be approved by me before being visible
+                       endif;
+            ?>>Comments by user must be approved by me before being visible
             </div>
         </td>
         </tr>
@@ -243,16 +247,16 @@
         </td>
         </tr>
         <tr>
-        <td>
-        <label for="pos_lat"><?php echo lang('eventsmanager:position_label'); ?> <span>*</span></label>
-        </td>
+            <td>
+                <label for="pos_lat"><?php echo lang('eventsmanager:position_label'); ?> <span>*</span></label>
+            </td>
         </tr>
 
         <tr>
         <td>
 
             <div class="input">
-<?php echo lang('eventsmanager:latitude_label'); ?>&nbsp;:
+                <?php echo lang('eventsmanager:latitude_label'); ?>&nbsp;:
                 <input style='width:40px;' type="text" id="pos_lat" name="pos_lat" value="<?php echo isset($event->pos_lat) ? $event->pos_lat : ""; ?>" />
                 &nbsp;<?php echo lang('eventsmanager:longitude_label'); ?>&nbsp;:
                 <input style='width:40px;' type="text" name="pos_lng" value="<?php echo isset($event->pos_lng) ? $event->pos_lng : ""; ?>" />

@@ -7,7 +7,7 @@
         $('.wall-main').animate({'opacity': '1'});
         $.fancybox.hideLoading();
         $('.comman-links').find('li').each(function() {
-            $(this).removeClass('active')
+            $(this).removeClass('active');
         });
         if(page_to_load.indexOf('/') > 0){
             mypage = page_to_load.substr(0, page_to_load.indexOf('/')-1);
@@ -16,7 +16,7 @@
         }
         $('.page-'+mypage).addClass('active');
     }); 
-}
+};
 ENTRY_TYPE = 'event';
 $(document).on('change','.drpdwn_sub_category_id', function(){
     page_to_load = $(this).siblings('#entry_type').val()=='interest' ?  'i-interests' : 'events';

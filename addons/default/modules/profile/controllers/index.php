@@ -180,20 +180,25 @@ class Index extends Public_Controller
     }
     
     
-    public function album()
+    public function album($slug = null)
     {
-       role_or_die('eventsmanager', 'frontend_editing', 'eventsmanager', lang('eventsmanager:notallowed_frontend_editing'));
        $event = new stdClass();
+       $this->load->model('users/album_m');
        $albums = array();
-       if($this->session->userdata('recently_created_event')!=''){
+       $event_id = null;
+       if(empty($slug) && $this->session->userdata('recently_created_event')!=''){
             $id = $this->session->userdata('recently_created_event'); 
             $event = $this->eventsmanager_m->getBy('id', $id);
-            $this->load->model('users/album_m');
-            $albums = $this->album_m->get_albums($this->current_user->id, $id);
+            $event_id = $id; 
             
+        }elseif(!empty($slug)){
+            $event = $this->eventsmanager_m->getBy('slug', $slug);
+            $event_id = $event-id;
+            $this->load->model('users/album_m');
         }else{
             show_404();
         } 
+        $albums = $this->album_m->get_albums($this->current_user->id, $event_id);
         echo load_view('profile',
                 'index/partials/form_album', array(
                     '_user' => $this->current_user, 

@@ -1,4 +1,12 @@
-<?php if ( $albums ): ?>
+<?php     
+echo load_view('profile','index/partials/form_album', array(
+            '_user' => $this->current_user,
+            'event'  => $event,
+            'albums' => $albums,
+            'showDir' => false
+        )
+    );
+if ( $albums ): ?>
     <div class="comman-heading">Albums</div>
     <ul class="videos">
         <?php foreach ( $albums as $album ):?>
@@ -10,7 +18,10 @@
                         <?php else: ?>
                             {{ theme:image file="no-image.jpg"}} 
                         <?php endif ; ?>
-                        <span class="name"><?php echo $album->name; ?> (<?php echo $album->photo_count ; ?> Photos)</span>
+                            <br/>
+                            <span class="color-blue f-bold txt-up"><?php echo $album->name; ?> </span>
+                            <br/>
+                            <span class="color-blue">(<?php echo $album->photo_count ; ?> Photos)</span>
                     </a>
                 </li>
             <?php endif ; ?>
