@@ -11,15 +11,15 @@ if ( $albums ): ?>
     <ul class="videos">
         <?php foreach ( $albums as $album ):?>
             <?php if ( $album->count_files != 0 ): ?>
-                <li>
+                <li class="txt-center">
+                    <span class="color-blue f-bold txt-up"><?php echo $album->name; ?> </span>
+                    <br/>
                     <a class="fancybox fancybox.ajax" href="/eventsmanager/album_images/<?php echo $album->id ; ?>">
                         <?php if ( !empty($album->cover) ): ?>
                             <img src="<?php echo $album->cover ; ?>" width="135" height="135" />
                         <?php else: ?>
                             {{ theme:image file="no-image.jpg"}} 
                         <?php endif ; ?>
-                            <br/>
-                            <span class="color-blue f-bold txt-up"><?php echo $album->name; ?> </span>
                             <br/>
                             <span class="color-blue">(<?php echo $album->photo_count ; ?> Photos)</span>
                     </a>
