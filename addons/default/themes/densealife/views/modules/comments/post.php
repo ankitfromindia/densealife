@@ -4,12 +4,10 @@
     <?php endif;?>
     <div class="header">
         <div class="profile_pic">
-            {{user:profile_pic user_id='<?php echo $item->user_id; ?>'}}
+            {{user:profile_pic user_id='<?php echo $item->user_id; ?>' comment_id = '<?php echo $item->id;?>'}}
         </div>
         <div class="post_title">
             <span class="display_name"><?php echo $item->display_name; ?> </span>
-
-            <?php if ($item->entry_title) : ?>> <?php endif; ?><?php echo $item->entry_title; ?>
             <br />
             <span class="time time-ago">
                 <?php echo time_passed(strtotime($item->priority)); ?>
@@ -53,7 +51,7 @@
             </li>
             <?php endif;?>
             <li>
-            <span>{{user:profile_pic user_id='<?php echo $this->current_user->id; ?>' dim='32'}}</span> 
+            <span>{{user:profile_pic user_id='<?php echo $this->current_user->id; ?>' dim='32' comment_id='<?php echo $item->id;?>'}}</span> 
             <div class="status-aera children">
                 <?php echo $this->comments->form($item->id); ?>
             </div>

@@ -8,7 +8,7 @@
             <?php endif;?>
             <div class="header">
                 <div class="profile_pic">
-                    {{user:profile_pic user_id='<?php echo $item->user_id; ?>' dim='32'}}
+                    {{user:profile_pic user_id='<?php echo $item->user_id; ?>' dim='32' comment_id = '<?php echo $item->id;?>'}}
                 </div>
                 <div>
                     <span class="display_name"><?php echo $item->display_name; ?></span>

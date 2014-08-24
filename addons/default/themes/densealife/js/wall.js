@@ -39,45 +39,6 @@ $(document).ready(function() {
             }
         },'json');
     });
-    
-//    $('.page-about').click(function() {
-//        $(".wall").load("/eventsmanager/about/" + $(this).data('slug'), function() {
-//            $('.comman-links').find('li').each(function() {
-//                $(this).removeClass('active');
-//            });
-//            $('.page-event').addClass('active');
-//        });
-//    });
-//
-//    $('.page-album').click(function() {
-//        $(".wall").load("/eventsmanager/albums/" + $(this).data('slug'), function() {
-//            $('.comman-links').find('li').each(function() {
-//                $(this).removeClass('active');
-//            });
-//            $('.page-album').addClass('active');
-//        });
-//    });
-//
-//
-//
-//    $('.page-video').click(function() {
-//        $(".wall").load("/eventsmanager/videos/" + $(this).data('slug'), function() {
-//            $('.comman-links').find('li').each(function() {
-//                $(this).removeClass('active')
-//            });
-//            $('.page-video').addClass('active');
-//        });
-//    });
-//
-//    $('.page-follower').click(function() {
-//        $(".wall").load("/eventsmanager/followers/" + $(this).data('slug'), function() {
-//            $('.comman-links').find('li').each(function() {
-//                $(this).removeClass('active')
-//            });
-//            $('.page-follower').addClass('active');
-//        });
-//    });
-
     $('body').on('keydown', '.form-post-comment', function(event) {
         if (event.keyCode == 13 && $(this).val() != '' && !event.shiftKey) {
             $(this).blur();
@@ -187,7 +148,7 @@ $('.form-status').ajaxForm({
                 $('.status-box').after('<ul class="status-blog"><li class="li-' + response.comment_id + '">' + content + '</li></ul>');
             }
         } else {
-            content = '<div class="header"><div class="profile_pic"><a href="/user/ankit">' + response.pic + '</a></div><div><span class="display_name">' + response.user_name + '</span>&nbsp;' + response.comment + '<br><span class="time time-ago">' + response.time_ago + '</span></div></div>';
+            content = '<div class="header"><div class="profile_pic"><a href="/user/ankit">' + response.pic_creator + '</a></div><div><span class="display_name">' + response.user_name + '</span>&nbsp;' + response.comment + '<br><span class="time time-ago">' + response.time_ago + '</span></div></div>';
             $('.li-' + response.parent_id).find('ul li:last').before('<li class="li-' + response.comment_id + ' mb10">' + content + '</li>');
         }
     },

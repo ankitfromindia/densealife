@@ -69,7 +69,8 @@ class Comment_m extends MY_Model
     public function get_by_entry($module, $entry_key, $entry_id, $is_active = true, $parent_id = 0, $comment_id = 0)
     {
         $this->_get_all_setup();
-
+        $this->db->select('IF(e.author = c.user_id, c.entry_title, (IF(c.user_id > 0, m.display_name, c.user_name))) as display_name',false);
+        $this->db->join('events as e', 'c.entry_id = e.id','left');
         $this->db
                 ->select('c.created_on as priority')
                 ->where('c.module', $module)
@@ -97,10 +98,10 @@ class Comment_m extends MY_Model
         }
         $this->_get_all_setup();
         $sharedIncluded = false;
+        $this->db->select('s.comment as comment_on_share, s.shared_at');
+        $this->db->join('shares as s','s.fk_comment_id = c.id', 'left');
+        $this->db->select("IF(s.shared_at is null, c.created_on,s.shared_at) AS priority", false);
         if(!empty($friends_ids)){
-            $this->db->select('s.comment as comment_on_share, s.shared_at');
-            $this->db->select("IF(s.shared_at is null, c.created_on,s.shared_at) AS priority", false);
-            $this->db->join('shares as s','s.fk_comment_id = c.id', 'left');
             $this->db->where("(s.user_id IN (". implode(',',$friends_ids).") OR s.user_id =".$user_id." OR c.user_id =".$user_id.")");
             $sharedIncluded = true; 
         }else{
