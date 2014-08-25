@@ -168,8 +168,6 @@ span.follower a, span.stars a{font-size:11px;text-decoration:none;color:#236aa0;
 .activity-feeds span.heading{padding:10px; text-transform:uppercase;color:#236aa0;font-size: 16px;}
 .activity-feeds ul{width:100%;float:left;margin:0px; padding:0px;}
 .activity-feeds ul li{border-bottom:1px solid #d8d8d8;overflow: hidden;}
-/*.activity-feeds ul li span {display:block;float:left;width:100%;}*/
-.activity-feeds ul li span {padding-left: 10px;width: 100%;}
 .activity-feeds ul li span.text {float:left;padding:5px;font-size: 10px;width: 75%; line-height:10px;}
 .activity-feeds ul li span.head {font-weight: bold;}
 span.name {display:block;margin: 4px auto 0px;padding: 5px;font-weight: bold; color:#3b5998;}

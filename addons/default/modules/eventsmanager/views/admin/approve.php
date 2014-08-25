@@ -7,8 +7,6 @@
 <section class="item">
     <div class="content">
         <?php
-//        echo $this->load->view('admin/partials/filters') ;
-
         if ( count($unpub_events) > 0 ):
             echo form_open('admin/eventsmanager/delete') ;
             ?>
@@ -32,11 +30,11 @@
                             <td class="event-picture">
                                 <?php
                                 if ( is_file(UPLOAD_PATH . 'files/' . $event->thumbnail) ) :
-                                    echo img(array( 'src' => UPLOAD_PATH . 'files/' . $event->thumbnail . '?' . mt_rand(0, 10000) )) ;
+                                    echo img(array( 'src' => UPLOAD_PATH . 'files/' . $event->thumbnail . '?' . mt_rand(0, 10000), 'width' => 100, 'height' => 100 )) ;
                                 elseif ( isset($event->picture_id) ) :
-                                    echo img(array( 'src' => 'files/thumb/' . $event->picture_id )) ;
+                                    echo img(array( 'src' => 'files/thumb/' . $event->picture_id.'/100' )) ;
                                 else :
-                                    echo img(array( 'src' => $module_path . '/img/event.png', 'style' => 'height: 100px' )) ;
+                                    echo img(array( 'src' => $module_path . '/img/event.png', 'style' => 'height: 100px ; width:100px;' )) ;
                                 endif ;
                                 ?>
                             </td>
