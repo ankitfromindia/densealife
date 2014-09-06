@@ -68,8 +68,11 @@ class Comment_m extends MY_Model
      */
     public function get_by_entry($module, $entry_key, $entry_id, $is_active = true, $parent_id = 0, $comment_id = 0)
     {
+        echo $this->current_user->id;
+        $this->get_comment_by_event($entry_id); 
+        exit; 
         $this->_get_all_setup();
-        $this->db->select('IF(e.author = c.user_id, c.entry_title, (IF(c.user_id > 0, m.display_name, c.user_name))) as display_name',false);
+        $this->db->select('IF(e.author = c.user_id, e.title, (IF(c.user_id > 0, m.display_name, c.user_name))) as display_name',false);
         $this->db->join('events as e', 'c.entry_id = e.id','left');
         $this->db
                 ->select('c.created_on as priority')
@@ -98,8 +101,9 @@ class Comment_m extends MY_Model
         }
         $this->_get_all_setup();
         $sharedIncluded = false;
-        $this->db->select('s.comment as comment_on_share, s.shared_at');
+        $this->db->select('s.comment as comment_on_share, s.shared_at, p1.display_name as shared_by');
         $this->db->join('shares as s','s.fk_comment_id = c.id', 'left');
+        $this->db->join('profiles as p1', 'p1.user_id = s.user_id', 'left');
         $this->db->select("IF(s.shared_at is null, c.created_on,s.shared_at) AS priority", false);
         if(!empty($friends_ids)){
             $this->db->where("(s.user_id IN (". implode(',',$friends_ids).") OR s.user_id =".$user_id." OR c.user_id =".$user_id.")");
@@ -351,5 +355,21 @@ class Comment_m extends MY_Model
         
         $rs = $this->get_all();
         return $rs; 
+    }
+    
+    public function get_comment_by_event($entry_id, $parent_comment_id = 0,  $show_inactive = false)
+    {
+        $this
+                ->select('comments.*')
+                ->select('if(e.author = default_comments.user_id, e.title, p.display_name) as display_name', false )
+                ->select('default_comments.created_on as priority')
+                ->join('events as e' , 'e.id = comments.entry_id', 'left')
+                ->join('profiles as p', 'p.user_id = comments.user_id', 'inner');
+         if ($parent_comment_id == 0) {
+            $this->order_by('comments.created_on', Settings::get('comment_order'));
+        }
+        $comments = $this->get_many_by(array('entry_id' => $entry_id, 'is_active' => 1));
+        
+        return $comments;
     }
 }

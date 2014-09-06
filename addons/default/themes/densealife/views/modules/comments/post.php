@@ -8,12 +8,19 @@
         </div>
         <div class="post_title">
             <span class="display_name"><?php echo $item->display_name; ?> </span>
+<!--            <span class="color-blue"> &nbsp; shared  <?php echo $item->display_name; ?>'s status</span>-->
             <br />
             <span class="time time-ago">
                 <?php echo time_passed(strtotime($item->priority)); ?>
             </span>
         </div>
     </div>
+    <?php if(!empty($item->comment_on_share)):?>
+        <div class="comments">
+            <?=$item->comment_on_share?>
+        </div>
+        <div class="shared_post">
+    <?php endif;?>
     <div class="comments">
         <?php
         if ($item->media != ''):
@@ -39,6 +46,9 @@
             <a href="/comments/share/<?php echo $item->id; ?>" class="fancybox fancybox.ajax">Share</a>
         </span>
     </div>
+    <?php if(!empty($item->comment_on_share)):?>
+        </div>
+    <?php endif;?>
     <div class="comment-box">
         <ul class="post_comments">
             <?php echo $this->comments->display_my_children($item->id, false); ?>
@@ -50,12 +60,14 @@
                 </a>
             </li>
             <?php endif;?>
+            <?php if($allowcomment) :?>
             <li>
-            <span>{{user:profile_pic user_id='<?php echo $this->current_user->id; ?>' dim='32' comment_id='<?php echo $item->id;?>'}}</span> 
+            <span>{{user:profile_pic user_id='<?php echo $this->current_user->id; ?>' dim='32' comment_id = '<?php echo $item->id;?>'}}</span> 
             <div class="status-aera children">
                 <?php echo $this->comments->form($item->id); ?>
             </div>
             </li>
+            <?php endif;?>
         </ul>
     </div>
 </div>

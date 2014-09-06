@@ -405,18 +405,18 @@ class Plugin_User extends Plugin
         $mode       = $this->attribute('mode', 'fit');
         $pic        = img(array('src' => '/addons/default/modules/eventsmanager/img/event.png', 'width' => $width, 'height' => $height));
         if (!is_null($comment_id)) {
-            $comment = $this->db->select()
+            $comment = $this->db->select('*, if(c.user_id = e.author, 1, 0) as is_author_post', false)
                     ->from('comments as c')
                     ->join('events as e', 'e.id = c.entry_id', 'inner')
                     ->where('c.id', $comment_id)
                     ->group_by('c.id')
                     ->get()
                     ->row();
-            if ($comment->user_id == $user_id) {
+            if ($comment->is_author_post) {
                 if (is_file(UPLOAD_PATH . 'files/' . $comment->thumbnail)) :
                     $pic = img(array('src' => UPLOAD_PATH . 'files/' . $comment->thumbnail, 'height' => $height, 'width' => $width));
                 elseif (isset($comment->picture_id)) :
-                    $pic = img(array('src' => 'files/thumb/' . $comment->picture_id . '/' . $dim));
+                    $pic = img(array('src' => 'files/thumb/' . $comment->picture_id . '/' . $dim.'/fit'));
                 endif;
             }else {
                 if (!empty($pic_info)) {

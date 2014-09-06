@@ -161,7 +161,7 @@ class Comments extends Public_Controller
                     }
                     if ($this->input->is_ajax_request()) {
                         $parent_id              = $this->input->post('parent_id') ? $this->input->post('parent_id') : 0;
-                        $comment = $this->db->select('*,e.id as event_id')
+                        $comment = $this->db->select('*, if(c.user_id = e.author, 1, 0) as is_author_post', false)
                                 ->from('comments as c')
                                 ->join('events as e','e.id = c.entry_id', 'left')
                                 ->where('c.id', $comment_id)
@@ -171,13 +171,16 @@ class Comments extends Public_Controller
                         $response['parent_id']  = $parent_id;
                         $response['comment_id'] = $comment_id;
                         $response['entry']      = $this->input->post('entry');
-                        if(($comment->event_id!='') && ($comment->author == $this->current_user->id )) {
+                        if($comment->is_author_post) {
                             if (is_file(UPLOAD_PATH . 'files/' . $comment->thumbnail)) :
-                                $response['pic_creator']        = img(array('src' => UPLOAD_PATH . 'files/' . $comment->thumbnail, 'height' => 32, 'width' => 32));
+                                $response['pic_creator']        = img(array('src' => UPLOAD_PATH . 'files/' . $comment->thumbnail, 'height' => 50, 'width' => 50));
+                                $response['pic']        = img(array('src' => UPLOAD_PATH . 'files/' . $comment->thumbnail, 'height' => 32, 'width' => 32));
                             elseif (isset($event->picture_id)) :
-                                $response['pic_creator']        = img(array('src' => 'files/thumb/' . $comment->picture_id . '/32'));
+                                $response['pic_creator']        = img(array('src' => 'files/thumb/' . $comment->picture_id . '/50'));
+                                $response['pic']        = img(array('src' => 'files/thumb/' . $comment->picture_id . '/32'));
                             else :
-                                $response['pic_creator']        =  img(array('src' => '/addons/default/modules/eventsmanager/img/event.png', 'width'=>32, 'height'=>32));
+                                $response['pic_creator']        =  img(array('src' => '/addons/default/modules/eventsmanager/img/event.png', 'width'=>50, 'height'=>50));
+                                $response['pic']        =  img(array('src' => '/addons/default/modules/eventsmanager/img/event.png', 'width'=>32, 'height'=>32));
                             endif;
                         }else{
                             $this->load->model('users/profile_m');

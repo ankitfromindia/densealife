@@ -12,7 +12,6 @@ class Notifications extends Public_Controller
     {
         parent::__construct();
         if ( !is_logged_in() ) {
-            $this->session->set_userdata('redirect_to', current_url());
             redirect('users/login');
         }
         $this->lang->load('profile');

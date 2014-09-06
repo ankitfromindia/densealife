@@ -51,7 +51,7 @@ $(document).ready(function() {
     $('body').on('click', '.post-delete', function(){  
        var $_this = $(this);
        $.fancybox.showLoading();
-       $.post('comments/delete', {id: $_this.data('id')}, function(response) {
+       $.post('/comments/delete', {id: $_this.data('id')}, function(response) {
             if (response.status === 'success') {
                 $('.li-' + $_this.data('id')).remove();
                 $.fancybox.hideLoading();
@@ -120,9 +120,9 @@ $('.form-status').ajaxForm({
     type: 'POST',
     delegation: true, // for live response
     dataType: 'json',
-    url: '../../comments/create/eventsmanager',
+    url: '/comments/create/eventsmanager',
     commentForm: function(response) {
-        return '<form accept-charset="utf-8" method="post" class="form-status" action="' + this.url + '"><input type="hidden" value="' + response.entry + '" name="entry"><input type="hidden" value="' + response.comment_id + '" name="parent_id"><textarea class="form-post-comment " name="comment" rows="" cols="" onfocus="this.value =\'\'"></textarea></form>'
+        return '<form accept-charset="utf-8" method="post" class="form-status" action="' + this.url + '"><input type="hidden" value="' + response.entry + '" name="entry"><input type="hidden" value="' + response.comment_id + '" name="parent_id"><textarea class="form-post-comment " name="comment" rows="" cols="" onfocus="this.value =\'\'"></textarea></form>';
     },
     media: function(response) {
         if (response.media != '') {

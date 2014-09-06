@@ -91,38 +91,7 @@
                             {{/friend:events}}
                         </ul>
                     </div>
-                    <div class="activity-feeds"> 
-                        <span class="heading-comman">Stream</span>
-                        <div class="search-box">
-                            <label for="SearchBox"></label>
-                            <input type="text" name="stream_search" id="stream_search" placeholder="Search streams"/>
-                        </div>
-                        
-                        <ul class="stream" id="stream_search_result">
-                            {{eventsmanager:get_all_events limit='10'}}
-                            <li class="txt-center">
-                                <div class='seperator'>&nbsp;</div>
-                                <span class="f-bold fs14"><a href="/eventsmanager/{{slug}}" title="{{title}}">{{title}}</a></span>
-                                <span class="image">
-                                    <a href="/eventsmanager/{{slug}}" title="{{title}}" >
-                                    {{ eventsmanager:thumb name=thumbnail}}
-                                    </a>
-                                    <div class="display-none hover-aera">
-                                        {{button:star_event event_id=id}}
-                                        {{button:follow_event event_id=id class='float-right ctrl_trend'}}
-                                    </div>
-                                </span> 
-                                    <table width="100%" border="0">
-                                        <tr>
-                                            <td width="50%"><a href="javascript:void(0);" class="float-left"><span class="count_star_{{id}} fl" style='display:inline-block;'>{{star_count}}</span><span class='fl'>&nbsp; Stars</span> </a> </td>
-                                            <td  width="50%"><a href="javascript:void(0);" class="float-right"><span class="count_follow_{{id}} fl" style='display:inline-block;'>{{follow_count}}</span><span class='fl'>&nbsp; Followers</span> </a></span> </td>
-                                        </tr>
-                                    </table>
-                            </li>
-                            {{ /eventsmanager:get_all_events}}
-                        </ul>
-                        <div style="clear:both;"></div>
-                    </div>
+                    {{theme:partial name="blocks/stream"}}
                 </div>
                 <!--End Right-body-container--> 
             </div>
@@ -133,19 +102,5 @@
         </div>
         {{asset:js file='customer.js'}}
         {{asset:render}}
-        <script>
-            $(document).ready(function(){
-                $('#stream_search').keyup(function(){
-                   
-                   if($(this).val().length > 3){
-                       $('#stream_search_result').animate({'opacity': '0.3'});
-                       
-                       $('#stream_search_result').load('/eventsmanager/search/'+$(this).val(), function(response){
-                           $('#stream_search_result').animate({'opacity': '1'});
-                       });
-                   } 
-                });
-            });
-        </script>
     </body>
 </html>

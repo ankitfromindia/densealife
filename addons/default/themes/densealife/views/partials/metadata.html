@@ -46,6 +46,17 @@ jQuery(document).ready(function() {
         $('.fancybox').fancybox();
         
         jQuery('section.post > h2').hide();
+        
+        $('#stream_search').keyup(function(){
+
+           if($(this).val().length > 3){
+               $('#stream_search_result').animate({'opacity': '0.3'});
+
+               $('#stream_search_result').load('/eventsmanager/search/'+$(this).val(), function(response){
+                   $('#stream_search_result').animate({'opacity': '1'});
+               });
+           } 
+        });
     });
     var base_url  = '{{ url:base }}';
 </script>

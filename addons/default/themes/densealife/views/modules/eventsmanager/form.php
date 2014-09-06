@@ -9,13 +9,15 @@
 <div class="comman-heading"><?php echo lang('eventsmanager:manage_event_label') . ' : ' . $event->title; ?></div>
 
 <?php endif; ?>
-
+<div class="<?php echo $this->session->userdata('recently_created_event')!='' ? 'd-block' : 'd-none' ; ?> view-event">
+    <a target="__blank" href="/eventsmanager/{{event:slug}}" id="event-url" class="fr mt10 f-bold color-blue">View Event >></a>
+</div>
 <div class="clear hgt28"></div>
 <div id="tabs">
     <ul>
         <li><a href="#tabs-1">Content</a></li>
-        <li><a id="tab-thumbnail" href="/densealife-page/thumbnail">Thumbnail and Cover Photo</a></li>
         <li><a id="tab-album" href="/densealife-page/album">Album</a></li>
+        <li><a id="tab-thumbnail" href="/densealife-page/thumbnail">Thumbnail and Cover Photo</a></li>
     </ul>
     <div id="tabs-1">
         <div class='error-tab-1 d-none'></div>

@@ -28,9 +28,9 @@ class EventsManager extends Public_Controller
             redirect('users/login');
         }
         $this->template->append_metadata(
-            "<script>
+                "<script>
                 var baseurl = '" . base_url() . "',
-                //var currenturl = '".current_url()."',
+                //var currenturl = '" . current_url() . "',
             </script>"
         );
         $this->template->set_layout('event');
@@ -148,54 +148,48 @@ class EventsManager extends Public_Controller
 
     public function edit($slug)
     {
-        $slug or show_404();
-
         $event              = $this->eventsmanager_m->getBy('slug', $slug);
         $type               = 'event';
-        if ($event->category_id = 2) {
+        if ($event->category_id == 2) {
             $type = 'interest';
         }
         $this->create($type, $slug, 'edit');
     }
 
-    public function create($type = 'event', $slug = null, $action='create')
+    public function create($type = 'event', $slug = null, $action = 'create')
     {
         $this->template->set_layout('densealife')->set('type', $type);
 
-        // Check for user permissions
-        role_or_die('eventsmanager', 'frontend_editing', 'eventsmanager', lang('eventsmanager:notallowed_frontend_editing'));
-
         $this->form_validation->set_rules(Events_Validation::rules());
-        $event              = $this->eventsmanager_m->getBy('slug', $slug);
+        if(!empty($slug)) {
+            $event = $this->eventsmanager_m->getBy('slug', $slug);
+        }
         if ($this->form_validation->run()) {
             $post                = $this->input->post();
             $post['category_id'] = '1';
             if ($type == 'interest') {
                 $post['category_id'] = '2';
             }
-            if($action=='edit'){
-             if ($this->eventsmanager_m->update($event->id, $this->input->post()) == true) {
-                 $this->session->set_userdata('recently_created_event', $event->id);
-                echo json_encode(array('status' => 'success', 'slug' => $this->input->post('slug')));
-                exit;
-             }   
-            }else{
-            if ($id = $this->eventsmanager_m->insert($post)) {
-                $this->session->set_userdata('recently_created_event', $id);
-                echo json_encode(array('status' => 'success', 'slug' => $this->input->post('slug')));
-                exit;
+            if ($action == 'edit') {
+                if ($this->eventsmanager_m->update($event->id, $this->input->post()) == true) {
+                    $this->session->set_userdata('recently_created_event', $event->id);
+                    echo json_encode(array('status' => 'success', 'slug' => $this->input->post('slug')));
+                    exit;
+                }
             } else {
-                $this->session->set_flashdata('error', lang('eventsmanager:create_error'));
-            }
+                if ($id = $this->eventsmanager_m->insert($post)) {
+                    $this->session->set_userdata('recently_created_event', $id);
+                    echo json_encode(array('status' => 'success', 'slug' => $this->input->post('slug')));
+                    exit;
+                } else {
+                    $this->session->set_flashdata('error', lang('eventsmanager:create_error'));
+                }
             }
         } else {
-            if ($slug) {
-                $event = $this->eventsmanager_m->getBy('slug', $slug);
+            if (!empty($slug)) {
                 $this->session->set_userdata('recently_created_event', $event->id);
             } else {
                 $event = new StdClass();
-
-
                 foreach (Events_Validation::rules() as $key => $field) {
                     $value                  = isset($field['default']) ? set_value($field['field'], $field['default']) : set_value($field['field']);
                     $event->$field['field'] = $value;
@@ -208,9 +202,6 @@ class EventsManager extends Public_Controller
             }
         }
 
-        // Load every required stuff for frontend editing
-        $this->_load_frontend_form_data();
-        $this->_load_frontend_form_assets();
         $sub_categories = array();
 
         if ($type == 'interest') {
@@ -233,6 +224,8 @@ class EventsManager extends Public_Controller
             $event_id = $this->session->userdata('recently_created_event');
             $event    = $this->eventsmanager_m->get_by('id', $event_id);
         }
+        $this->_load_frontend_form_assets();
+        $this->_load_frontend_form_data($event);
         $this->template
                 ->title($this->module_details['name'], lang('eventsmanager:new_event_label'))
                 ->set('type', $type)
@@ -455,24 +448,37 @@ class EventsManager extends Public_Controller
     public function wall($slug = null)
     {
         $this->_set_template_content($slug);
-        $event = $this->eventsmanager_m->getBy('slug', $slug);
-        $this->load->model('profile/auto_approval_m'); 
-        $auto_approved = (bool)$this->auto_approval_m->count_by(array('admin_id' => $event->author, 'user_id' => $this->current_user->id, 'approval_type' => 'comment', 'status' => 'on'));
-        $this->db->set_dbprefix('default_'); 
-        $this->load->model('comments/comment_blacklists_m'); 
-        $blacklisted = $this->comment_blacklists_m->is_blacklisted($event->author, $this->current_user->id);
-        
-        $allow_comment = false; 
-        if(
-                ($this->current_user->group == 'admin') 
-                or ($this->current_user->id == $event->author) 
-                or (!$blacklisted) 
-                and ($auto_approved or ($event->comment_permission == 'FOLLOWER' and $this->trend_m->am_i_following($event->id)))) {
-            $allow_comment = true; 
+        $event         = $this->eventsmanager_m->getBy('slug', $slug);
+        $this->load->model('profile/auto_approval_m');
+        $auto_approved = (bool) $this->auto_approval_m->count_by(array('admin_id' => $event->author, 'user_id' => $this->current_user->id, 'approval_type' => 'comment', 'status' => 'on'));
+        $this->db->set_dbprefix('default_');
+        $this->load->model('comments/comment_blacklists_m');
+        $blacklisted   = $this->comment_blacklists_m->is_blacklisted($event->author, $this->current_user->id);
+        $allow_comment = false;
+        $message = null;
+        //allow comment if user is admin
+        if($this->current_user->group == 'admin' or $this->current_user->id == $event->author or $auto_approved){
+            $allow_comment = true;
+        } else {
+            if($blacklisted) {
+              $message = 'You have been blocked by the creator of event <b class="txt-up">' . $event->title. '</b>';
+            } else if(!$this->trend_m->am_i_following($event->id)){
+                $message = 'Follow the event <b class="txt-up">'. $event->title. '</b> to get updates, post and comment';
+            } else {
+                $allow_comment = true;
+            }
         }
         
+//        if (
+//                ($this->current_user->group == 'admin')
+//                or ( $this->current_user->id == $event->author)
+//                or ( !$blacklisted)
+//                and ( $auto_approved or ( $event->comment_permission == 'FOLLOWER' and $this->trend_m->am_i_following($event->id)))) {
+//            $allow_comment = true;
+//        }
+
         $this->template
-                ->set('content', $this->load_view('wall', array('event' => $event,'allow_comment' => $allow_comment)))
+                ->set('content', $this->load_view('wall', array('event' => $event, 'allow_comment' => $allow_comment, 'message' => $message)))
                 ->build('eventsmanager/index');
     }
 

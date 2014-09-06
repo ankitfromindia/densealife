@@ -15,14 +15,18 @@
 </div>
 {{else}}
 <section>
-    <div style="font-size:18px; color:blue; border:1px solid blue; margin-top:20px; height: 150px; padding-top:10px;">
-        Because of following reasons you are not able to comment on this event. 
-        <ol>
-            <li>You are not following the event.</li>
-            <li>You have been blocked by the creator of this event. </li>
-        </ol>
+    <div style='border-bottom: 2px solid skyblue;
+    color: #05a6cc;
+    font-size: 14px;
+    padding: 58px;
+    text-align: center;'>
+        {{message}}
+        
+        <div style='margin-left:160px;'>
+            {{button:follow_event event_id='<?php echo $event->id; ?>'}}
+        </div>
     </div>
 </section>
 {{endif}}
 
-<?php echo $this->comments->display ();
+<?php echo $this->comments->display($allow_comment);

@@ -26,9 +26,9 @@ class Friend
             return ci()->friend_m->get_status_label_mapping($status);
         }
         
-        public function is_friend($uid)
+        public function is_friend($who, $whose = null)
         {
-            return ci()->friend_m->is_friend($uid);
+            return ci()->friend_m->is_friend($who, $whose);
         }
         
         public function get_follower_friends($event_id, $user_id)

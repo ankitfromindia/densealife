@@ -1,8 +1,6 @@
 <div class="comman-box clearfix">
     <div class="comman-heading">Messages</div>
-    <div class="message-header clearfix">
-        <span class="float-left">Inbox({{unread}}) &nbsp;&nbsp;&nbsp;Others(2)</span>
-        
+    <div class="message-header clearfix"> 
         <?php if(isset($action) && $action != 'new_message') :?>
         <span class="right">
             <p class="float-left">{{rec:display_name}}</p>
