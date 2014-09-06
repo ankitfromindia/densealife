@@ -189,7 +189,7 @@ class Comments extends Public_Controller
                         }                    
                         $response['user_email'] = $comment->user_email;
 
-                        $response['user_name']  = ($comment->user_id == $this->current_user->id) ? $comment->entry_title : $this->current_user->display_name; 
+                        $response['user_name']  = ($comment->is_author_post) ? $comment->entry_title : $this->current_user->display_name; 
                         $response['media']      = '';
                         $response['time_ago']   = time_passed(strtotime($comment->created_on));
                         if(!isset($comment->display_name)){
