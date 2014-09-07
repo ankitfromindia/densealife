@@ -29,8 +29,8 @@ class EventsManager extends Public_Controller
         }
         $this->template->append_metadata(
                 "<script>
-                var baseurl = '" . base_url() . "',
-                //var currenturl = '" . current_url() . "',
+                var baseurl = '" . base_url() . "';
+                //var currenturl = '" . current_url() . "';
             </script>"
         );
         $this->template->set_layout('event');
@@ -161,7 +161,7 @@ class EventsManager extends Public_Controller
         $this->template->set_layout('densealife')->set('type', $type);
 
         $this->form_validation->set_rules(Events_Validation::rules());
-        if(!empty($slug)) {
+        if(!empty($event)) {
             $event = $this->eventsmanager_m->getBy('slug', $slug);
         }
         if ($this->form_validation->run()) {
@@ -228,6 +228,7 @@ class EventsManager extends Public_Controller
         $this->_load_frontend_form_data($event);
         $this->template
                 ->title($this->module_details['name'], lang('eventsmanager:new_event_label'))
+                ->append_js('module::map.js')
                 ->set('type', $type)
                 ->set('event', $event)
                 ->set('category_id', $parent_id)
@@ -469,35 +470,35 @@ class EventsManager extends Public_Controller
             }
         }
         
-//        if (
-//                ($this->current_user->group == 'admin')
-//                or ( $this->current_user->id == $event->author)
-//                or ( !$blacklisted)
-//                and ( $auto_approved or ( $event->comment_permission == 'FOLLOWER' and $this->trend_m->am_i_following($event->id)))) {
-//            $allow_comment = true;
-//        }
-
         $this->template
-                ->set('content', $this->load_view('wall', array('event' => $event, 'allow_comment' => $allow_comment, 'message' => $message)))
-                ->build('eventsmanager/index');
+                ->set('event', $event)
+                ->set('allow_comment', $allow_comment)
+                ->set('message', $message)
+                ->build('eventsmanager/wall');
+
     }
 
     public function about($slug = null)
     {
         $this->_set_template_content($slug);
-        $event = $this->eventsmanager_m->getBy('slug', $slug);
-
+        if(!empty($slug)){
+            $event = $this->eventsmanager_m->getBy('slug', $slug);
+        }
         $this->template
-                ->set('content', $this->load_view('about', array('event' => $event)))
-                ->build('eventsmanager/index');
+               ->append_metadata("<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false&language=" . $this->current_user->lang . "'></script>")
+                ->append_metadata("<script type='text/javascript'>var MAP_PLACE = '".$event->place."'; var CURRENT_LANGUAGE = 'en';</script>")
+                ->append_js('module::map.js')
+                ->build('eventsmanager/about');
     }
 
     public function albums($slug = null)
     {
         $this->_set_template_content($slug);
-        $event  = $this->eventsmanager_m->getBy('slug', $slug);
+        $event = new stdClass();
+        if(!empty($slug)) {
+            $event  = $this->eventsmanager_m->getBy('slug', $slug);   
+        }
         $albums = $this->file_folders_m->get_albums($event->id);
-        $photos = '';
         foreach ($albums as &$album) {
             if ($album->count_files != 0) {
                 $cover              = $this->eventsmanager_m->get_images_files($album->id);
@@ -508,8 +509,10 @@ class EventsManager extends Public_Controller
         }
         $user_uploads = $this->eventsmanager_m->get_user_uploads_by_event_id($event->id);
         $this->template
-                ->set('content', $this->load_view('albums', array('albums' => $albums, 'photos' => $user_uploads, 'event' => $event)))
-                ->build('eventsmanager/index');
+                ->set('albums', $albums)
+                ->set('photos', $user_uploads)
+                ->set('event', $event)
+                ->build('eventsmanager/albums');
     }
 
     public function videos($slug = null)
@@ -532,8 +535,10 @@ class EventsManager extends Public_Controller
         }
 
         $this->template
-                ->set('content', $this->load_view('videos', array('albums' => $albums, 'count' => $count_video_files, 'youtube_videos' => $youtube_videos)))
-                ->build('eventsmanager/index');
+                ->set('albums', $albums)
+                ->set('count', $count_video_files)
+                ->set('youtube_videos', $youtube_videos)
+                ->build('eventsmanager/videos');
     }
 
     public function followers($slug = null)
@@ -546,8 +551,8 @@ class EventsManager extends Public_Controller
         $this->load->library('friend/friend');
 
         $this->template
-                ->set('content', $this->load_view('followers', array('followers' => $followers)))
-                ->build('eventsmanager/index');
+                ->set('followers', $followers)
+                ->build('eventsmanager/followers');
     }
 
     public function ajax_album_images($album_id)

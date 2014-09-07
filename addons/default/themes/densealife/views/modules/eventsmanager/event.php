@@ -113,7 +113,7 @@
 </script>
 <!-- Maps Management -->
 <?php if ($event->show_map): ?>
-<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false&language=<?php echo $this->current_user->lang; ?>'></script>
+<!--<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false&language=<?php echo $this->current_user->lang; ?>'></script>-->
 <script type='text/javascript'>
     $(document).ready(function()
     {

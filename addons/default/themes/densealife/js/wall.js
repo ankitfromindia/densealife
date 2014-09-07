@@ -207,6 +207,7 @@ $('.form-trend').ajaxForm({
             } else {
                 $('.btn-follow-' + response.entry).text('Following');
             }
+            window.location.reload();
         }
 
         if (response.trend == '2') {

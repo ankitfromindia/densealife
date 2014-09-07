@@ -69,10 +69,15 @@
     <li>
         <label for="place"><?php echo lang('eventsmanager:place_label'); ?> <span>*</span></label>
         <div>
-            <span class="input"><input type="text" id="place" name="place" value="<?php echo isset($event->place) ? $event->place : ""; ?>" /></span>
+            <span class="input">
+                <input type="text" id="place" name="place" value="<?php echo isset($event->place) ? $event->place : ""; ?>" />
+                <input class="d-none" type="text" id="place_clone" name="place_clone" value="<?php echo isset($event->place) ? $event->place : ""; ?>" />
+            </span>
             &nbsp;&nbsp;
+                 <input type="checkbox" id="show_map_clone" name="show_map_clone" value="1"
+<?php if ( isset($event->show_map) && $event->show_map ) echo "checked"; ?>  class="d-none"/>
             <input type="checkbox" id="show_map" name="show_map" value="1"
-<?php if ( isset($event->show_map) && $event->show_map ) echo "checked"; ?> />
+        <?php if ( isset($event->show_map) && $event->show_map ) echo "checked"; ?> />
             &nbsp;<?php echo lang('eventsmanager:show_map_label'); ?>
             &nbsp;<a id="map_options"><?php echo lang('eventsmanager:map_more_options_label'); ?></a>
         </div>

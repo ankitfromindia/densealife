@@ -25,22 +25,22 @@ class EventsManager_m extends MY_Model
     {
         $this->db->select()
                 ->from($this->_table . ' as e');
-        if(!empty($user_id)){
-                //->join('trends as t', 'e.id = t.entry_id', 'right')
-                $this->db->where('e.author', $user_id);
+        if (!empty($user_id)) {
+            //->join('trends as t', 'e.id = t.entry_id', 'right')
+            $this->db->where('e.author', $user_id);
         }
-        if($entry_type == 'event') {
+        if ($entry_type == 'event') {
             $this->db->where('category_id', '1');
-        }else{
+        } else {
             $this->db->where('category_id', '2');
         }
-        
-                //->where('t.entry_type', $entry_type);
+
+        //->where('t.entry_type', $entry_type);
 //        if ( $user_id != '' ) {
 //            $this->db->where('t.user_id', $user_id);
 //        }
 
-        if ( $limit != '' ) {
+        if ($limit != '') {
             $this->db->limit($limit);
         }
         $rs = $this->db->order_by('id', 'DESC')->get()
@@ -64,14 +64,14 @@ class EventsManager_m extends MY_Model
     public function get_all($conds = array(), $sort_direction = 'asc')
     {
         $this->db->select()->order_by('start_date', $sort_direction);
-        if ( !empty($conds) )
-            foreach ( $conds as $cond )
+        if (!empty($conds))
+            foreach ($conds as $cond)
                 $this->db->where($cond);
 
         $events = parent::get_all();
-        if ( !empty($events) ) {
+        if (!empty($events)) {
             // Format the dates to the site format
-            foreach ( $events as $event ) {
+            foreach ($events as $event) {
                 $event->start_time = date('H:i', strtotime($event->start_date));
                 $event->end_time   = date('H:i', strtotime($event->end_date));
             }
@@ -90,7 +90,7 @@ class EventsManager_m extends MY_Model
     public function getBy($param, $value)
     {
         $query = $this->db->query("SELECT * FROM " . $this->db->dbprefix('events') . " WHERE `" . $param . "` = '" . $value . "'");
-        if ( $query->num_rows() == 0 )
+        if ($query->num_rows() == 0)
             return null;
         else {
             $result            = $query->result();
@@ -116,12 +116,12 @@ class EventsManager_m extends MY_Model
 
     private function _process($input)
     {
-        if (!empty($input['start_date'] )) {
+        if (!empty($input['start_date'])) {
             // Format the date for the database
             $DATE_FORMAT    = $this->settings->get('date_format');
             $start_datetime = date_create_from_format($DATE_FORMAT, $input['start_date']);
             $start_datetime->setTime($input['start_time_hour'], $input['start_time_minute']);
-            if ( $input['end_date_defined'] ) {
+            if ($input['end_date_defined']) {
                 $end_datetime = date_create_from_format($DATE_FORMAT, $input['end_date']);
                 $end_datetime->setTime($input['end_time_hour'], $input['end_time_minute']);
             } else {
@@ -130,35 +130,35 @@ class EventsManager_m extends MY_Model
             }
         }
         $insert_row = array(
-            'category_id'      => $input['category_id'],
-            'sub_category_id'  => $input['sub_category_id'],
-            'title'            => $input['title'],
-            'slug'             => $input['slug'],
-            'about'            => $input['about'],
-            'website'          => isset($input['website']) ? $input['website'] : null,
-            'affiliations'     => isset($input['affiliations']) ? $input['affiliations'] : null,
-            'description'      => $input['description'],
-            'place'            => $input['place'],
-            'author'           => $input['author'],
-            'start_date'       => (!empty($start_datetime) && is_object($start_datetime)) ? $start_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
-            'end_date'         => (!empty($end_datetime) && is_object($end_datetime)) ? $end_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
-            'end_date_defined' => $input['end_date_defined'],
-            'enable_comments'  => $input['enable_comments'],
-            'published'        => isset($input['published'])  ? $input['published'] : 1,
-            'youtube_videos'   => isset($input['youtube_videos']) ? serialize($input['youtube_videos']) : null,
+            'category_id'        => $input['category_id'],
+            'sub_category_id'    => $input['sub_category_id'],
+            'title'              => $input['title'],
+            'slug'               => $input['slug'],
+            'about'              => $input['about'],
+            'website'            => isset($input['website']) ? $input['website'] : null,
+            'affiliations'       => isset($input['affiliations']) ? $input['affiliations'] : null,
+            'description'        => $input['description'],
+            'place'              => $input['place'],
+            'author'             => $input['author'],
+            'start_date'         => (!empty($start_datetime) && is_object($start_datetime)) ? $start_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
+            'end_date'           => (!empty($end_datetime) && is_object($end_datetime)) ? $end_datetime->format('Y-m-d H:i:s') : '0000-00-00 00:00:00',
+            'end_date_defined'   => $input['end_date_defined'],
+            'enable_comments'    => $input['enable_comments'],
+            'published'          => isset($input['published']) ? $input['published'] : 1,
+            'youtube_videos'     => isset($input['youtube_videos']) ? serialize($input['youtube_videos']) : null,
             'comment_permission' => isset($input['comment_permission']) ? $input['comment_permission'] : 'CREATER',
-            'comment_approval'  => isset($input['comment_approval']) ? $input['comment_approval'] : 'NO'
+            'comment_approval'   => isset($input['comment_approval']) ? $input['comment_approval'] : 'NO'
         );
-        
-        if(isset($input['cover_photo'])) {
+
+        if (isset($input['cover_photo'])) {
             $insert_row['cover_photo'] = $input['cover_photo'];
-        }        
-        if($this->current_user->group == 'admin') {
+        }
+        if ($this->current_user->group == 'admin') {
             $insert_row['published'] = 1;
-        } else{
+        } else {
             $insert_row['published'] = 0;
         }
-        
+
         return $insert_row;
     }
 
@@ -172,18 +172,18 @@ class EventsManager_m extends MY_Model
     public function insert($input, $skip_validation = false)
     {
         $array = $this->_process($input);
-        $id    = ( int ) parent::insert($array);
-        
+        $id    = (int) parent::insert($array);
+
         // Doing this work after for PHP < 5.3
-        if ( isset($input['picture_id']) ) {
-            parent::update($id, array( 'picture_id' => $input['picture_id'] ));
+        if (isset($input['picture_id'])) {
+            parent::update($id, array('picture_id' => $input['picture_id']));
 
             // Generate the thumbnail
             $x1 = $input['thumbnail_x1'];
             $y1 = $input['thumbnail_y1'];
             $x2 = $input['thumbnail_x2'];
             $y2 = $input['thumbnail_y2'];
-            if ( !empty($x1) && !empty($y1) && !empty($x2) && !empty($y2) ) { // If there is a new selection
+            if (!empty($x1) && !empty($y1) && !empty($x2) && !empty($y2)) { // If there is a new selection
                 $path   = UPLOAD_PATH . 'files/';
                 $name   = 'thumbnail_event_' . $id;
                 $raw    = $this->get_image_file($input['picture_id']);
@@ -191,20 +191,20 @@ class EventsManager_m extends MY_Model
                 $disp_w = str_replace('px', '', $input['thumbnail_disp_w']);
                 $disp_h = str_replace('px', '', $input['thumbnail_disp_h']);
                 imageCrop($path, $name, $src, $disp_w, $disp_h, $x1, $y1, $x2, $y2);
-                parent::update($id, array( 'thumbnail' => $name . $raw->extension ));
+                parent::update($id, array('thumbnail' => $name . $raw->extension));
             }
         }
 
         // Maps
-        if ( isset($input['show_map']) )
-            parent::update($id, array( 'show_map' => $input['show_map'] ));
+        if (isset($input['show_map']))
+            parent::update($id, array('show_map' => $input['show_map']));
         else
-            parent::update($id, array( 'show_map' => false ));
-        if ( isset($input['pos_method']) ) {
-            if ( $input['pos_method'] == 0 ) // Automatic mode
-                parent::update($id, array( 'pos_lat' => null, 'pos_lng' => null ));
+            parent::update($id, array('show_map' => false));
+        if (isset($input['pos_method'])) {
+            if ($input['pos_method'] == 0) // Automatic mode
+                parent::update($id, array('pos_lat' => null, 'pos_lng' => null));
             else // Latitude/longitude mode
-                parent::update($id, array( 'pos_lat' => $input['pos_lat'], 'pos_lng' => $input['pos_lng'] ));
+                parent::update($id, array('pos_lat' => $input['pos_lat'], 'pos_lng' => $input['pos_lng']));
         }
         return $id;
     }
@@ -237,7 +237,7 @@ class EventsManager_m extends MY_Model
         $newImageWidth  = ceil($width * $scale);
         $newImageHeight = ceil($height * $scale);
         $newImage       = imagecreatetruecolor($newImageWidth, $newImageHeight);
-        switch ( $imageType ) {
+        switch ($imageType) {
             case "image/gif":
                 $source = imagecreatefromgif($image);
                 break;
@@ -253,7 +253,7 @@ class EventsManager_m extends MY_Model
         }
         imagecopyresampled($newImage, $source, 0, 0, 0, 0, $newImageWidth, $newImageHeight, $width, $height);
 
-        switch ( $imageType ) {
+        switch ($imageType) {
             case "image/gif":
                 imagegif($newImage, $image);
                 break;
@@ -281,7 +281,7 @@ class EventsManager_m extends MY_Model
         $newImageWidth  = ceil($width * $scale);
         $newImageHeight = ceil($height * $scale);
         $newImage       = imagecreatetruecolor($newImageWidth, $newImageHeight);
-        switch ( $imageType ) {
+        switch ($imageType) {
             case "image/gif":
                 $source = imagecreatefromgif($image);
                 break;
@@ -296,7 +296,7 @@ class EventsManager_m extends MY_Model
                 break;
         }
         imagecopyresampled($newImage, $source, 0, 0, $start_width, $start_height, $newImageWidth, $newImageHeight, $width, $height);
-        switch ( $imageType ) {
+        switch ($imageType) {
             case "image/gif":
                 imagegif($newImage, $thumb_image_name);
                 break;
@@ -316,7 +316,7 @@ class EventsManager_m extends MY_Model
 
     public function save_thumbnail($id, $input)
     {
-        
+
         $max_width    = "500";       // Max width allowed for the large image
         $thumb_width  = "100";      // Width of thumbnail image
         $thumb_height = "100";
@@ -326,27 +326,27 @@ class EventsManager_m extends MY_Model
         $width                = $this->getWidth($large_image_location);
         $height               = $this->getHeight($large_image_location);
         //Scale the image if it is greater than the width set above
-        if ( $width > $max_width ) {
+        if ($width > $max_width) {
             $scale    = $max_width / $width;
             $uploaded = $this->resizeImage($large_image_location, $width, $height, $scale);
         } else {
             $scale    = 1;
             $uploaded = $this->resizeImage($large_image_location, $width, $height, $scale);
         }
-        
+
         //Delete the thumbnail file so the user can create a new one
-        if ( file_exists($thumb_image_location) ) {
+        if (file_exists($thumb_image_location)) {
             unlink($thumb_image_location);
         }
-        if ( isset($input['picture_id']) ) {
-            parent::update($id, array( 'picture_id' => $input['picture_id'] ));
+        if (isset($input['picture_id'])) {
+            parent::update($id, array('picture_id' => $input['picture_id']));
 
             // Generate the thumbnail
             $x1 = $input['thumbnail_x1'];
             $y1 = $input['thumbnail_y1'];
             $x2 = $input['thumbnail_x2'];
             $y2 = $input['thumbnail_y2'];
-            if ( !empty($x1) && !empty($y1) && !empty($x2) && !empty($y2) ) { // If there is a new selection
+            if (!empty($x1) && !empty($y1) && !empty($x2) && !empty($y2)) { // If there is a new selection
                 $path = UPLOAD_PATH . 'files/';
                 $name = 'thumbnail_event_' . $id;
                 $raw  = $this->get_image_file($input['picture_id']);
@@ -355,42 +355,49 @@ class EventsManager_m extends MY_Model
                 $disp_w = str_replace('px', '', '500');
                 $disp_h = str_replace('px', '', '500');
                 imageCrop($path, $name, $src, $disp_w, $disp_h, $x1, $y1, $x2, $y2);
-                return parent::update($id, array( 'thumbnail' => $name . $raw->extension ));
+                return parent::update($id, array('thumbnail' => $name . $raw->extension));
             }
         }
     }
-    public function publish_event($id, $input){
-        return parent::update($id, $input); 
+
+    public function publish_event($id, $input)
+    {
+        return parent::update($id, $input);
     }
+
     public function update($id, $input, $skip_validation = false)
     {
         $array  = $this->_process($input);
         // Update all except author
         $result = parent::update($id, $array);
-        
+
         // Doing this work after for PHP < 5.3
         //$result = $this->save_thumbnail($id, $input);
         // Maps
-        if ( isset($input['show_map']) )
-            $result = parent::update($id, array( 'show_map' => $input['show_map'] ));
-        else
-            $result = parent::update($id, array( 'show_map' => false ));
-        if ( isset($input['pos_method']) ) {
-            if ( $input['pos_method'] == 0 ) // Automatic mode
-                $result = parent::update($id, array( 'pos_lat' => null, 'pos_lng' => null ));
-            else // Latitude/longitude mode
-                $result = parent::update($id, array( 'pos_lat' => $input['pos_lat'], 'pos_lng' => $input['pos_lng'] ));
+        if (isset($input['show_map']) or isset($input['show_map_clone'])) {
+            $show_map = !empty($input['show_map']) ? $input['show_map'] : (!empty($input['show_map_clone']) ? $input['show_map_clone'] : false);
+            $result   = parent::update($id, array('show_map' => $show_map));
+        } else {
+            $result = parent::update($id, array('show_map' => false));
+        }
+        if (isset($input['pos_method'])) {
+            if ($input['pos_method'] === 0) { // Automatic mode
+                $result = parent::update($id, array('pos_lat' => null, 'pos_lng' => null));
+            } else { // Latitude/longitude mode
+                $result = parent::update($id, array('pos_lat' => $input['pos_lat'], 'pos_lng' => $input['pos_lng']));
+            }
         }
         return $result;
     }
 
-    public function get_files($type = 'i', $folder_id = null, $image_id = null)
+    public function get_files($type = 'i', $folder_id = null)
     {
         $images = $this->db
                 ->select('files.*')
                 ->where('files.type', $type); // Only the images files
-        if ( isset($folder_id) )
+        if (isset($folder_id)) {
             $this->db->where('folder_id', $folder_id);
+        }
         return $images->get('files')->result();
     }
 
@@ -399,8 +406,9 @@ class EventsManager_m extends MY_Model
         $images = $this->db
                 ->select('files.*')
                 ->where('files.type', 'i'); // Only the images files
-        if ( isset($folder_id) )
+        if (isset($folder_id)) {
             $this->db->where('folder_id', $folder_id);
+        }
         return $images->get('files')->result();
     }
 
@@ -418,15 +426,17 @@ class EventsManager_m extends MY_Model
 
     public function get_image_file($image_id, $folder_id = null)
     {
-        $image  = $this->db
+        $image = $this->db
                 ->select('files.*')
                 ->where('files.type', 'i') // Only the images files
                 ->where('files.id', $image_id); // Only the images files
-        if ( isset($folder_id) )
+        if (isset($folder_id)) {
             $this->db->where('folder_id', $folder_id);
+        }
         $result = $image->get('files')->result();
-        if ( !empty($result) )
+        if (!empty($result)) {
             return $result[0];
+        }
         return null;
     }
 
@@ -438,47 +448,47 @@ class EventsManager_m extends MY_Model
                 ->or_where('end_date >= NOW())')
                 ->order_by('start_date', 'asc')
                 ->limit($limit);
-        if ( $published )
+        if ($published) {
             $this->db->where('published', 1);
+        }
         return $events->get('events')->result();
-        //echo $this->db->last_query();die();
     }
 
-    public function get_upcoming($user_id = null, $type='event', $sub_cat_id = null, $limit = null)
+    public function get_upcoming($user_id = null, $type = 'event', $sub_cat_id = null, $limit = null)
     {
-         if($type=='interest'){
-            $cat = $this->event_categories_m->get_by('slug', 'interest');
-            $category_id = $cat->id; 
-        }else{
-            $cat = $this->event_categories_m->get_by('slug', 'event');
-            $category_id = $cat->id; 
+        if ($type == 'interest') {
+            $cat         = $this->event_categories_m->get_by('slug', 'interest');
+            $category_id = $cat->id;
+        } else {
+            $cat         = $this->event_categories_m->get_by('slug', 'event');
+            $category_id = $cat->id;
         }
         $condition = array('category_id' => $category_id, 'start_date > ' => date('Y-m-d'), 'published' => 1);
-        
-        if($sub_cat_id!=''){
+
+        if ($sub_cat_id != '') {
             $condition = $condition + array('sub_category_id' => $sub_cat_id);
         }
-        if($limit!=''){
-            $this->limit($limit); 
+        if ($limit != '') {
+            $this->limit($limit);
         }
-       
+
         $this->order_by('star_count', 'DESC');
         $this->order_by('follow_count', 'DESC');
         $this->order_by('favorite_count', 'DESC');
-        $upcoming = $this->get_many_by($condition); 
+        $upcoming = $this->get_many_by($condition);
         return $upcoming;
     }
 
     public function get_star_count($entry_id)
     {
         $rs = $this->select('star_count')
-                ->get_by(array( 'id' => $entry_id ));
+                ->get_by(array('id' => $entry_id));
         return $rs->star_count;
     }
 
     public function add_star($entry_id)
     {
-        $this->update($entry_id, array( 'star_count' => 'star_count' + 1 ));
+        $this->update($entry_id, array('star_count' => 'star_count' + 1));
     }
 
     /**
@@ -490,22 +500,22 @@ class EventsManager_m extends MY_Model
         $this->load->library('friend/friend');
         return $this->friend->get_follower_friends($event_id, $this->current_user->id);
     }
-    
+
     public function save_image_as($id, $input)
     {
-        $raw  = $this->get_image_file($input['picture_id']);
-        if ( isset($input['picture_id']) ) {
-            if($input['type']=='thumb'){
-                return parent::update($id, array( 'picture_id' => $input['picture_id'], 'thumbnail'=> $raw->filename ));
-            }else{
-                return parent::update($id, array( 'picture_id' => $input['picture_id'], 'cover_photo'=> $raw->filename));
+        $raw = $this->get_image_file($input['picture_id']);
+        if (isset($input['picture_id'])) {
+            if ($input['type'] == 'thumb') {
+                return parent::update($id, array('picture_id' => $input['picture_id'], 'thumbnail' => $raw->filename));
+            } else {
+                return parent::update($id, array('picture_id' => $input['picture_id'], 'cover_photo' => $raw->filename));
             }
         }
     }
-    
+
     public function save_cp_pos($id, $input)
     {
-        return parent::update($id, array( 'cover_photo_pos' => str_replace('px','',$input['new_cp_pos'])));
+        return parent::update($id, array('cover_photo_pos' => str_replace('px', '', $input['new_cp_pos'])));
     }
-   
+
 }
