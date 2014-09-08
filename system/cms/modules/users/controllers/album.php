@@ -81,7 +81,15 @@ class Album extends Public_Controller
 
     public function delete()
     {
+        $album_id = $this->input->get('album_id');
+        $status = 'failure';
+        if(!empty($album_id)) {
+            $this->album_m->remove_album($album_id); 
+            $status = 'success';
+        }
         
+        $this->template
+                ->build_json(array('status' => $status));
     }
 
 }

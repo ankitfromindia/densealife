@@ -33,9 +33,9 @@
         <span class="clear"></span>
         <span class="fl">
             <?php if (Settings::get('comment_markdown') and $item->parsed): ?>
-                <?php echo $item->parsed ?>
+                <?php echo parse_comment($item->parsed); ?>
             <?php else: ?>
-                <p><?php echo nl2br($item->comment) ?></p>
+            <p><?php echo nl2br(parse_comment($item->comment)); ?></p>
             <?php endif ?>
         </span>
         <span class='clear'>&nbsp;</span>

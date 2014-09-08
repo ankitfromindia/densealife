@@ -153,8 +153,9 @@ class Files
             $parent = ($result ? $result->id : 0) ;
         }
 
-        ci()->file_folders_m->where('parent_id', $parent)->where('hidden', 0);
-        ci()->file_folders_m->where('by_user', $by_user);
+        ci()->file_folders_m->where('parent_id', $parent)
+                ->where('hidden', 0)
+                ->where('by_user', $by_user);
         if($event_id!=''){
             ci()->file_folders_m->where('event_id', $event_id);
         }
@@ -164,11 +165,9 @@ class Files
         }
         
         $folders = ci()->file_folders_m->order_by('sort','desc')->get_all() ;
-
         $files = ci()->file_m->where('folder_id', $parent)
                 ->order_by('sort','desc')
                 ->get_all() ;
-        
         ci()->load->library('keywords/keywords') ;
         // let's be nice and add a date in that's formatted like the rest of the CMS
         if ( $folders ) {

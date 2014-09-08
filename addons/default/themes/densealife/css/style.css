@@ -6,7 +6,7 @@ body {margin:0px;padding:0px;font-family: 'SegoeUISymbolRegular';font-size:12px;
     font-family: 'SegoeUISymbolRegular';
     src: url('../fonts/seguisym.eot');
     src: url('../fonts/seguisym.eot') format('embedded-opentype'),
-         url('../fonts/seguisym.woff') format('woff'),ac
+         url('../fonts/seguisym.woff') format('woff'),
          url('../fonts/seguisym.ttf') format('truetype'),
          url('../fonts/seguisym.svg#SegoeUISymbolRegular') format('svg');
 }

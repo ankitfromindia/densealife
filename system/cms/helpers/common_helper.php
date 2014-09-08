@@ -27,3 +27,7 @@ function p($data)
     echo '</pre>'; 
     exit; 
 }
+
+function parse_comment($text) {
+    return preg_replace('@(http)?(s)?(://)?(([-\w]+\.)+([^\s]+)+[^,.\s])@', '<a class="color-blue" href="http$2://$4">$1$2$3$4</a>', $text);
+}

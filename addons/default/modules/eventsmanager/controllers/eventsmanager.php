@@ -158,11 +158,13 @@ class EventsManager extends Public_Controller
 
     public function create($type = 'event', $slug = null, $action = 'create')
     {
+        
         $this->template->set_layout('densealife')->set('type', $type);
 
         $this->form_validation->set_rules(Events_Validation::rules());
-        if(!empty($event)) {
+        if(!empty($slug)) {
             $event = $this->eventsmanager_m->getBy('slug', $slug);
+            $this->session->set_userdata('recently_created_event', $event->id);
         }
         if ($this->form_validation->run()) {
             $post                = $this->input->post();
@@ -498,7 +500,8 @@ class EventsManager extends Public_Controller
         if(!empty($slug)) {
             $event  = $this->eventsmanager_m->getBy('slug', $slug);   
         }
-        $albums = $this->file_folders_m->get_albums($event->id);
+        $albums = $this->album_m->get_albums(null, $event->id);
+        
         foreach ($albums as &$album) {
             if ($album->count_files != 0) {
                 $cover              = $this->eventsmanager_m->get_images_files($album->id);

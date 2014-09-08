@@ -4,4 +4,4 @@
     <img src="{{url:site}}files/medium/<?php echo $image->id;?>/fit" alt="" width="200" height="200"/>
 </a>
 <?php endforeach;?>
-<?php endif;?>
+<?php endif;

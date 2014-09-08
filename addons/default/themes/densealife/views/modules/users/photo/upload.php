@@ -3,7 +3,7 @@
 $(document).ready(function()
 {
 	$("#fileuploader").uploadFile({
-            url:"/photo/upload",
+            url:"/photo/upload?album_id="+<?php echo $album_id;?>,
             fileName:"myfile",
             returnType:'json',
             formData: {

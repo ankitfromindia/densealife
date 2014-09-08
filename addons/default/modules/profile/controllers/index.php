@@ -178,7 +178,7 @@ class Index extends Public_Controller
     }
 
     public function album($slug = null)
-    {
+    {   
         $recently_created_event = $this->session->userdata('recently_created_event');
         $event    = new stdClass();
         $this->load->model('users/album_m');
@@ -193,12 +193,13 @@ class Index extends Public_Controller
             $event_id = $event->id;
         }
         $albums = $this->album_m->get_albums($this->current_user->id, $event_id);
-        echo load_view('eventsmanager','partials/form_album', array(
-                    '_user'  => $this->current_user,
-                    'event'  => $event,
-                    'albums' => $albums
-                )
-            );
+        $this->template
+                ->set('_user', $this->current_user)
+                ->set('event', $event)
+                ->set('albums', $albums)
+                ->set('showDir', true)
+                ->build('eventsmanager/partials/form_album');
+        
     }
 
     private function _load_frontend_form_assets()

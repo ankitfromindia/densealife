@@ -4,12 +4,12 @@
             <li class='li-<?php echo $item->id; ?>'>
                 <table>
                     <tr>
-                    <td>
-                        {{user:profile_pic user_id='<?php echo $item->user_id; ?>'}}
-                    </td>
-                    <td>
-                    <span class="name"><?php echo $item->user_name ?></span>
-                    </td>
+                        <td>
+                            {{user:profile_pic user_id='<?php echo $item->user_id; ?>'}}
+                        </td>
+                        <td>
+                            <span class="name"><?php echo $item->user_name ?></span>
+                        </td>
                     </tr>
                     <tr>
                     <td colspan="2">
@@ -24,9 +24,9 @@
                             ?>
                             <span>
                                 <?php if (Settings::get('comment_markdown') and $item->parsed): ?>
-                                    <?php echo $item->parsed ?>
+                                    <?php echo parse_comment($item->parsed) ?>
                                 <?php else: ?>
-                                    <p><?php echo nl2br($item->comment) ?></p>
+                                    <p><?php echo nl2br(parse_comment($item->comment)) ?></p>
                                 <?php endif ?>
                             </span>
                             <span class="comman-star stars">
@@ -55,4 +55,5 @@
         <?php endforeach ?>
     </ul>
     <?php
+
  endif;
